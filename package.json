@@ -3,9 +3,10 @@
   "version": "1.0.0",
   "description": "gastro project",
   "main": "index.js",
-  "scripts": {
-    "start": "nodemon index.js"
-  },
+ "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js"
+},
   "author": "İlknur Cengiz",
   "type": "commonjs",
   "license": "ISC",
