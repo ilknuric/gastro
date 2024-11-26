@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+    <title>me Time | Admin Dashboard</title>
+    <link rel="shortcut icon" href="/assets/img/favicon.png">
+    <link rel="stylesheet" href="/admin/assets/css/select2.min.css">
+    <link rel="stylesheet" href="/admin/assets/plugins/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/admin/assets/plugins/bootstrap-tagsinput/css/bootstrap-tagsinput.css">
+    <link rel="stylesheet" href="/admin/assets/plugins/fontawesome/css/fontawesome.min.css">
+    <link rel="stylesheet" href="/admin/assets/plugins/fontawesome/css/all.min.css">
+    <link rel="stylesheet" href="/admin/assets/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="/admin/assets/plugins/feather/feather.css">
+	<link rel="stylesheet" href="/admin/assets/css/owl.carousel.min.css">
+	<link rel="stylesheet" href="/admin/assets/css/ckeditor.css">
+	<link rel="stylesheet" href="/admin/assets/plugins/fancybox/jquery.fancybox.min.css">  
+    <link rel="stylesheet" href="/admin/assets/css/style.css">
+</head>
+
+<body>
+    <div class="main-wrapper">
+        <%- include('./sidebar.ejs') %>
+        <%- include('./header.ejs') %>
+        <div class="page-wrapper">
+            <div class="content">
+                <div class="row">
+                    <div class="col-xl-12">
+                        <div class="serv-profile">
+							<h2><%= business.businessName %></h2>
+							<ul>
+								<li class="service-map"><i class="fe fe-map-pin"></i> <%= business.businessLocation %></li>
+							</ul>
+						</div>
+						<div class="service-wrap mt-3">
+							<div class="row mb-3">
+                                <div class="col-md-8">
+                                </div>
+                                <div class="col-md-2 text-md-end">
+                                    <a class="btn btn-primary" onclick="toggleSelectAll()" id="selectAllButton"><i class="fa fa-check me-2"></i>Wählen Sie Alle </a>
+                                </div>
+                                <div class="col-md-2 text-md-start">
+                                    <a class="btn btn-outline-primary" onclick="deleteSelectedImages()"><i class="fa fa-trash"></i>Ausgewählte löschen </a>
+                                </div>
+                            </div>
+                            <form id="imageForm" >
+                                <div class="row">
+                                    <% if (business && business.businessImages && business.businessImages.length > 0) { %>
+                                        <% for (const image of business.businessImages) { %>	
+                                        <div class="col-lg-3 col-3" style="position: relative;">
+                                            <input type="checkbox" name="selectedImages" class="image-check">
+                                            <img src="<%= image %>" alt="gastro">
+                                        </div>
+                                        
+                                        <% } %>	
+                                    <% } else { %>
+									<p>Keine Bilder für dieses Unternehmen gefunden.</p>
+                                    <% } %>	
+                                    <input type="hidden" name="businessID" value="" id="businessID">
+                                </div>
+                            </form>
+                            
+                            <div class="row">
+                                <div class="col-lg-12 mt-3">
+                                    <div class="upload-div mb-0">
+                                        <div class="upload-sets">
+                                            <div class="upload-sets-btn form-group">
+                                                <input type="file" id="imgInp" name="businessImages[]" class="" multiple onchange="uploadImages()">
+                                                <a href="javascript:void(0);" class="btn btn-upload" ><i class="fa fa-upload me-2"></i> Bild hochladen</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+						</div>
+                    </div>
+                </div>
+            </div>
+        </div> 
+    </div>
+    <script src="/admin/assets/js/jquery-3.6.4.min.js"></script>
+    <script src="/admin/assets/js/select2.min.js"></script>
+    <script src="/admin/assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="/admin/assets/plugins/bootstrap-tagsinput/js/bootstrap-tagsinput.js"></script>
+    <script src="/admin/assets/js/feather.min.js"></script>
+    <script src="/admin/assets/js/jquery.dataTables.min.js"></script>
+    <script src="/admin/assets/js/dataTables.bootstrap4.min.js"></script>
+	<script src="/admin/assets/js/ckeditor.js"></script>
+    <script src="/admin/assets/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+    <script src="/admin/assets/plugins/sweetalert/sweetalert2.all.min.js"></script>
+    <script src="/admin/assets/plugins/sweetalert/sweetalerts.min.js"></script>
+	<script src="/admin/assets/js/owl.carousel.min.js"></script>
+	<script src="/admin/assets/plugins/fancybox/jquery.fancybox.min.js"></script>
+    <script src="/admin/assets/js/admin.js"></script>
+    <script>
+        function toggleSelectAll() {
+            const checkboxes = document.getElementsByName('selectedImages');
+            const selectAllButton = document.getElementById('selectAllButton');
+            const areAllChecked = Array.from(checkboxes).every(checkbox => checkbox.checked);
+    
+            if (areAllChecked) {
+                checkboxes.forEach(checkbox => {
+                    checkbox.checked = false;
+                });
+                selectAllButton.innerHTML = '<i class="fa fa-check me-2"></i>Wählen Sie Alle';
+            } else {
+                checkboxes.forEach(checkbox => {
+                    checkbox.checked = true;
+                });
+                selectAllButton.innerHTML = '<i class="fa fa-times me-2"></i>Alle abwählen';
+            }
+        }
+        function deleteSelectedImages() {
+            const checkboxes = document.getElementsByName('selectedImages');
+            const businessID = document.getElementById('businessID').value;
+            const selectedImages = Array.from(checkboxes)
+                .filter(checkbox => checkbox.checked)
+                .map(checkbox => checkbox.nextElementSibling.src);
+            fetch('/admin/setup/delete-images', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ selectedImages, businessID }),
+            })
+            .then(response => {
+                if (response.ok) {
+                    console.log('Selected images deleted successfully.');
+                    location.reload();
+                } else {
+                    console.error('Error deleting selected images.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+        function uploadImages() {
+            const input = document.getElementById('imgInp');
+            const files = input.files;
+            const businessID = document.getElementById('businessID').value;
+            if (files.length === 0) {
+                console.log('No files selected.');
+                return;
+            }
+            const formData = new FormData();
+            formData.append('businessID', businessID);
+            for (let i = 0; i < files.length; i++) {
+                formData.append('businessImages', files[i]);
+            }
+            fetch('/admin/setup/upload-images', {
+                method: 'POST',
+                body: formData,
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Images uploaded successfully:', data);
+                location.reload();
+            })
+            .catch(error => {
+                console.error('Error uploading images:', error);
+            });
+        } 
+    </script>
+    <script>
+        var currentURL = window.location.href;
+        var urlParts = currentURL.split('/');
+        var dynamicID = urlParts[urlParts.length - 1];
+    
+        var businessIDInput = document.getElementById('businessID');
+        businessIDInput.value = dynamicID;
+    </script>
+</body>
+</html>

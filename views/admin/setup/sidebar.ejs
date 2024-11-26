@@ -1,0 +1,62 @@
+<div class="sidebar" id="sidebar" style="overflow-y: scroll;">
+    <div class="sidebar-header">
+        <div class="sidebar-logo">
+            <a href="/admin/setup/<%= business._id%>">
+                <img src="/assets/img/logo.png" class="img-fluid logo" alt="gastro" width="200">
+            </a>
+            <a href="/admin/setup/<%= business._id%>">
+                <img src="/assets/img/logo.png" class="img-fluid logo-small" alt="gastro">
+            </a>
+        </div>
+    </div>
+    <div class="sidebar-inner " >
+        <div id="sidebar-menu" class="sidebar-menu">
+            <ul id="menuList">
+                <li class="menu-title m-0">
+                    <h6>Home</h6>
+                </li>
+                <li>
+                    <a href="/admin/setup/<%= business._id%>" class="<%= activePage === 'admin/setup/' ? 'active' : '' %>"><i class="fe fe-grid"></i> <span>Dashboard</span></a>
+                </li>
+                <li class="menu-title">
+                    <h6>Geschäft</h6>
+                </li>
+                <li>
+                    <a href="/admin/setup/services/<%= business._id%>" class="<%= activePage === 'admin/setup/services' ? "active" : '' %>"><i class="fe fe-briefcase"></i> <span>Dienstleistungen</span></a>
+                </li>
+                <li>
+                    <a href="/admin/setup/products/<%= business._id%>" class="<%= activePage === 'admin/setup/products' ? "active" : '' %>"><i class="fe fe-book"></i> <span>Produkte</span></a>
+                </li>
+               
+                <li>
+                    <a href="/admin/setup/workers/<%= business._id%>" class="<%= activePage === 'admin/setup/workers' ? 'active' : '' %>"><i class="fe fe-clipboard"></i> <span>Arbeitskräfte</span></a>
+                </li>
+                 
+                <li>
+                    <a href="/admin/setup/calendar/<%= business._id%>" class="<%= activePage === 'admin/setup/calendar' ? 'active' : '' %>"><i class="fe fe-calendar"></i> <span>Kalender</span></a>
+                </li>
+                <li>
+                    <a href="/admin/setup/promotion/<%= business._id%>" class="<%= activePage === 'admin/setup/promotion' ? "active" : '' %>"><i class="fe fe-dollar-sign"></i> <span>Rabattcodes</span></a>
+                </li>
+                <li>
+                    <a href="/admin/setup/campaigns/<%= business._id%>" class="<%= activePage === 'admin/setup/campaigns' ? "active" : '' %>"><i class="fe fe-arrow-down-circle"></i> <span>Kampagnen</span></a>
+                </li>
+                <li>
+                    <a href="/admin/setup/saloon-images/<%= business._id%>" class="<%= activePage === 'admin/setup/saloon-images' ? 'active' : '' %>"><i class="fe fe-tv"></i> <span>Titelbild</span></a>
+                </li>
+                <li class="menu-title">
+					<h6>Finanzen und Bestellungen</h6>
+                </li>
+                <li>
+                    <a href="/admin/setup/orders/<%= business._id%>" class="<%= activePage === 'admin/setup/orders' ? 'active' : '' %>"><i class="fe fe-shopping-bag"></i> <span>Bestellberichte</span></a>
+                </li>
+                <li class="menu-title">
+					<h6>Unternehmenseinstellungen</h6>
+                </li>
+                <li>
+                    <a href="/admin/setup/settings/<%= business._id%>" class="<%= activePage === 'admin/setup/settings' ? 'active' : '' %>"><i class="fe fe-settings"></i> <span>Einstellungen</span></a>
+                </li> 
+            </ul>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+    <title>me Time | Admin Dashboard</title>
+    <link rel="shortcut icon" href="/assets/img/favicon.png">
+    <link rel="stylesheet" href="/admin/assets/css/select2.min.css">
+    <link rel="stylesheet" href="/admin/assets/plugins/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/admin/assets/plugins/bootstrap-tagsinput/css/bootstrap-tagsinput.css">
+    <link rel="stylesheet" href="/admin/assets/plugins/fontawesome/css/fontawesome.min.css">
+    <link rel="stylesheet" href="/admin/assets/plugins/fontawesome/css/all.min.css">
+    <link rel="stylesheet" href="/admin/assets/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="/admin/assets/plugins/feather/feather.css">
+    <link rel="stylesheet" href="/admin/assets/css/style.css">
+</head>
+<body>
+    <div class="main-wrapper">
+        <%- include('./sidebar.ejs') %>
+        <%- include('./header.ejs') %>
+        
+        <div class="page-wrapper page-settings">
+            
+            <div class="content">
+                <div class="row">
+                    <form action="/admin/setup/admin-orders" method="post" class="col-lg-7" >
+                        <div class="row">
+                            <div class="col-lg-4 p-2">
+                                <label for="" class="fw-bold">Aus</label>
+                                <input type="date" name="startDate" class="form-control" required>
+                            </div>
+                            <div class="col-lg-4 p-2">
+                                <label for="" class="fw-bold">Zu</label>
+                                <input type="date" name="endDate" class="form-control" required>
+                            </div>
+                            <div class="col-lg-2" style="margin-top: 32px;">
+                                <button href="" class="btn btn-primary" type="submit">Suchen</button>
+                            </div>
+                            <input type="hidden" value="<%= business._id%>" name="businessID">
+                            <div class="col-lg-2" style="margin-top: 32px;">
+                                <a href="/admin/setup/orders/<%= business._id%>" class="btn btn-outline-primary" type="submit"><u>Klar</u></a>
+                            </div>
+                        </div>
+                    </form>
+                    <div class="col-lg-5" style="margin-top: 32px;">                    
+                        <form id="form1" class="  ">
+                            <a href="" class="btn btn-outline-primary" id="btnPrintOrders"><i class="fa fa-download"></i> Export</a>
+                        </form>
+                    </div>
+                </div>
+                <div class="table-responsive" id="popOrders" style="display: none; font-size: 12px !important;">
+                    <table class="">
+                        <thead>
+                            <tr>
+                                <th width="150px">Auftragsdatum</th>
+                                <th width="150px">Bestellnummer</th>
+                                <th width="200px">Termin</th>
+                                <th width="200px">Gesamtmenge</th>
+                                <th width="200px">Verdienen</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% if (orders && orders.length > 0) { %>
+                                <% orders.forEach((order,index) => {  %>
+                            <tr>
+                                <td width="150px"><%= order.createdAt.toLocaleDateString('ch-CH') %></td>
+                                <td width="150px"><%= order.orderNumber%></td>
+                                <td width="200px"><%= order.startDate ? order.startDate.toLocaleDateString('ch-CH') : '' %></td>   
+                                <td width="200px">CHF <%= parseFloat(order.orderPrice).toFixed(2)%></td>
+                                <td width="200px">CHF <%= parseFloat(order.orderPrice*businessCommision.commisionRate/100).toFixed(2)%></td>
+                            </tr>
+                            <% }); %>   
+                            <% } else { %>
+                                <tr>
+                                <td colspan="3">Keine Bestellungen verfügbar.</td>
+                                </tr>
+                            <% } %>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="row">
+                    <div class="col-12 ">
+                        <div class="table-responsive table-div">
+                            <table class="table datatable" id="ordersTable">
+                                <thead>
+                                    <tr>
+                                        <th>Auftragsdatum</th>
+                                        <th>Bestellnummer</th>
+                                        <th>Termin</th>
+                                        <th>Termindauer</th>
+                                        <th>Gesamtmenge</th>
+                                        <th>Verdienen</th>
+                                        <th>Aktion</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% if (orders && orders.length > 0) { %>
+                                        <% orders.forEach((order,index) => {  %>
+                                    <tr>
+                                        <td><%= order.createdAt.toLocaleDateString('ch-CH') %></td>
+                                        <td><%= order.orderNumber%></td>
+                                        <td><%= order.startDate ? order.startDate.toLocaleDateString('ch-CH') : '' %></td>
+                                        <%
+                                        let duration = 0;
+                                        if (order.orderItems && order.orderItems.length > 0) {
+                                            order.orderItems.forEach(item => {
+                                                if (item.durationMinutes && !isNaN(item.durationMinutes)) {
+                                                    duration += parseFloat(item.durationMinutes);
+                                                }
+                                            });
+                                        }
+                                        %>
+                                        <%
+                                        if(duration>60){
+                                            const hours = Math.floor(duration / 60);
+                                            const minutes = duration % 60;
+                                        %>
+                                        <td><%= hours %> Std. <%= minutes %> Min.</td>
+                                        <% } else {
+                                        const minutes = duration % 60; %>
+                                        <td><%= minutes %> Min.</td>
+                                        <% } %>    
+                                        <td>CHF <%= parseFloat(order.orderPrice).toFixed(2)%></td>
+                                        <td>CHF <%= parseFloat(order.orderPrice*businessCommision.commisionRate/100).toFixed(2)%></td>
+                                        <td>
+                                            <div class="table-actions d-flex">
+                                                <a class="delete-table me-2" href="" data-bs-target="#view-full-<%= order._id %>" data-bs-toggle="modal">
+                                                    <img src="/admin/assets/img/icons/eye.svg" alt="gastro">
+                                                </a>
+                                                <form id="form1" class="">
+                                                    <a class="delete-table me-2 btnPrintOrderDetail" href="#" data-order-id="<%= order._id %>">
+                                                        <img src="/admin/assets/img/icons/pdf.svg" alt="gastro">
+                                                    </a>
+                                                </form>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <div class="modal fade" id="view-full-<%= order._id %>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered " style="max-width: 900px !important;">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalLabel">Bestelldetails</h5>
+                                                    <button type="button" class="btn-close close-modal" data-bs-dismiss="modal" aria-label="Close">
+                                                        <i class="fe fe-x"></i>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body" id="popOrderDetail">
+                                                    <div class="del-modal">
+                                                        <div class="row">
+                                                            <div class="col-lg-6">
+                                                                <p class="mb-2"><span class="fw-bold" style="font-weight: 600;">Auftragsdatum: </span><%= order.createdAt.toLocaleDateString('ch-CH') %></p>
+                                                                <p class="mb-2"><span class="fw-bold" style="font-weight: 600;">Bestellnummer: </span>#<%= order.orderNumber %></p>
+                                                                <p class="mb-2"><span class="fw-bold" style="font-weight: 600;">Termin: </span><%= order.startDate ? order.startDate.toLocaleDateString('ch-CH') : '' %></p>
+                                                                <p class="mb-2"><span class="fw-bold" style="font-weight: 600;">Termindauer: </span>
+                                                                    <%
+                                                                    let durationn = 0;
+                                                                    if (order.orderItems && order.orderItems.length > 0) {
+                                                                        order.orderItems.forEach(item => {
+                                                                            if (item.durationMinutes && !isNaN(item.durationMinutes)) {
+                                                                                durationn += parseFloat(item.durationMinutes);
+                                                                            }
+                                                                        });
+                                                                    }
+                                                                    %>
+                                                                    <%
+                                                                    if(durationn>60){
+                                                                        const hours = Math.floor(durationn / 60);
+                                                                        const minutes = durationn % 60;
+                                                                    %>
+                                                                    <%= hours %> Std. <%= minutes %> Min.
+                                                                    <% } else {
+                                                                    const minutes = durationn % 60; %>
+                                                                    <%= minutes %> Min.
+                                                                    <% } %>  
+                                                                </p>
+                                                                <% if(order.couponCode){%><p class="mb-2" style="font-weight: 600;"><span class="fw-bold">Gutscheincode: </span><%= order.couponCode %></p><%}%>
+                                                                <% if(order.discount>0){%><p class="mb-2" style="font-weight: 600;"><span class="fw-bold">Rabatt: </span><%= parseFloat(order.discount).toFixed(2) %></p><%}%>
+                                                                <p class="mb-2"><span class="fw-bold" style="font-weight: 600;">Zwischensumme: </span><%= parseFloat(order.subtotal).toFixed(2) %></p>
+                                                                <%          
+                                                                const mwstSums = {};
+                                                                order.orderItems.forEach(function(item) { 
+                                                                    const mwstName = item.mwstName;
+                                                                    const mwstValue = parseFloat(item.mwstValue);
+                                                                    
+                                                                    if (mwstSums[mwstName] === undefined) {
+                                                                    mwstSums[mwstName] = 0;
+                                                                    }
+                                                                    
+                                                                    mwstSums[mwstName] += mwstValue;
+                                                                });
+
+                                                                const mwstNames = Object.keys(mwstSums);
+                                                                mwstNames.sort();
+
+                                                                for (const mwstName of mwstNames) {
+                                                                    const mwstValue = mwstSums[mwstName];
+                                                                    const mwstRatio = order.orderItems.find(item => item.mwstName === mwstName).mwstRatio;
+                                                                %>
+                                                                <p class="mb-2"><span class="fw-bold" style="font-weight: 600;"><%= mwstName%> (%<%= mwstRatio%>):  </span>CHF <%= parseFloat(mwstValue).toFixed(2) %></p>
+                                                                <% } %>
+                                                                <p class="mb-2"><span class="fw-bold" style="font-weight: 600;">Gesamtmenge: </span><%= parseFloat(order.orderPrice).toFixed(2) %></p>
+                                                            </div>
+                                                            <div class="col-lg-6">
+                                                                <p class="mb-2"><span class="fw-bold" style="font-weight: 600;">Kundenname: </span><%= order.name %> <%= order.surname %></p>
+                                                                <p class="mb-2"><span class="fw-bold" style="font-weight: 600;">Kunden-eMail: </span><%= order.email %></p>
+                                                                <p class="mb-2"><span class="fw-bold" style="font-weight: 600;">Kundentelefon: </span><%= order.gsm %></p>
+                                                                <p class="mb-2"><span class="fw-bold" style="font-weight: 600;">Kundenadresse: </span><%= order.street%> <%= order.no%>, <%= order.postcode%> <%= order.ort%></p>
+                                                                <% if(order.note){%><p class="mb-2"><span class="fw-bold">Bestellhinweis: </span><%= order.note %></p><%}%>
+                                                            </div>
+                                                        </div>
+                                                            <div class="row fw-bold" style="background-color: #eeecec; display:flex; justify-content: space-around; text-align: left; padding: 10px 0; margin-top: 20px;" >
+                                                                <div class="col-lg-5" style="font-weight: 600; width: 50%; text-align: left;">Produktname</div>
+                                                                <div class="col-lg-2" style="font-weight: 600; width: 20%; text-align: left;">Preis</div>
+                                                                <div class="col-lg-2" style="font-weight: 600; width: 10%; text-align: left;">Menge</div>
+                                                                <div class="col-lg-3" style="font-weight: 600; width: 20%; text-align: left;">Gesamtpreis</div>
+                                                            </div>
+                                                            
+                                                            <% order.orderItems.forEach(item => { %>
+                                                                <div class="row" style="display:flex; justify-content: space-around; text-align: left; padding: 10px 0;" >
+                                                                    <div class="col-lg-5" style="width: 50%; text-align: left;"><%= item.productName || item.serviceName || 'N/A' %></div>
+                                                                    <div class="col-lg-2" style="width: 20%; text-align: left;">CHF <%= parseFloat(item.price / item.quantity).toFixed(2) || 'N/A' %></div>
+                                                                    <div class="col-lg-2" style="width: 10%; text-align: left;"><%= item.quantity || 'N/A' %></div>
+                                                                    <div class="col-lg-3" style="width: 20%; text-align: left;">CHF <%= parseFloat(item.price).toFixed(2) || 'N/A' %></div>
+                                                                </div>
+                                                            <% }); %>
+                                                            
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div> 
+                                    <% }); %>   
+                                    <% } else { %>
+                                        <tr>
+											<td colspan="3">Keine Bestellungen verfügbar.</td>
+                                        </tr>
+                                      <% } %>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> 
+    </div> 
+    <script src="/admin/assets/js/jquery-3.6.4.min.js"></script>
+    <script src="/admin/assets/js/select2.min.js"></script>
+    <script src="/admin/assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="/admin/assets/plugins/bootstrap-tagsinput/js/bootstrap-tagsinput.js"></script>
+    <script src="/admin/assets/js/feather.min.js"></script>    
+    <script src="/admin/assets/js/jquery.dataTables.min.js"></script>
+    <script src="/admin/assets/js/dataTables.bootstrap4.min.js"></script>
+    <script src="/admin/assets/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+    <script src="/admin/assets/plugins/sweetalert/sweetalert2.all.min.js"></script>
+    <script src="/admin/assets/plugins/sweetalert/sweetalerts.min.js"></script>
+    <script src="/admin/assets/js/admin.js"></script>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+    
+    <script type="text/javascript">
+// Export Orders
+$(document).on("click", "#btnPrintOrders", function (event) {
+    event.preventDefault();
+    var divContents = $("#popOrders").html();
+    var printWindow = window.open('', '', 'height=400,width=1300');
+    var today = new Date();
+    var dateString = today.getDate() + '.' + (today.getMonth() + 1); 
+    printWindow.document.write('<html><head><title>' + 'Orders' + '_' + dateString + '</title>');
+    printWindow.document.write('<link rel="stylesheet" type="text/css" href="/admin/assets/css/style.css">');
+    printWindow.document.write('</head><body style="font-size:5px !important;">');
+    printWindow.document.write(divContents);
+    printWindow.document.write('</body></html>');
+    printWindow.document.close();
+    printWindow.print();
+});
+
+// Export Order Detail
+$(document).on("click", ".btnPrintOrderDetail", function (event) {
+    event.preventDefault();
+    var orderId = $(this).data("order-id");
+    var divContents = $("#view-full-" + orderId).html();
+    var printWindow = window.open('', '', 'height=400,width=1000');
+    printWindow.document.write('<html><head><title>Order Detail</title>');
+    
+    printWindow.document.write('<link rel="stylesheet" type="text/css" href="/admin/assets/css/select2.min.css">');
+    printWindow.document.write('<link rel="stylesheet" type="text/css" href="/admin/assets/plugins/bootstrap/css/bootstrap.min.css">');
+    printWindow.document.write('<link rel="stylesheet" type="text/css" href="/admin/assets/plugins/bootstrap-tagsinput/css/bootstrap-tagsinput.css">');
+    printWindow.document.write('<link rel="stylesheet" type="text/css" href="/admin/assets/plugins/fontawesome/css/all.min.css">');
+    printWindow.document.write('<link rel="stylesheet" type="text/css" href="/admin/assets/css/dataTables.bootstrap4.min.css">');
+    printWindow.document.write('<link rel="stylesheet" type="text/css" href="/admin/assets/css/style.css">');
+
+    printWindow.document.write('</head><body style="font-size:8px">');
+    printWindow.document.write(divContents);
+    printWindow.document.write('</body></html>');
+    printWindow.document.close();
+    printWindow.print();
+});
+
+
+    </script>
+</body>
+</html>

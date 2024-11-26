@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+    <title>me Time | Admin Dashboard</title>
+    <link rel="shortcut icon" href="/assets/img/favicon.png">
+    <link rel="stylesheet" href="/admin/assets/css/select2.min.css">
+    <link rel="stylesheet" href="/admin/assets/plugins/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/admin/assets/plugins/bootstrap-tagsinput/css/bootstrap-tagsinput.css">
+    <link rel="stylesheet" href="/admin/assets/plugins/fontawesome/css/fontawesome.min.css">
+    <link rel="stylesheet" href="/admin/assets/plugins/fontawesome/css/all.min.css">
+    <link rel="stylesheet" href="/admin/assets/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="/admin/assets/plugins/feather/feather.css">
+	<link rel="stylesheet" href="/admin/assets/css/ckeditor.css">
+    <link rel="stylesheet" href="/admin/assets/css/style.css">
+</head>
+<body>
+    <div class="main-wrapper">
+        <%- include('./sidebar.ejs') %>
+        <%- include('./header.ejs') %>
+        <div class="page-wrapper">
+            <div class="content">
+                <div class="row">
+                    <div class="col-lg-12 col-sm-12 m-auto">
+                        <div class="content-page-header">
+                            <h5>Bearbeiten <%= applicationdetail.businessName %></h5>
+                        </div>
+                        <form action="../edit-application/<%= applicationdetail._id %>" method="post">
+                            <div class="row">
+                                <div class="col-lg-4">
+                                    <div class="form-group"><label>Firmenname</label>
+                                        <input type="text" class="form-control" value="<%= applicationdetail.businessName %>" name="businessName" readonly>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label>Name</label>
+                                        <input type="text" class="form-control" value="<%= applicationdetail.businessFirstname %>" name="businessFirstname" readonly>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label>Nachname</label>
+                                        <input type="text" class="form-control" value="<%= applicationdetail.businessSurname %>" name="businessSurname" readonly>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+<label>Unternehmensstandort</label>
+                                        <input type="text" class="form-control" value="<%= applicationdetail.businessLocation %>" name="businessLocation" readonly>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label>Telefon</label>
+                                        <input type="text" class="form-control" value="<%= applicationdetail.businessTel %>" name="businessTel" readonly>
+                                        <input type="hidden" class="form-control" value="" name="businessLat" id="businessLat">
+                                        <input type="hidden" class="form-control" value="" name="businessLong" id="businessLong">
+                                        <input type="hidden" class="form-control" value="2" name="auth">
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label>E-mail</label>
+                                        <input type="text" class="form-control" value="<%= applicationdetail.businessMail %>" name="businessMail" readonly>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <label>Bewerbungsstatus<small class="fw-bold text-bg-danger p-1">Ändern Sie den Status des neuen Geschäftsantrags in <u>Genehmigen</u> oder <u>Ablehnen</u>. Der Unternehmer erhält die Ergebnisse per E-Mail</small></label>
+                                        <select class="select select2" name="appStatus" required>
+                                            <option value="" disabled>Select Status</option>
+                                            <option value="Waiting" <%= applicationdetail.businessStatus === 'Waiting' ? 'selected' : '' %>>Waiting</option>
+                                            <option value="Approved" <%= applicationdetail.businessStatus === 'Approved' ? 'selected' : '' %>>Approve</option>
+                                            <option value="Declined" <%= applicationdetail.businessStatus === 'Declined' ? 'selected' : '' %>>Decline</option>
+                                        </select>
+                                    </div>
+                                </div>   
+                                <input type="hidden" class="form-control" value="<%= applicationdetail.businessStreet %>" name="businessStreet" id="businessStreet" readonly>                             
+                                <input type="hidden" class="form-control" value="<%= applicationdetail.businessNr %>" name="businessNr" id="businessNr" readonly>                             
+                                <input type="hidden" class="form-control" value="<%= applicationdetail.businessPostcode %>" name="businessPostcode" id="businessPostcode" readonly>                             
+                                <input type="hidden" class="form-control" value="<%= applicationdetail.businessOrt %>" name="businessOrt" id="businessOrt" readonly>                             
+                                <div class="col-lg-12">
+                                    <div class="btn-path">                                    
+                                        <a href="/admin/application" class="btn btn-cancel me-3">Storniern</a>
+                                        <button type="submit" class="btn btn-submit "> Einreichen</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div> 
+    </div>
+    <script src="/admin/assets/js/jquery-3.6.4.min.js"></script>
+    <script src="/admin/assets/js/select2.min.js"></script>
+    <script src="/admin/assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="/admin/assets/plugins/bootstrap-tagsinput/js/bootstrap-tagsinput.js"></script>
+    <script src="/admin/assets/js/feather.min.js"></script>
+    <script src="/admin/assets/js/jquery.dataTables.min.js"></script>
+    <script src="/admin/assets/js/dataTables.bootstrap4.min.js"></script>
+	<script src="/admin/assets/js/ckeditor.js"></script>
+    <script src="/admin/assets/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+    <script src="/admin/assets/plugins/sweetalert/sweetalert2.all.min.js"></script>
+    <script src="/admin/assets/plugins/sweetalert/sweetalerts.min.js"></script>
+    <script src="/admin/assets/js/admin.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDpdRgZnPECuMag4x5EFJVD_UzG2w49jSM&libraries=places"></script>
+    <script>
+        const geocoder = new google.maps.Geocoder();
+    
+        const businessStreet = document.getElementById('businessStreet').value;
+        const businessNr = document.getElementById('businessNr').value;
+        const businessPostcode = document.getElementById('businessPostcode').value;
+        const businessOrt = document.getElementById('businessOrt').value;
+    
+        const fullAddress = `${businessStreet} ${businessNr}, ${businessPostcode}, ${businessOrt}`;
+    
+        geocoder.geocode({ address: fullAddress }, (results, status) => {
+            if (status === 'OK' && results[0]) {
+                const location = results[0].geometry.location;
+                document.getElementById('businessLat').value = location.lat();
+                document.getElementById('businessLong').value = location.lng();
+            } else {
+                console.error('Geocoder failed due to: ', status);
+            }
+        });
+    </script>
+</body>
+</html>

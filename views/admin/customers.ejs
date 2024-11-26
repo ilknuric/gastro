@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+    <title>Gastro Koçak Handel GmbH | Admin Dashboard</title>
+    <link rel="shortcut icon" href="/assets/img/favicon.png">
+    <link rel="stylesheet" href="assets/css/select2.min.css">
+    <link rel="stylesheet" href="assets/plugins/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/plugins/bootstrap-tagsinput/css/bootstrap-tagsinput.css">
+    <link rel="stylesheet" href="assets/plugins/fontawesome/css/fontawesome.min.css">
+    <link rel="stylesheet" href="assets/plugins/fontawesome/css/all.min.css">
+    <link rel="stylesheet" href="assets/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="assets/plugins/feather/feather.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+    <div class="main-wrapper">
+        <%- include('./sidebar.ejs') %>
+        <%- include('./header.ejs') %>
+        <div class="page-wrapper page-settings">
+            <div class="content">
+                <div class="content-page-header content-page-headersplit">
+                    <h5>Alle Kunden</h5>
+                    <div class="list-btn">
+                        <ul>
+                            <li>
+                                <a class="btn btn-primary" href="/admin/add-customer"><i class="fa fa-plus me-2"></i>Neuen Kunden hinzufügen</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 ">
+                        <div class="table-resposnive table-div">
+                            <table class="table datatable">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Kundenname</th>
+                                        <th>Tel</th>
+                                        <th>E-mail</th>
+                                        <th>Adresse</th>
+                                        <th>Status</th>
+                                        <th>Aktion</th>
+                                    </tr>
+                                </thead>
+                                <tbody> 
+                                    <% if (users) { %>
+                                        <% users.forEach((user,index) => { %>
+                                        <tr>
+                                            <td><%= index+1 %></td>
+                                            <td><%= user.name%> <%= user.surname%></td> 
+                                            <td><%= user.gsm%></td> 
+                                            <td><%= user.email%></td> 
+                                            <td><%= user.street%> <%= user.no%>, <%= user.postcode%> <%= user.ort%></td> 
+                                            <% if (user.customerStatus=='Approved') { %>
+                                            <td><h6 class="badge-active">Aktiv</h6></td>
+                                            <% } else { %>
+                                            <td><h6 class="badge-delete">Waiting Approval</h6></td>
+                                            <% } %>
+                                            <td>
+                                                <div class="table-actions d-flex">
+                                                    <a class="delete-table me-2" href="/admin/edit-customer/<%= user._id %>" >
+                                                        <img src="assets/img/icons/edit.svg" alt="gastro">
+                                                    </a>
+                                                    <a class="delete-table" href="/admin/delete-customer/<%= user._id %>" data-bs-toggle="modal" data-bs-target="#delete-item-<%= user._id %>">
+                                                        <img src="assets/img/icons/delete.svg" alt="gastro">
+                                                    </a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <div class="modal fade" id="delete-item-<%= user._id %>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-centered ">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="exampleModalLabel">Produkt löschen</h5>
+                                                        <button type="button" class="btn-close close-modal" data-bs-dismiss="modal" aria-label="Close">
+                                                            <i class="fe fe-x"></i>
+                                                        </button>
+                                                    </div>
+                                                    <form action="/admin/delete-customer/<%= user._id %>" method="get">
+                                                        <div class="modal-body py-0">
+                                                            <div class="del-modal">
+                                                                <p>Möchten Sie wirklich löschen?</p>
+                                                            </div>
+                                                        </div>
+                                                        <div class="modal-footer pt-0">
+                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Storniern</button>
+                                                            <button type="submit" class="btn btn-primary">Ja</button>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div> 
+                                        <% }); %>
+                                      <% } else { %>
+                                        <tr>
+                                            <td colspan="3">Keine Produkte verfügbar.</td>
+                                        </tr>
+                                      <% } %>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> 
+    </div>
+    <div class="modal fade" id="delete-item" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered ">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">Dienste löschen</h5>
+					<button type="button" class="btn-close close-modal" data-bs-dismiss="modal" aria-label="Close">
+						<i class="fe fe-x"></i>
+					</button>
+				</div>
+                <form action="listings.html">
+                    <div class="modal-body py-0">
+                        <div class="del-modal">
+<p>Möchten Sie wirklich löschen?</p>
+                        </div>
+                    </div>
+                    <div class="modal-footer pt-0">
+                        <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">Storniern</button>
+                        <button type="submit" class="btn btn-submit">Ja</button>
+                    </div>
+                </form>
+			</div>
+		</div>
+	</div>
+    <script src="assets/js/jquery-3.6.4.min.js"></script>
+    <script src="assets/js/select2.min.js"></script>
+    <script src="assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/plugins/bootstrap-tagsinput/js/bootstrap-tagsinput.js"></script>
+    <script src="assets/js/feather.min.js"></script>
+    <script src="assets/js/jquery.dataTables.min.js"></script>
+    <script src="assets/js/dataTables.bootstrap4.min.js"></script>
+    <script src="assets/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+    <script src="assets/plugins/sweetalert/sweetalert2.all.min.js"></script>
+    <script src="assets/plugins/sweetalert/sweetalerts.min.js"></script>
+    <script src="assets/js/admin.js"></script>
+</body>
+
+</html>

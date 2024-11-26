@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+	<title>Gastro Koçak Handel GmbH | Admin Dashboard</title>
+	<link rel="shortcut icon" href="/assets/img/favicon.png">
+    <link rel="stylesheet" href="/admin/assets/css/select2.min.css">
+	<link rel="stylesheet" href="/admin/assets/plugins/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/admin/assets/plugins/bootstrap-tagsinput/css/bootstrap-tagsinput.css">
+	<link rel="stylesheet" href="/admin/assets/plugins/fontawesome/css/fontawesome.min.css">
+	<link rel="stylesheet" href="/admin/assets/plugins/fontawesome/css/all.min.css">
+	<link rel="stylesheet" href="/admin/assets/plugins/feather/feather.css">
+    <link rel="stylesheet" href="/admin/assets/css/ckeditor.css">
+	<link rel="stylesheet" href="/admin/assets/css/style.css">
+		<style>
+	@media only screen and (max-width: 999px) {
+		.page-settings{
+		flex-direction:column;
+		}
+	}
+	
+	</style>
+</head>
+<body>
+	<div class="main-wrapper">
+        <%- include('./sidebar.ejs') %>
+        <%- include('./header.ejs') %>
+		<div class="page-wrapper page-settings">
+			<div class="content-sidelink">
+				<div class="content-sidelinkheading">
+<h6>Einstellungen</h6>
+				</div>
+				<div class="content-sidelinkmenu">
+					<ul>
+						<li><a href="/admin/admin-settings" class="active">Geschäftseinstellungen</a></li>
+						<li><a href="/admin/admin-security">Sicherheit</a></li>
+					</ul>
+				</div>
+			</div>
+			<div class="content w-100">
+                <form action="../admin/edit-admin-business/<%= business._id%>" method="post" enctype="multipart/form-data">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="form-grouphead">
+<h2>Unternehmenslogo</h2>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="profile-upload">
+                                <div class="profile-upload-img">
+                                    <img class="rounded" src="<%= business.businessImage ? business.businessImage : '/assets/img/default.png' %>" width="50" alt="gastro" style="object-fit: contain; ">
+                                </div>
+                                <div class="profile-upload-content">
+                                    <div class="profile-upload-btn">
+                                        <div class="profile-upload-file">
+                                            <input type="file" id="imgInp" name="businessImage" accept="image/*">
+                                            <a href="javascript:void(0);" class="btn btn-load-one">Hochladen</a>
+                                        </div>
+                                    </div>
+                                    <div class="profile-upload-para">
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-12">
+                            <div class="form-group">
+                                <label>Provisionssatz <small style="font-size: 10px; font-weight: 600;" class="text-bg-danger p-1" >(Geben Sie % der Provision in das Eingabefeld ein)</small></label>                                
+                                <input type="hidden" class="form-control" name="auth" value="1" >
+                            </div>
+                        </div>
+                        <input type="hidden" name="businessID" id="businessID" value="<%= business._id %>">
+                        <input type="hidden" name="businessLat" id="businessLat" value="<%= business.businessLat %>" >
+                        <input type="hidden" name="businessLong" id="businessLong"  value="<%= business.businessLong %>" >
+                        <div class="col-lg-12">
+                            <div class="form-grouphead">
+                                <h2>Adresse <small class="fs-6 fw-light">(Ziehen Sie die Stecknadel, um Ihren Unternehmensstandort zu markieren.)</small></h2>
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <div class="form-grouphead">
+                                <div class="map-frame">
+                                    <div id="businessMap" style="height: 300px;"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-12">
+                            <div class="form-group">
+                                <label>Strasse</label>
+                                <input type="text" class="form-control" name="businessStreet" id="businessStreet" value="<%= business.businessStreet%>">
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-12">
+                            <div class="form-group">
+                                <label>Nr</label>
+                                <input type="text" class="form-control" name="businessNr" id="businessNr" value="<%= business.businessNr%>">
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-12">
+                            <div class="form-group">
+<label>Postleitzahl</label>
+                                <input type="text" class="form-control" name="businessPostcode" id="businessPostcode" value="<%= business.businessPostcode%>">
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-12">
+                            <div class="form-group">
+                                <label>Ort</label>
+                                <input type="text" class="form-control" name="businessOrt" id="businessOrt" value="<%= business.businessOrt%>">
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <div class="form-grouphead">
+<h2>Geschäftsinformationen </h2>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-12">
+                            <div class="form-group">
+<label>Firmenname</label>
+                                <input type="text" class="form-control" name="businessName" value="<%= business.businessName%>">
+                            </div>
+                        </div>
+                       
+                        <div class="col-lg-6 col-12">
+                            <div class="form-group">
+                                <label>Name</label>
+                                <input type="text" class="form-control" name="businessFirstname" value="<%= business.businessFirstname%>">
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-12">
+                            <div class="form-group">
+                                <label>Nachname</label>
+                                <input type="text" class="form-control" name="businessSurname" value="<%= business.businessSurname%>">
+                            </div>
+                        </div>
+                       
+                        <div class="col-lg-6 col-12">
+                            <div class="form-group">
+                                <label>Email</label>
+                                <input type="text" class="form-control" name="businessMail" value="<%= business.businessMail%>">
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-12">
+                            <div class="form-group">
+                                <label>Telefon</label>
+                                <input type="text" class="form-control" name="businessTel" value="<%= business.businessTel%>">
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-12">
+                            <div class="form-group">
+                                <label>Website</label>
+                                <input type="text" class="form-control" name="businessWebsite" value="<%= business.businessWebsite%>">
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-sm-12">
+                            <div class="form-group">
+                                <label>Facebook URL</label>
+                                <input type="text" class="form-control" name="socialFacebook" placeholder="Please copy and paste your page's URL" value="<%= business.socialFacebook%>">
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-sm-12">
+                            <div class="form-group">
+                                <label>Instagram URL</label>
+                                <input type="text" class="form-control" name="socialInstagram" placeholder="Please copy and paste your page's URL" value="<%= business.socialInstagram%>">
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <div class="btn-path"> 
+                                <button type="submit" class="btn btn-submit "> Einreichen</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+			</div>
+		</div> 
+	</div>
+	<script src="/admin/assets/js/jquery-3.6.4.min.js"></script>
+    <script src="/admin/assets/js/select2.min.js"></script>
+	<script src="/admin/assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="/admin/assets/plugins/bootstrap-tagsinput/js/bootstrap-tagsinput.js"></script>
+	<script src="/admin/assets/js/feather.min.js"></script>	
+    <script src="/admin/assets/js/ckeditor.js"></script>
+	<script src="/admin/assets/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+    <script src="/admin/assets/plugins/sweetalert/sweetalert2.all.min.js"></script>
+    <script src="/admin/assets/plugins/sweetalert/sweetalerts.min.js"></script>
+    <script src="/admin/assets/js/admin.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDpdRgZnPECuMag4x5EFJVD_UzG2w49jSM&libraries=places"></script>
+
+    <script>
+        const apiBaseUrl = "https://metime-schweiz.ch";
+        const businessID = document.getElementById('businessID').value;
+        fetch(`${apiBaseUrl}/api/business/${businessID}`)
+            .then(response => response.json())
+            .then(data => {
+                const businessLat = data.businessLat;
+                const businessLong = data.businessLong;
+                const businessName = data.businessName;
+    
+                const map = new google.maps.Map(document.getElementById('businessMap'), {
+                    center: { lat: businessLat, lng: businessLong },
+                    zoom: 15
+                });
+    
+                const marker = new google.maps.Marker({
+                    position: { lat: businessLat, lng: businessLong },
+                    map: map,
+                    title: businessName,
+                    draggable: true 
+                });
+    
+                marker.addListener('dragend', function () {
+                    const newPosition = marker.getPosition(); 
+                    document.getElementById('businessLat').value = newPosition.lat();
+                    document.getElementById('businessLong').value = newPosition.lng();
+                    const geocoder = new google.maps.Geocoder();
+                    geocoder.geocode({ location: newPosition }, (results, status) => {
+                        if (status === 'OK' && results[0]) {
+                            const addressComponents = results[0].address_components;
+    
+                            const street = addressComponents.find(component => component.types.includes('route'));
+                            const number = addressComponents.find(component => component.types.includes('street_number'));
+                            const postcode = addressComponents.find(component => component.types.includes('postal_code'));
+                            const ort = addressComponents.find(component => component.types.includes('locality'));
+                            document.getElementById('businessStreet').value = street ? street.long_name : '';
+                            document.getElementById('businessNr').value = number ? number.long_name : '';
+                            document.getElementById('businessPostcode').value = postcode ? postcode.long_name : '';
+                            document.getElementById('businessOrt').value = ort ? ort.long_name : '';
+                        } else {
+                            console.error('Geocoder failed due to: ', status);
+                        }
+                    });
+                });
+            })
+            .catch(error => console.error('Error fetching business location:', error));
+    
+            function updateMarkerFromAddress() {
+                const businessStreet = document.getElementById('businessStreet').value;
+                const businessNr = document.getElementById('businessNr').value;
+                const businessPostcode = document.getElementById('businessPostcode').value;
+                const businessOrt = document.getElementById('businessOrt').value;
+    
+                const address = `${businessStreet} ${businessNr}, ${businessPostcode} ${businessOrt}`;
+    
+                const geocoder = new google.maps.Geocoder();
+                geocoder.geocode({ address: address }, (results, status) => {
+                    if (status === 'OK' && results[0]) {
+                        const newPosition = results[0].geometry.location;
+                        document.getElementById('businessLat').value = newPosition.lat();
+                        document.getElementById('businessLong').value = newPosition.lng();
+                        marker.setPosition(newPosition);
+                    } else {
+                        console.error('Geocoder failed due to: ', status);
+                    }
+                });
+            }
+            document.getElementById('businessStreet').addEventListener('change', updateMarkerFromAddress);
+            document.getElementById('businessNr').addEventListener('change', updateMarkerFromAddress);
+            document.getElementById('businessPostcode').addEventListener('change', updateMarkerFromAddress);
+            document.getElementById('businessOrt').addEventListener('change', updateMarkerFromAddress);
+    
+        </script>
+    
+</body>
+</html>

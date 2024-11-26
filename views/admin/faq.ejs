@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+    <title>Gastro Koçak Handel GmbH | Admin Dashboard</title>
+    <link rel="shortcut icon" href="/assets/img/favicon.png">
+    <link rel="stylesheet" href="assets/css/select2.min.css">
+    <link rel="stylesheet" href="assets/plugins/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/plugins/bootstrap-tagsinput/css/bootstrap-tagsinput.css">
+    <link rel="stylesheet" href="assets/plugins/fontawesome/css/fontawesome.min.css">
+    <link rel="stylesheet" href="assets/plugins/fontawesome/css/all.min.css">
+    <link rel="stylesheet" href="assets/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="assets/plugins/feather/feather.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+    <div class="main-wrapper">
+        <%- include('./sidebar.ejs') %>
+        <%- include('./header.ejs') %>
+        <div class="page-wrapper page-settings">
+            <div class="content">
+                <div class="content-page-header content-page-headersplit">
+                    <h5>All FAQ</h5>
+                    <div class="list-btn">
+                        <ul>
+                            <li>
+                                <a class="btn btn-primary" href="/admin/add-faq"><i class="fa fa-plus me-2"></i>Add New FAQ </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 ">
+                        <div class="table-resposnive table-div">
+                            <table class="table datatable">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Question</th>
+                                        <th>Answer</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                <% if (faq && faq.length > 0) { %>
+                                    <% faq.forEach((faq, index) => { %>
+                                    <tr>
+                                        <td><%= index + 1 %></td>
+                                        <td><%= faq.question %></td>
+										 <td><%= faq.answer.substr(0, 50) %>...</td>
+                                        <td>
+                                            <div class="table-actions d-flex">
+                                                <a class="delete-table me-2" href="/admin/edit-faq/<%= faq._id %>" >
+                                                   <img src="assets/img/icons/edit.svg" alt="gastro">
+                                                </a>
+                                                <a class="delete-table" href="/admin/delete-faq/<%= faq._id %>" data-bs-toggle="modal" data-bs-target="#delete-item-<%= faq._id %>">
+                                                    <img src="assets/img/icons/delete.svg" alt="gastro">
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <div class="modal fade" id="delete-item-<%= faq._id %>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered ">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalLabel">Delete Categories</h5>
+                                                    <button type="button" class="btn-close close-modal" data-bs-dismiss="modal" aria-label="Close">
+                                                        <i class="fe fe-x"></i>
+                                                    </button>
+                                                </div>
+                                                <form action="/admin/delete-faq/<%= faq._id %>" method="get">
+                                                    <div class="modal-body py-0">
+                                                        <div class="del-modal">
+                                                            <p>Are you sure want to Delete?</p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer pt-0">
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                        <button type="submit" class="btn btn-primary">Yes</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div> 
+                                    <% }); %>
+                                    <% } else { %>
+                                      <tr>
+                                        <td colspan="3">No FAQ available.</td>
+                                      </tr>
+                                    <% } %>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> 
+    </div>
+    <script src="assets/js/jquery-3.6.4.min.js"></script>
+    <script src="assets/js/select2.min.js"></script>
+    <script src="assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/plugins/bootstrap-tagsinput/js/bootstrap-tagsinput.js"></script>
+    <script src="assets/js/feather.min.js"></script>
+    <script src="assets/js/jquery.dataTables.min.js"></script>
+    <script src="assets/js/dataTables.bootstrap4.min.js"></script>
+    <script src="assets/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+    <script src="assets/plugins/sweetalert/sweetalert2.all.min.js"></script>
+    <script src="assets/plugins/sweetalert/sweetalerts.min.js"></script>
+    <script src="assets/js/admin.js"></script>
+</body>
+</html>

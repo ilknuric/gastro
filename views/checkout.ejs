@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US" lang="en-US">
+<head>
+    <meta charset="utf-8">
+    <title>Gastro Koçak Handel GmbH | Alles für Ihr Restaurant</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="fonts/fonts.css">
+    <link rel="stylesheet" href="fonts/font-icons.css">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/swiper-bundle.min.css">
+    <link rel="stylesheet" href="css/animate.css">
+    <link rel="stylesheet"type="text/css" href="css/styles.css"/> 
+    <link rel="shortcut icon" href="/favicon.png">
+    <link rel="apple-touch-icon-precomposed" href="images/logo/favicon.png">
+</head>
+<body class="preload-wrapper">
+    <div class="preload preload-container">
+        <div class="preload-logo">
+            <div class="spinner"></div>
+        </div>
+    </div>
+    <div id="wrapper">
+        <%- include('./partials/header.ejs') %>
+        <div class="tf-page-title">
+            <div class="container-full">
+                <div class="heading text-center">Kasse</div>
+            </div>
+        </div>
+        <form action="/place-order" method="post" >
+            <section class="flat-spacing-11">
+                <div class="container">
+                    <div class="tf-page-cart-wrap layout-2">
+                        <div class="tf-page-cart-item">
+                            <h5 class="fw-5 mb_20">Rechnungsdetails</h5>
+                            <div class="form-checkout">
+                                <div class="box grid-2">
+                                    <fieldset class="fieldset">
+                                        <label for="first-name">Vorname</label>
+                                        <input type="text" id="first-name" name="name" value="<%= user.name%>"> 
+                                    </fieldset>
+                                    <fieldset class="fieldset">
+                                        <label for="last-name">Nachname</label>
+                                        <input type="text" id="last-name" name="surname" value="<%= user.surname%>">
+                                    </fieldset>
+                                </div>
+                                <div class="box grid-2">
+                                    <fieldset class="fieldset">
+                                        <label for="email">E-mail</label>
+                                        <input type="email" id="email" name="email" value="<%= user.email%>">
+                                    </fieldset>
+                                    <fieldset class="fieldset">
+                                        <label for="tel">Tel</label>
+                                        <input type="text" id="tel" name="gsm" value="<%= user.gsm%>">
+                                    </fieldset>
+                                </div>
+                                <div class="box grid-2">
+                                    <fieldset class="fieldset">
+                                        <label for="street">Strasse</label>
+                                        <input type="text" id="street" name="street" value="<%= user.street%>">
+                                    </fieldset>
+                                    <fieldset class="fieldset">
+                                        <label for="nr">Nr</label>
+                                        <input type="text" id="nr" name="no" value="<%= user.no%>">
+                                    </fieldset>
+                                </div>
+                                <div class="box grid-2">
+                                    <fieldset class="fieldset">
+                                        <label for="postcode">Postleitzahl</label>
+                                        <input type="text" id="postcode" name="postcode" value="<%= user.postcode%>">
+                                    </fieldset>
+                                    <fieldset class="fieldset">
+                                        <label for="ort">Ort</label>
+                                        <input type="text" id="ort" name="ort" value="<%= user.ort%>">
+                                    </fieldset>
+                                </div>
+                                <fieldset class="box fieldset">
+                                    <label for="note">Bestellhinweise (optional)</label>
+                                    <textarea name="note" id="note" name="note"></textarea>
+                                </fieldset>
+                                <input type="hidden" name="userID" id="userID" value="<%= userID%>">
+                                <input type="hidden" name="orderPrice" id="tots" value="">
+                                <input type="hidden" name="appliedcouponCode" id="lastcouponCode" value="" placeholder="kuponcode">
+                                <input type="hidden" name="discount" id="discount" value="" placeholder="discount">
+                                <input type="hidden" name="orderItems" id="orderItems">
+
+                            </div>
+                        </div>
+                        <div class="tf-page-cart-footer">
+                            <div class="tf-cart-footer-inner">
+                                <h5 class="fw-5 mb_20">Bestelldetails</h5>
+                                <div class="tf-page-cart-checkout widget-wrap-checkout">
+                                    <ul class="wrap-checkout-product">
+                                    </ul>
+                                    <div class="coupon-box">
+                                        <input type="text" placeholder="Gutscheincode" name="couponCode"  id="couponCode">
+                                        <button class="tf-btn btn-sm radius-3 btn-fill btn-icon animate-hover-btn promo-check" type="submit">Code hinzufügen</button>
+                                    </div>
+                                    <div class="d-flex justify-content-between ">
+                                        <h6 class="">Zwischensumme</h6>
+                                        <h6 class="total fw-5" id="subtotal"></h6>
+                                    </div>
+                                    <div id="mwstContainer" style="margin-top: -30px;"></div>
+                                    <div class=" justify-content-between" style="margin-top: -10px; display: none;" id="discount-container">
+                                        <h6 class="">Rabatt</h6>
+                                        <h6 class="total fw-5" id="discount-value"></h6>
+                                    </div>
+                                    <div class="d-flex justify-content-between line" style="margin-top: -10px;">
+                                        <h6 class="">Gesamtpreis</h6>
+                                        <h6 class="total fw-5" id="totalprice"></h6>
+                                    </div>
+                                    <div class="wd-check-payment">
+                                        <div class="box-checkbox fieldset-radio mb_20">
+                                            <input type="checkbox" id="check-agree" class="tf-check" required>
+                                            <label for="check-agree" class="text_black-2">Ich habe die <a href="/agb" class="text-decoration-underline">AGB</a> gelesen und akzeptiert und bin damit einverstanden*.</label>
+                                        </div>
+                                    </div>
+                                    <button class="tf-btn radius-3 btn-fill btn-icon animate-hover-btn justify-content-center">Bestellung aufgeben</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </form>
+        <%- include('./partials/footer.ejs') %>
+    </div>
+    <div class="progress-wrap">
+        <svg class="progress-circle svg-content" width="100%" height="100%" viewBox="-1 -1 102 102">
+        <path d="M50,1 a49,49 0 0,1 0,98 a49,49 0 0,1 0,-98" style="transition: stroke-dashoffset 10ms linear 0s; stroke-dasharray: 307.919, 307.919; stroke-dashoffset: 286.138;"></path>
+        </svg>
+    </div>
+    <%- include('./partials/mobilebar.ejs') %>
+    <%- include('./partials/basket.ejs') %>
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/swiper-bundle.min.js"></script>
+    <script type="text/javascript" src="js/carousel.js"></script>
+    <script type="text/javascript" src="js/bootstrap-select.min.js"></script>
+    <script type="text/javascript" src="js/lazysize.min.js"></script>
+    <script type="text/javascript" src="js/count-down.js"></script>   
+    <script type="text/javascript" src="js/wow.min.js"></script>   
+    <script type="text/javascript" src="js/wow.min.js"></script>
+    <script type="text/javascript" src="js/multiple-modal.js"></script>
+    <script type="text/javascript" src="js/main.js"></script>
+    <script>
+    function loadCheckoutItems() {
+        displayMwstCalculation();
+        const checkoutProductList = document.querySelector('.wrap-checkout-product'); 
+        checkoutProductList.innerHTML = ''; 
+        const cart = JSON.parse(localStorage.getItem('cart')) || [];
+        cart.forEach(item => {
+            const itemTotal = (item.price * item.quantity).toFixed(2); 
+            const itemHTML = `
+                <li class="checkout-product-item">
+                    <figure class="img-product">
+                        <img src="${item.image}" alt="gastro">
+                        <span class="quantity">${item.quantity}</span>
+                    </figure>
+                    <div class="content">
+                        <div class="info">
+                            <p class="name">${item.name}</p>
+                        </div>
+                        <span class="price">${itemTotal} CHF</span>
+                    </div>
+                </li>
+            `;
+            checkoutProductList.insertAdjacentHTML('beforeend', itemHTML);
+        });
+    }
+    document.addEventListener('DOMContentLoaded', loadCheckoutItems);
+
+
+
+    function findCouponCode(couponCode, callback) {
+        $.ajax({
+            url: `/api/promotion/${couponCode}`,
+            type: 'GET',
+            dataType: 'json',
+            success: function(coupon) {
+                callback(coupon);
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.error('Error fetching coupon:', errorThrown);
+                callback(null); 
+            }
+        });
+    }
+
+    $(document).on("click", ".promo-check", function (e) {
+        e.preventDefault();
+        const couponCode = document.getElementById("couponCode").value.trim();
+        const userID = document.getElementById("userID").value.trim();
+        const cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+        if (!couponCode || cart.length === 0) {
+            Swal.fire({
+                title: 'Hata',
+                text: "Lütfen bir kupon kodu girin ve sepetinizi kontrol edin.",
+                icon: 'error',
+                confirmButtonText: 'Tamam'
+            });
+            return;
+        }
+        let basketTotalPrice = 0;
+        for (const item of cart) {
+            const price = parseFloat(item.price) * parseFloat(item.quantity);
+            basketTotalPrice += price;
+        }
+
+        findCouponCode(couponCode, function(couponDetails) {
+            if (!couponDetails) {
+                Swal.fire({
+                    title: 'Hata',
+                    text: "Bu kupon bulunamadı veya kullanılamaz durumda.",
+                    icon: 'error',
+                    confirmButtonText: 'Tamam'
+                });
+                return;
+            }
+            const couponType = couponDetails.couponType;
+            const couponValue = parseFloat(couponDetails.couponValue);
+            const minValue = parseFloat(couponDetails.minValue);
+            if (basketTotalPrice < minValue) {
+                Swal.fire({
+                    title: 'Hata',
+                    text: `Bu kupon için minimum sepet tutarı CHF ${minValue.toFixed(2)}.`,
+                    icon: 'error',
+                    confirmButtonText: 'Tamam'
+                });
+                return;
+            }
+
+            $.ajax({
+                url: `/api/order/check-coupon`,
+                type: 'POST',
+                data: JSON.stringify({ couponCode, userID }),
+                contentType: "application/json",
+                success: function(orderCheck) {
+                    if (orderCheck.used) {
+                        Swal.fire({
+                            title: 'Hata',
+                            text: "Bu kupon daha önce kullanılmış.",
+                            icon: 'error',
+                            confirmButtonText: 'Tamam'
+                        });
+                    } else {
+                        let discount = 0;
+                        if (couponType === "%") {
+                            discount = (basketTotalPrice * couponValue) / 100;
+                        } else if (couponType === "CHF") {
+                            discount = couponValue;
+                        }
+
+                        const newTotal = basketTotalPrice - discount;
+                        if (discount > 0) {
+                            document.getElementById("discount-value").innerText = `${discount.toFixed(2)} CHF`;
+                            document.getElementById("discount-container").style.display = "flex";
+                        } else {
+                            document.getElementById("discount-container").style.display = "none";
+                        }
+
+                        document.getElementById("totalprice").innerText = `${newTotal.toFixed(2)} CHF`;
+                        document.getElementById("lastcouponCode").value = couponCode;
+                        document.getElementById("tots").value = newTotal;
+                        document.getElementById("discount").value = discount;
+
+                        Swal.fire({
+                            title: 'Başarılı',
+                            text: "Kupon başarıyla uygulandı!",
+                            icon: 'success',
+                            confirmButtonText: 'Tamam'
+                        });
+                    }
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.error('Error checking coupon usage:', errorThrown);
+                    Swal.fire({
+                        title: 'Hata',
+                        text: "Kupon kullanım durumu kontrol edilirken bir hata oluştu.",
+                        icon: 'error',
+                        confirmButtonText: 'Tamam'
+                    });
+                }
+            });
+        });
+    });
+
+
+
+
+    function prepareOrderItems(callback) {
+        const cart = JSON.parse(localStorage.getItem('cart')) || [];
+        const orderItems = [];
+        let remainingProducts = cart.length;
+
+        cart.forEach((item) => {
+            findCategoryById(item.category, (category) => {
+                if (!category || !category.mwstID) {
+                    console.error('Category or mwstId missing for item:', item);
+                    if (--remainingProducts === 0) callback(orderItems); 
+                    return;
+                }
+
+                findMwstById(category.mwstID, (mwst) => {
+                    if (!mwst) {
+                        console.error('Mwst not found for category:', category);
+                        if (--remainingProducts === 0) callback(orderItems); 
+                        return;
+                    }
+                    orderItems.push({
+                        _id: item.id,
+                        productName: item.name,
+                        description: item.description || '',
+                        price: item.price.toString(),
+                        category: item.category,
+                        quantity: item.quantity.toString(),
+                        mwstName: mwst.mwstName || '',
+                        mwstValue: ((item.price * item.quantity) * (mwst.mwstRatio / 100)).toFixed(2),
+                        mwstRatio: mwst.mwstRatio.toString(),
+                        __v: "0"
+                    });
+                    if (--remainingProducts === 0) callback(orderItems);
+                });
+            });
+        });
+    }
+    prepareOrderItems((orderItems) => {
+        document.getElementById('orderItems').value = JSON.stringify(orderItems);
+        const totalPrice = orderItems.reduce((total, item) => total + parseFloat(item.price) * parseFloat(item.quantity), 0).toFixed(2);
+        document.getElementById('tots').value = totalPrice;
+        document.querySelector('.totalPrice').innerText = `${totalPrice} CHF`;
+    });
+    </script>
+</body>
+</html>

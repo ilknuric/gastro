@@ -1,0 +1,17 @@
+
+.btn-primary-outline {
+    border: 2px solid $__secondarycolor;
+    color: $__themeColor;
+    &:hover {
+		background-color: $__themeColor;
+		border: 2px solid $__themeColor;
+        box-shadow: 0 50px 0 0 $__white $__inset;
+        color: $__themeColor;
+	}
+	&:focus {
+		background-color: $__themeColor;
+		border: 2px solid $__themeColor;
+        box-shadow: 0 50px 0 0 $__white $__inset;
+        color: $__themeColor;
+	}
+}

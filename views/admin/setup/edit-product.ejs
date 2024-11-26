@@ -1,0 +1,109 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+    <title>me Time | Admin Dashboard</title>
+    <link rel="shortcut icon" href="/assets/img/favicon.png">
+    <link rel="stylesheet" href="/admin/assets/css/select2.min.css">
+    <link rel="stylesheet" href="/admin/assets/plugins/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/admin/assets/plugins/bootstrap-tagsinput/css/bootstrap-tagsinput.css">
+    <link rel="stylesheet" href="/admin/assets/plugins/fontawesome/css/fontawesome.min.css">
+    <link rel="stylesheet" href="/admin/assets/plugins/fontawesome/css/all.min.css">
+    <link rel="stylesheet" href="/admin/assets/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="/admin/assets/plugins/feather/feather.css">
+	<link rel="stylesheet" href="/admin/assets/css/ckeditor.css">
+    <link rel="stylesheet" href="/admin/assets/css/style.css">
+</head>
+
+<body>
+    <div class="main-wrapper">
+        <%- include('./sidebar.ejs') %>
+        <%- include('./header.ejs') %>
+        <div class="page-wrapper">
+            <div class="content">
+                <form action="/admin/setup/edit-product/<%= products._id %>" method="post" enctype="multipart/form-data">
+                    <div class="row">
+                        <div class="col-lg-12 col-sm-12 ">
+                            <div class="content-page-header">
+								<h5>Neuen Dienst hinzufügen</h5>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <img src="<%= products.productImage %>" alt="gastro" height="200px; object-fit:contain;">
+                                    </div>
+                                </div>
+                                <div class="col-lg-8">
+                                    <div class="form-group">
+										<label>Produktbild</label>
+                                        <input type="file" class="form-control" name="productImage" style="padding: 15px 20px;">
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+										<label>Produktname</label>
+                                        <input type="text" class="form-control" required value="<%= products.productName %>" name="productName">
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label>Status</label>
+                                        <select class="select" name="status" required>
+                                            <option value="" disabled>Wählen Sie Status aus</option>
+                                            <option value="Active" <%= products.status === 'Active' ? 'selected' : '' %>>Aktiv</option>
+                                            <option value="Passive" <%= products.status === 'Passive' ? 'selected' : '' %>>Passiv</option>
+                                        </select>
+                                    </div>                                    
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label>Preis</label>
+                                        <input type="text" class="form-control" value="<%= products.price %>" required name="price">
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label>Kategorie</label>
+                                        <select class="select" required name="category">
+                                            <option value="" disabled selected>Kategorie wählen</option>
+                                            <% categories.forEach((category) => { %>
+                                                <option value="<%= category._id %>" <%= products.category == category._id ? 'selected' : '' %>><%= category.categoryName %></option>
+                                            <% }); %>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+										<label>Beschreibung</label>
+                                        <input type="text" class="form-control"  name="description" value="<%= products.description %>">
+                                    </div>
+                                </div>
+                                <input type="hidden" name="businessID" value="<%= products.businessID%>">
+                                <div class="col-lg-12">
+                                    <div class="btn-path">
+                                        <button type="submit" class="btn btn-submit "> Speichern</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div> 
+    </div>
+    <script src="/admin/assets/js/jquery-3.6.4.min.js"></script>
+    <script src="/admin/assets/js/select2.min.js"></script>
+    <script src="/admin/assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="/admin/assets/plugins/bootstrap-tagsinput/js/bootstrap-tagsinput.js"></script>
+    <script src="/admin/assets/js/feather.min.js"></script>
+    <script src="/admin/assets/js/jquery.dataTables.min.js"></script>
+    <script src="/admin/assets/js/dataTables.bootstrap4.min.js"></script>
+	<script src="/admin/assets/js/ckeditor.js"></script>
+    <script src="/admin/assets/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+    <script src="/admin/assets/plugins/sweetalert/sweetalert2.all.min.js"></script>
+    <script src="/admin/assets/plugins/sweetalert/sweetalerts.min.js"></script>
+    <script src="/admin/assets/js/admin.js"></script>
+</body>
+</html>

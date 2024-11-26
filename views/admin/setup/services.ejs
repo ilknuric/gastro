@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+    <title>me Time | Admin Dashboard</title>
+    <link rel="shortcut icon" href="/assets/img/favicon.png">
+    <link rel="stylesheet" href="/admin/assets/css/select2.min.css">
+    <link rel="stylesheet" href="/admin/assets/plugins/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/admin/assets/plugins/bootstrap-tagsinput/css/bootstrap-tagsinput.css">
+    <link rel="stylesheet" href="/admin/assets/plugins/fontawesome/css/fontawesome.min.css">
+    <link rel="stylesheet" href="/admin/assets/plugins/fontawesome/css/all.min.css">
+    <link rel="stylesheet" href="/admin/assets/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="/admin/assets/plugins/feather/feather.css">
+    <link rel="stylesheet" href="/admin/assets/css/style.css">
+</head>
+<body>
+    <div class="main-wrapper">
+        <%- include('./sidebar.ejs') %>
+        <%- include('./header.ejs') %>
+        <div class="page-wrapper page-settings">
+            <div class="content">
+                <div class="content-page-header content-page-headersplit">
+					<h5>Alle Dienste</h5>
+                    <div class="list-btn">
+                        <ul>
+                            <li>
+                                <a class="btn btn-primary" href="/admin/setup/add-service/"><i class="fa fa-plus me-2"></i>Neuen Dienst hinzufügen </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 ">
+                        <div class="table-resposnive table-div">
+                            <table class="table datatable">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+										<th>Dienstname</th>
+										<th>Diensttyp</th>
+										<th>Kategorie</th>
+                                        <th>Preis</th>
+										<th>Dauer</th>
+										<th>Beschreibung</th>
+										<th>Aktion</th>
+                                    </tr>
+                                </thead>
+                                <tbody> 
+                                    <% if (services && services.length > 0) { %>
+                                        <% services.forEach((service,index) => { %>
+                                        <tr>
+                                            <td><%= index+1 %></td>
+                                            <td><%= service.serviceName%></td> 
+                                            <td><%= service.serviceType%></td> 
+                                            <td><%= service.category%></td> 
+                                            <td>CHF <%= parseFloat(service.price).toFixed(2) %></td>
+                                            <td>
+                                                <% 
+                                                  const totalMinutes = service.durationMinutes;
+                                                  const hours = Math.floor(totalMinutes / 60);
+                                                  const minutes = totalMinutes % 60;
+                                                  if(hours>0){
+                                                %>
+                                                <%= hours %> Hours <%= minutes %> Min.
+                                                <% } else { %>
+                                                <%= minutes %> Min.
+                                                <% } %>
+                                              </td>
+                                            <% if (service.status=='Active') { %>
+                                            <td><h6 class="badge-active">Aktiv</h6></td>
+                                            <% } else { %>
+                                            <td><h6 class="badge-delete">Passiv</h6></td>
+                                            <% } %>
+                                            <td>
+                                                <div class="table-actions d-flex">
+                                                    <a class="delete-table me-2" href="" data-bs-target="#view-full-<%= service._id %>" data-bs-toggle="modal">
+                                                        <img src="/admin/assets/img/icons/eye.svg" alt="gastro">
+                                                     </a>
+                                                    <a class="delete-table me-2" href="/admin/setup/edit-service/<%= service._id %>" >
+                                                        <img src="/admin/assets/img/icons/edit.svg" alt="gastro">
+                                                    </a>
+                                                    <a class="delete-table" href="/admin/setup/delete-service/<%= service._id %>" data-bs-toggle="modal" data-bs-target="#delete-item-<%= service._id %>">
+                                                        <img src="/admin/assets/img/icons/delete.svg" alt="gastro">
+                                                    </a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <div class="modal fade" id="delete-item-<%= service._id %>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-centered ">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="exampleModalLabel">Dienst löschen</h5>
+                                                        <button type="button" class="btn-close close-modal" data-bs-dismiss="modal" aria-label="Close">
+                                                            <i class="fe fe-x"></i>
+                                                        </button>
+                                                    </div>
+                                                    <form action="/admin/setup/delete-service/<%= service._id %>" method="get">
+                                                        <div class="modal-body py-0">
+                                                            <div class="del-modal">
+																<p>Möchten Sie wirklich löschen?</p>
+                                                            </div>
+                                                        </div>
+                                                        <div class="modal-footer pt-0">
+                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Stornieren</button>
+                                                            <button type="submit" class="btn btn-primary">Ja</button>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div> 
+                                        <div class="modal fade" id="view-full-<%= service._id %>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-centered ">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="exampleModalLabel">Servicedetails</h5>
+                                                        <button type="button" class="btn-close close-modal" data-bs-dismiss="modal" aria-label="Close">
+                                                            <i class="fe fe-x"></i>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <div class="del-modal">
+                                                            <p class="mb-2"><span class="fw-bold">Dienstname: </span><%= service.serviceName %></p>                                                            
+                                                            <p class="mb-2"><span class="fw-bold">Kategorie: </span><%= service.category %></p>                                                            
+                                                            <p class="mb-2"><span class="fw-bold">Preis: </span><%= service.price %></p>                                                            
+                                                            <p class="mb-2"><span class="fw-bold">Dauer: </span>
+                                                            <% if(hours>0){ %>
+                                                            <%= hours %> Stunde <%= minutes %> Min.
+                                                            <% } else { %>
+                                                            <%= minutes %> Min.
+                                                            <% } %></p>                                                            
+                                                            <p class="mb-2"><span class="fw-bold">Beschreibung: </span><%= service.description %></p>                                                           
+                                                            <p class="mb-2"><span class="fw-bold">Status: <% if (service.status=='Active') { %>
+                                                            <span class="badge-active">Aktiv</span>
+                                                            <% } else { %>
+                                                            <span class="badge-delete">Passiv</span>
+                                                            <% } %></span></p>                                                           
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div> 
+                                        <% }); %>
+                                      <% } else { %>
+                                        <tr>
+											<td colspan="3">Kein Dienst verfügbar.</td>
+                                        </tr>
+                                      <% } %>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> 
+    </div>
+    <script src="/admin/assets/js/jquery-3.6.4.min.js"></script>
+    <script src="/admin/assets/js/select2.min.js"></script>
+    <script src="/admin/assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="/admin/assets/plugins/bootstrap-tagsinput/js/bootstrap-tagsinput.js"></script>
+    <script src="/admin/assets/js/feather.min.js"></script>
+    <script src="/admin/assets/js/jquery.dataTables.min.js"></script>
+    <script src="/admin/assets/js/dataTables.bootstrap4.min.js"></script>
+    <script src="/admin/assets/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+    <script src="/admin/assets/plugins/sweetalert/sweetalert2.all.min.js"></script>
+    <script src="/admin/assets/plugins/sweetalert/sweetalerts.min.js"></script>
+    <script src="/admin/assets/js/admin.js"></script>
+    <script>
+        var currentURL = window.location.href;
+        var urlParts = currentURL.split('/');
+        var dynamicID = urlParts[urlParts.length - 1];
+        var addServiceLink = document.querySelector('.list-btn ul li a');
+        var addServiceOriginalHref = addServiceLink.getAttribute('href');
+        addServiceLink.setAttribute('href', addServiceOriginalHref + dynamicID);
+    </script>
+</body>
+
+</html>

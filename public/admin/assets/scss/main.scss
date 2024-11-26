@@ -1,0 +1,45 @@
+/****** UTILS ******/
+@import "utils/variables";
+@import "utils/mixins";
+
+/******* BASE *******/
+@import "base/reset";
+@import "base/typography.scss";
+@import "base/colors"; 
+@import "base/base";
+@import "base/grid";
+
+/******* COMPONENTS ******/
+@import "components/button.scss";
+
+
+/****** LAYOUT ******/
+
+@import "layout/avatar.scss";
+@import "layout/bootstrap-classes.scss";
+@import "layout/component.scss";
+@import "layout/nav-tabs.scss";
+@import "layout/select2.scss";
+@import "layout/sidebar.scss";
+@import "layout/content";
+@import "layout/footer";
+@import "layout/header";
+@import "layout/table.scss";
+@import "layout/toggle-button.scss";
+
+/****** PAGES ******/
+
+@import "pages/bank-transfer.scss";
+@import "pages/blog-details.scss";
+@import "pages/blog.scss";
+@import "pages/chat.scss";
+@import "pages/dashboard.scss";
+@import "pages/invoices.scss";
+@import "pages/listing.scss";
+@import "pages/login.scss";
+@import "pages/notifications.scss";
+@import "pages/preloading.scss";
+@import "pages/pricing.scss";
+@import "pages/profile.scss";
+@import "pages/reports.scss";
+

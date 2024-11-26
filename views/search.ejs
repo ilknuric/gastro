@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US" lang="en-US">
+<head>
+    <meta charset="utf-8">
+    <title>Gastro Koçak Handel GmbH | Alles für Ihr Restaurant</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="/fonts/fonts.css">
+    <link rel="stylesheet" href="/fonts/font-icons.css">
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/swiper-bundle.min.css">
+    <link rel="stylesheet" href="/css/animate.css">
+    <link rel="stylesheet"type="text/css" href="/css/styles.css"/>
+    <link rel="shortcut icon" href="/favicon.png"> 
+    <link rel="apple-touch-icon-precomposed" href="favicon.png">
+</head>
+<body class="preload-wrapper">
+    <div class="preload preload-container">
+        <div class="preload-logo">
+            <div class="spinner"></div>
+        </div>
+    </div>
+    <div id="wrapper">
+        <%- include('./partials/header.ejs') %>
+        <div class="tf-page-title">
+            <div class="container-full">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="heading text-center">Suchergebnisse</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <section class="flat-spacing-1">
+            <div class="container">
+                <div class="tf-shop-control grid-3 align-items-center">
+                    <div class="tf-control-filter">
+                        <!-- <a href="#filterShop" data-bs-toggle="offcanvas" aria-controls="offcanvasLeft" class="tf-btn-filter"><span class="icon icon-filter"></span><span class="text">Filter</span></a> -->
+                    </div>
+                    <ul class="tf-control-layout d-flex justify-content-center">
+                        <li class="tf-view-layout-switch sw-layout-2" data-value-grid="grid-2">
+                            <div class="item"><span class="icon icon-grid-2"></span></div>
+                        </li>
+                        <li class="tf-view-layout-switch sw-layout-3 active" data-value-grid="grid-3">
+                            <div class="item"><span class="icon icon-grid-3"></span></div>
+                        </li>
+                        <li class="tf-view-layout-switch sw-layout-4" data-value-grid="grid-4">
+                            <div class="item"><span class="icon icon-grid-4"></span></div>
+                        </li>
+                    </ul>
+                    <!--
+                    <div class="tf-control-sorting d-flex justify-content-end">
+                        <div class="tf-dropdown-sort" data-bs-toggle="dropdown">
+                            <div class="btn-select">
+                                <span class="text-sort-value">Featured</span>
+                                <span class="icon icon-arrow-down"></span>
+                            </div>
+                            <div class="dropdown-menu">
+                                <div class="select-item active">
+                                    <span class="text-value-item">Featured</span>
+                                </div>
+                                <div class="select-item">
+                                    <span class="text-value-item">Best selling</span>
+                                </div>
+                                <div class="select-item">
+                                    <span class="text-value-item">Alphabetically, A-Z</span>
+                                </div>
+                                <div class="select-item">
+                                    <span class="text-value-item">Alphabetically, Z-A</span>
+                                </div>
+                                <div class="select-item">
+                                    <span class="text-value-item">Price, low to high</span>
+                                </div>
+                                <div class="select-item">
+                                    <span class="text-value-item">Price, high to low</span>
+                                </div>
+                                <div class="select-item">
+                                    <span class="text-value-item">Date, old to new</span>
+                                </div>
+                                <div class="select-item">
+                                    <span class="text-value-item">Date, new to old</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>-->
+                </div>
+                <div class="">
+                    <div class="tf-shop-content">
+                        <div class="grid-layout wrapper-shop" data-grid="grid-3">
+                            <% products.forEach((product) => { %>
+                            <div class="card-product">
+                                <div class="card-product-wrapper">
+                                    <a href="/product-detail/<%- product._id %>" class="product-img">
+                                        <img class="lazyload img-product" data-src="<%= product && product.productImages[0] ? product.productImages[0] : '/assets/img/default.png' %>" src="<%= product && product.productImages[0] ? product.productImages[0] : '/assets/img/default.png' %>" alt="gastro">
+                                        <img class="lazyload img-hover" data-src="<%= product && product.productImages[0] ? product.productImages[0] : '/assets/img/default.png' %>" src="<%= product && product.productImages[0] ? product.productImages[0] : '/assets/img/default.png' %>" alt="gastro">
+                                    </a>
+                                    <% if (product.campaignDetail) { %>
+                                    <div class="list-product-btn absolute-2">
+                                        <a href="#quick_add" data-bs-toggle="modal" class="box-icon bg_white quick-add tf-btn-loading" onclick="showProductModal('<%= product._id %>', '<%= product.productImages[0] %>', '<%= product.productName %>', <%=product.campaignDetail.campaignPrice %>, '<%= product.category %>' , '<%= product.packageName %>')">
+                                            <span class="icon icon-bag"></span>
+                                            <span class="tooltip">Schnell hinzufügen</span>
+                                        </a>
+                                    </div>
+                                    <% } else { %>
+                                    <div class="list-product-btn absolute-2">
+                                        <a href="#quick_add" data-bs-toggle="modal" class="box-icon bg_white quick-add tf-btn-loading" onclick="showProductModal('<%= product._id %>', '<%= product.productImages[0] %>', '<%= product.productName %>', <%= product.price %>, '<%= product.category %>', '<%= product.packageName %>')">
+                                            <span class="icon icon-bag"></span>
+                                            <span class="tooltip">Schnell hinzufügen</span>
+                                        </a>
+                                    </div>
+                                    <% } %>
+                                    <% if (product.discountPercentage) { %>
+                                        <div class="on-sale-wrap text-end">
+                                            <div class="on-sale-item">-<%= product.discountPercentage %>%</div>
+                                        </div>
+                                    <% } %>
+                                </div>
+                                <div class="card-product-info">
+                                    <a href="/product-detail/<%- product._id %>" class="title link"><%- product.productName %> <small class="fs-10">(<%- product.packageName %>)</small></a>
+                                    <% if (product.campaignDetail) { %>
+                                        <div class="d-flex">
+                                            <div class="price"><%= parseFloat(product.campaignDetail.campaignPrice).toFixed(2) %> CHF</div>
+                                            <div class="price compare-at-price"><%= parseFloat(product.campaignDetail.currentPrice).toFixed(2) %> CHF</div>
+                                        </div>
+                                    <% } else { %>
+                                        <div class="price"><%= parseFloat(product.price).toFixed(2) %> CHF</div>
+                                    <% } %>
+                                </div>
+                            </div>
+                            <div class="modal fade modalDemo" id="quick_add">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="header">
+                                            <span class="icon-close icon-close-popup" data-bs-dismiss="modal"></span>
+                                        </div>
+                                        <div class="wrap">
+                                            <div class="tf-product-info-item">
+                                                <div class="image">
+                                                    <img id="modal-product-image" src="" alt="gastro">
+                                                </div>
+                                                <div class="content">
+                                                    <a id="modal-product-link" href="#"><span id="modal-product-name"></span> <span id="modal-package-name" class="fs-10"></span></a>
+                                                    <div class="tf-product-info-price">
+                                                        <div class="price" id="modal-product-price"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="d-flex align-items-center justify-content-between align-content-center">
+                                                <div class="tf-product-info-quantity mb_15">
+                                                    <div class="quantity-title fw-6">Menge</div>
+                                                    <div class="wg-quantity">
+                                                        <span class="btn-quantity minus-btn">-</span>
+                                                        <input type="text" name="number" value="1">
+                                                        <span class="btn-quantity plus-btn">+</span>
+                                                    </div>
+                                                </div>
+                                                <div class="tf-product-info-buy-button">
+                                                    <div class="quantity-title fw-6" style="visibility: hidden;">Menge</div>
+                                                    <a class="tf-btn btn-fill justify-content-center fw-6 fs-16 flex-grow-1 animate-hover-btn" onclick="addToCart()">
+                                                        <span>Geschäft</span>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <% }); %>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <%- include('./partials/footer.ejs') %>
+    </div>
+    <div class="progress-wrap">
+        <svg class="progress-circle svg-content" width="100%" height="100%" viewBox="-1 -1 102 102">
+        <path d="M50,1 a49,49 0 0,1 0,98 a49,49 0 0,1 0,-98" style="transition: stroke-dashoffset 10ms linear 0s; stroke-dasharray: 307.919, 307.919; stroke-dashoffset: 286.138;"></path>
+        </svg>
+    </div>    
+    <%- include('./partials/basket.ejs') %>
+    <%- include('./partials/mobilebar.ejs') %>
+    <script type="text/javascript" src="/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/js/swiper-bundle.min.js"></script>
+    <script type="text/javascript" src="/js/carousel.js"></script>
+    <script type="text/javascript" src="/js/bootstrap-select.min.js"></script>
+    <script type="text/javascript" src="/js/lazysize.min.js"></script>
+    <script type="text/javascript" src="/js/count-down.js"></script>   
+    <script type="text/javascript" src="/js/wow.min.js"></script>   
+    <script type="text/javascript" src="/js/wow.min.js"></script>
+    <script type="text/javascript" src="/js/multiple-modal.js"></script>
+    <script type="text/javascript" src="/js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset='utf-8' />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">	
+<title>me Time | Admin Dashboard</title>
+<link rel="shortcut icon" href="/assets/img/favicon.png">
+<link rel="stylesheet" href="/admin/assets/css/select2.min.css">
+<link rel="stylesheet" href="/admin/assets/plugins/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="/admin/assets/plugins/bootstrap-tagsinput/css/bootstrap-tagsinput.css">
+<link rel="stylesheet" href="/admin/assets/plugins/fontawesome/css/fontawesome.min.css">
+<link rel="stylesheet" href="/admin/assets/plugins/fontawesome/css/all.min.css">
+<link rel="stylesheet" href="/admin/assets/css/dataTables.bootstrap4.min.css">
+<link rel="stylesheet" href="/admin/assets/plugins/feather/feather.css">
+<link rel="stylesheet" href="/admin/assets/css/style.css">
+
+
+
+<link rel="stylesheet" type="text/css" href="https://uicdn.toast.com/tui.time-picker/latest/tui-time-picker.css">
+<link rel="stylesheet" type="text/css" href="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.css">
+<link rel="stylesheet" href="/admin/assets/plugins/fontawesome/css/fontawesome.min.css">
+<link rel="stylesheet" href="/admin/assets/plugins/fontawesome/css/all.min.css">
+<link rel="stylesheet" type="text/css" href="/admin/assets/calendar/dist/tui-calendar.css">
+<link rel="stylesheet" type="text/css" href="/admin/assets/calendar/css/default.css">
+<link rel="stylesheet" type="text/css" href="/admin/assets/calendar/css/icons.css">
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src='/admin/dist/index.global.js'></script>
+<script src="https://cdn.jsdelivr.net/npm/moment@2.29.1/moment.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/moment@2.29.1/locale/en-gb.js"></script>
+
+<style>
+    @import url("https://fonts.googleapis.com/css2?family=Encode+Sans:wght@100;200;300;400;500;600;700;800;900&display=swap");
+    body {
+        margin: 40px 0px;
+        padding: 0 10px;
+        font-family: "Encode Sans", sans-serif; 
+        font-size: 14px;
+    }
+
+    #calendar {
+        max-width: 100% !important;
+        
+        
+    }
+    .restricted-background {
+      background-color: #d5d5d5 !important;
+    }
+    .fc-button-primary{
+      background-color: #C10037 !important;
+      border-color: #C10037 !important;
+    }
+    .fc-scrollgrid-sync-inner{
+      padding: 10px 0;
+    }
+    .swal2-confirm{
+      background-color: #C10037 !important;
+      border-color: #C10037 !important;
+    }
+    .swal2-confirm:focus{
+      background-color: #C10037 !important;
+      border-color: #C10037 !important;
+      box-shadow: #C10037;
+    }
+    #worker{
+        margin-top: 80px;
+        padding-left: 310px;
+
+    }
+    .main-wrapper{
+        background-color: #f9f9f9;
+    }
+    .fc-scrollgrid{
+        background-color: #fff;
+    }
+  
+	label{
+	margin-top:1rem;
+	}
+    .fc-day-today {
+        background-color: #fff4f7 !important;
+    }
+    .swal2-styled.swal2-cancel{
+        font-size: 14px !important;
+    }
+    .fc-disabled {
+        background-color: #f2f2f2 !important; /* Set your desired background color for disabled cells */
+        pointer-events: none; /* Disable pointer events for the disabled cells */
+        color: #999999 !important; /* Set the text color for better visibility */
+    }
+    .fc-v-event{
+      border-color: none !important;
+    }
+    .cal{
+        margin-top: 150px !important;
+    }
+    @media (max-width: 999px) {
+		 #worker{
+       padding:0 20px; margin-left:20px; margin-right:20px;
+			 margin-top:0px;
+
+    }
+		div:where(.swal2-container) .swal2-html-container{
+		margin:0 !important;
+		}
+		.swal2-content{
+		padding:0 0.5em !important;
+		}
+		.btn {
+    font-size: 12px;
+}
+		.fc-view-harness{
+		height:100vh !important;
+		}
+        #calendar{
+            margin-left: 0 !important;
+            position: relative;
+        }
+        .cal{
+            margin-top: 0px !important;
+        }
+        #worker{
+            margin-top: 10px !important;
+            padding-left: 0px !important;
+        }
+        .fc-toolbar-chunk{
+            display: flex;
+        }
+        .fc .fc-toolbar-title{
+            font-size: 14px;
+        }
+        .swal2-popup{
+            width: 90% !important;
+            
+        }
+		.swal2-content{
+		font-size:24px !important;
+		}
+		.form-control{
+		font-size:18px;
+			        height: 40px;
+		}
+		h5{
+		font-size:18px !important;
+		}
+		label{
+		font-size:18px !important;
+		}
+    }
+    @media (min-width: 999px) {
+        .app-btn{
+            display: none;
+        }
+    }
+</style>
+</head>
+<body>
+    <div class="main-wrapper">
+        <%- include('./sidebar.ejs') %>
+        <%- include('./header.ejs') %>
+
+        <div class="row">
+            <div class="col-lg-4 col-xs-6 col-md-6 col-12" id="worker" >
+                <input type="hidden" value="<%= business._id%>" id="businessID">
+                <label for="" class="emp-label  mt-4">Mitarbeiter auswählen</label>
+                <select class="form-control select " name="workers"  id="workerSelect" onchange="loadCalendarData()" style="width: 100% !important;">													
+                    <option value="" selected >Alle Arbeiter</option>
+                    <% workers.forEach((worker) => { %>
+                    <option value="<%= worker._id %>"  data-businessid="<%= worker.businessID %>"><%= worker.name %> <%= worker.surname %></option>
+                    <% }); %>
+                </select>
+            </div>
+            <div class="col-lg-4 col-xs-6 col-md-6 col-12 app-btn" >
+                <a class="btn btn-primary  mt-3" href="#" onclick="addNewApp()" style="width:100%"><i class="fa fa-plus me-2"></i>Neuen Termin hinzufügen </a><br><br>
+            </div>
+            <div class="col-lg-8 col-xs-12 col-md-12 col-12 cal">
+                <div id='calendar'></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/admin/assets/js/jquery-3.6.4.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js"></script>
+    <script src="/admin/assets/js/select2.min.js"></script>
+    <script src="/admin/assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="/admin/assets/plugins/bootstrap-tagsinput/js/bootstrap-tagsinput.js"></script>
+    <script src="/admin/assets/js/feather.min.js"></script>
+    <script src="/admin/assets/js/jquery.dataTables.min.js"></script>
+    <script src="/admin/assets/js/dataTables.bootstrap4.min.js"></script>
+    <script src="/admin/assets/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+    <script src="/admin/assets/plugins/sweetalert/sweetalert2.all.min.js"></script>
+    <script src="/admin/assets/plugins/sweetalert/sweetalerts.min.js"></script>
+    
+
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+    <script src="https://uicdn.toast.com/tui.code-snippet/v1.5.2/tui-code-snippet.min.js"></script>
+    <script src="https://uicdn.toast.com/tui.time-picker/v2.0.3/tui-time-picker.min.js"></script>
+    <script src="https://uicdn.toast.com/tui.date-picker/v4.0.3/tui-date-picker.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chance/1.0.13/chance.min.js"></script>
+    <script src="/admin/assets/calendar/dist/tui-calendar.js"></script>
+    <script src="/admin/assets/calendar/js/data/calendars.js"></script> 
+    <script src="/admin/assets/calendar/js/data/schedules.js"></script>
+    
+    <script src="/admin/assets/plugins/select2/js/select2.min.js"></script>	
+    <script src="/admin/assets/js/script.js"></script>
+	
+    <script src="/admin/assets/js/admin.js"></script>
+    <script>
+        let calendar; 
+        document.addEventListener('DOMContentLoaded', function() {
+            var calendarEl = document.getElementById('calendar');
+            var isMobile = window.innerWidth < 600;
+            var initialView = isMobile ? 'timeGridDay' : 'timeGridWeek';
+            var today = new Date();
+            var todayFormatted = today.toISOString().split('T')[0]; 
+
+             calendar = new FullCalendar.Calendar(calendarEl, {
+                headerToolbar: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'timeGridWeek,timeGridDay'
+                },
+
+		        initialView: initialView,
+                navLinks: true,
+                selectable: true,
+                selectMirror: true,
+                buttonText: {
+				  today: 'Heute',
+				  day: 'Tag',
+				  week:'Woche',
+				  month:'Monat'
+				},
+				validRange: {
+					start: todayFormatted,
+				},
+                locale: 'de', 
+                select: function(arg) {
+                    var selectedStart = arg.start;
+                    var selectedEnd = arg.end;
+                    const date = new Date(selectedStart);
+                    const formattedDate = date.toISOString().split('T')[0];
+                    //START
+                    const startTime = selectedStart.toISOString().split('T')[1].split('.')[0];
+                    const [hoursStart, minutesStart] = startTime.split(':').map(Number);
+                    const startHour = `${((hoursStart+1) % 24).toString().padStart(2, '0')}:${minutesStart.toString().padStart(2, '0')}`;
+                    //END
+                    const endTime = selectedEnd.toISOString().split('T')[1].split('.')[0];
+                    const [hoursEnd, minutesEnd] = endTime.split(':').map(Number);
+                    const endHour = `${((hoursEnd + 1) % 24).toString().padStart(2, '0')}:${minutesEnd.toString().padStart(2, '0')}`;
+                    
+                    Swal.fire({
+                        title: '<h5>Geben Sie die Termindetails ein</h5><hr>',
+                        html: `
+                        <div class="row mt-2">
+                            <div class="col-lg-12">
+                                <label class="fw-bold">Wählen Sie Arbeiter aus</label>
+                                <select class="form-control  " name="workers" id="workerID">													
+                                    <% workers.forEach((worker) => { %>
+                                    <option value="<%= worker._id %>"  data-businessid="<%= worker.businessID %>"><%= worker.name %> <%= worker.surname %></option>
+                                    <% }); %>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-lg-12">
+								<label class="fw-bold">Termindatum</label>
+                                <input id="event-day" type="date" class="form-control" min="0" max="23"  value="${formattedDate}">
+                            </div>
+							 <div class="col-lg-6 mt-2 col-12">
+                                <label class="fw-bold">Kundenname</label>
+                                <input id="customer-name" type="text" class="form-control" >
+                            </div>
+							 <div class="col-lg-6 mt-2 col-12">
+                                <label class="fw-bold">Nachname des Kunden</label>
+                                <input id="customer-surname" type="text" class="form-control">
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-lg-6 col-12">
+                                <label class="fw-bold">Startzeit</label>
+                                <input id="event-start" type="time" class="form-control" value="${startHour}">
+                            </div>
+                            <div class="col-lg-6 col-12">
+                                <label class="fw-bold">Endzeit</label>
+                                <input id="event-end" type="time" class="form-control" value="${endHour}"
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-lg-12 col-12">
+                                <label class="fw-bold">Kundentelefon</label>
+                                <input id="clientTel" type="number" class="form-control" value="">                               
+                            </div>
+                        </div>
+						<div class="row mt-2">
+							<div class="col-lg-12">
+                                <label class="fw-bold">Terminnotiz</label>
+                                <textarea id="note" class="form-control" style="width:100%"></textarea>
+                            </div>
+                        </div>
+                        `,
+                        showCancelButton: true,
+                        showCloseButton: true,
+                        confirmButtonText: 'Speichern',
+                        cancelButtonText: 'Stornieren',
+                        showLoaderOnConfirm: true,
+                        preConfirm: () => {
+                            const start = document.getElementById('event-start').value;
+                            const end = document.getElementById('event-end').value;
+                            const day = document.getElementById('event-day').value;
+                            const customerName = document.getElementById('customer-name').value;
+                            const customerSurname = document.getElementById('customer-surname').value;
+                            const orderNote = document.getElementById('note').value;							
+                            const businessID = document.getElementById('businessID').value;
+                            const clientTel = document.getElementById('clientTel').value;
+                            const workerSelect = document.getElementById('workerID');
+                            const selectedWorkerID = workerSelect.value;
+                            if (!start || !end || !day || !selectedWorkerID ) {
+                                Swal.showValidationMessage('Please fill all of the fields');
+                            }
+                            return {start, end, day, customerName,customerSurname,orderNote,selectedWorkerID,businessID,clientTel };
+                        },
+                        allowOutsideClick: () => !Swal.isLoading()
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            const start = result.value.start;
+                            const end = result.value.end;
+                            const customerName = result.value.customerName;
+                            const customerSurname = result.value.customerSurname;
+                            const orderNote = result.value.orderNote;
+                            const day = result.value.day;							
+                            const selectedWorkerID = result.value.selectedWorkerID;
+                            const clientTel = result.value.clientTel;
+                            const businessID = result.value.businessID;
+                            //DURATION CALC
+                            var startTimeCalc = parseInt(start.split(":")[0]) * 60 + parseInt(start.split(":")[1]);
+                            var endTimeCalc = parseInt(end.split(":")[0]) * 60 + parseInt(end.split(":")[1]);
+                            var timeDifferenceInMinutes = endTimeCalc - startTimeCalc;
+
+                            const startD = convertToISODateTime(day, start);
+                            const startDateZurichObject = new Date(startD);
+                            var utcDate = new Date(startDateZurichObject.getUTCFullYear(), startDateZurichObject.getUTCMonth(), startDateZurichObject.getUTCDate(),
+                            startDateZurichObject.getUTCHours(), startDateZurichObject.getUTCMinutes(), startDateZurichObject.getUTCSeconds());
+				            var startDate = utcDate.toISOString();
+                            
+                            const endD = convertToISODateTime(day, end);
+                            const endDateZurichObject = new Date(endD);
+                            var utcEndDate = new Date(endDateZurichObject.getUTCFullYear(), endDateZurichObject.getUTCMonth(), endDateZurichObject.getUTCDate(),
+                            endDateZurichObject.getUTCHours(), endDateZurichObject.getUTCMinutes(), endDateZurichObject.getUTCSeconds());
+				            var endDate = utcEndDate.toISOString();
+                            
+                            const orderNumber=0;
+                            saveEventData(startDate, endDate, orderNumber, timeDifferenceInMinutes, selectedWorkerID, businessID, customerName, customerSurname, orderNote, clientTel);
+                        }
+                    }); 
+                    calendar.unselect();
+                },
+                allDaySlot: false,
+                eventClick: function(arg) {
+                const event = arg.event;
+                const calendarID = event._def.extendedProps.calendarID;
+                fetchEventDetails(calendarID)
+                .then((eventDetails) => {
+                const aDate= eventDetails.calendarInfo[0].startDate.split('T')[0];
+                                    
+                const startTime = eventDetails.calendarInfo[0].startDate.split('T')[1].split('.')[0];
+                const [hoursStart, minutesStart] = startTime.split(':').map(Number);
+                const formattedStartTime = `${((hoursStart+1) % 24).toString().padStart(2, '0')}:${minutesStart.toString().padStart(2, '0')}`;
+
+                const endTime = eventDetails.calendarInfo[0].endDate.split('T')[1].split('.')[0];
+                const [hoursEnd, minutesEnd] = endTime.split(':').map(Number);
+                const formattedEndTime = `${((hoursEnd + 1) % 24).toString().padStart(2, '0')}:${minutesEnd.toString().padStart(2, '0')}`;
+                
+                const calendarworkerID=eventDetails.calendarInfo[0].workerID;
+                const allWorkers=eventDetails.workers;
+				const serviceNames=eventDetails.concatenatedServiceNames;
+                const productNames=eventDetails.concatenatedProductNames;
+                Swal.fire({
+                    title: '<h5>Termindetails bearbeiten</h5><hr>',
+                    html: `
+                    <div class="row mt-2">
+                        <div class="col-lg-12">
+                            <label class="fw-bold">Arbeiter auswählen</label>
+                            <select class="form-control" name="workers" id="workerID">
+                                ${allWorkers.map(worker => `
+                                    <option value="${worker._id}" ${worker._id === calendarworkerID ? 'selected' : ''}>
+                                        ${worker.name} ${worker.surname}
+                                    </option>
+                                `).join('')}
+                            </select>
+                        </div>
+                    </div>
+                    <input type="hidden" value="${eventDetails.calendarInfo[0]._id}" name="calendarID" id="calendarID">
+                    <div class="row mt-2">
+                        <div class="col-lg-12">
+                            <label class="fw-bold">Termindatum</label>
+                            <input id="event-day" type="date" class="form-control" min="0" max="23"  value="${aDate}">
+                        </div>
+                            <div class="col-lg-6 mt-2 col-12">
+                                <label class="fw-bold">Kundenname</label>
+                            <input id="customer-name" type="text" class="form-control" value="${eventDetails.calendarInfo[0].customerName}">
+                        </div>
+                            <div class="col-lg-6 mt-2 col-12">
+                                <label class="fw-bold">Nachname des Kunden</label>
+                            <input id="customer-surname" type="text" class="form-control" value="${eventDetails.calendarInfo[0].customerSurname}">
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-lg-6 col-12">
+                            <label class="fw-bold">Startzeit</label>
+                            <input id="event-start" type="time" class="form-control" value="${formattedStartTime}">
+                        </div>
+                        <div class="col-lg-6 col-12">
+                            <label class="fw-bold">Endzeit</label>
+                            <input id="event-end" type="time" class="form-control" value="${formattedEndTime}">
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                            <div class="col-lg-12 col-12">
+                                <label class="fw-bold">Kundentelefonn</label>
+                                <input id="clientTel" type="number" class="form-control" value="${eventDetails.calendarInfo[0].clientTel}">                               
+                            </div>
+                        </div>
+                    <div class="row mt-2">
+                        <div class="col-lg-12">
+                            <label class="fw-bold">Terminnotiz</label>
+                            <textarea id="note" class="form-control" style="width:100%">${eventDetails.calendarInfo[0].orderNote} ${serviceNames} ${productNames}</textarea>
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-lg-12">
+                            <button class="btn btn-warning" id="deleteBtn">Termin löschen</button>
+                        </div>
+                    </div>`,
+                    showCancelButton: true,
+                    showCloseButton: true,
+                    confirmButtonText: 'Speichern',
+                    cancelButtonText: 'Stornieren',
+                    showLoaderOnConfirm: true,
+                    preConfirm: () => {
+                        const start = document.getElementById('event-start').value;
+                        const end = document.getElementById('event-end').value;
+                        const day = document.getElementById('event-day').value;
+                        const customerName = document.getElementById('customer-name').value;
+                        const customerSurname = document.getElementById('customer-surname').value;
+                        const orderNote = document.getElementById('note').value;							
+                        const businessID = document.getElementById('businessID').value;
+                        const calendarID = document.getElementById('calendarID').value;
+                        const clientTel = document.getElementById('clientTel').value;
+                        const workerSelect = document.getElementById('workerID');
+                        const selectedWorkerID = workerSelect.value;
+                        if (!start || !end || !day || !selectedWorkerID ) {
+                            Swal.showValidationMessage('Please fill all of the fields');
+                        }
+                        return { start, end, day, customerName, customerSurname, orderNote, selectedWorkerID, businessID,calendarID, clientTel };
+                    },
+                    allowOutsideClick: () => !Swal.isLoading(),      
+                    didOpen: () => {
+                        const deleteButton = document.getElementById('deleteBtn');
+                        deleteButton.addEventListener('click', function() {
+                            const calendarID = eventDetails.calendarInfo[0]._id;
+                            deleteEvent(calendarID);
+                            Swal.close(); 
+                        });
+                    }
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        const start = result.value.start;
+                        const end = result.value.end;
+                        const customerName = result.value.customerName;
+                        const customerSurname = result.value.customerSurname;
+                        const orderNote = result.value.orderNote;
+                        const calendarID = result.value.calendarID;
+                        const day = result.value.day;							
+                        const selectedWorkerID = result.value.selectedWorkerID;
+                        const businessID = result.value.businessID;
+                        const clientTel = result.value.clientTel;
+
+
+                        const startD = convertToISODateTime(day, start);
+                        const startDateZurichObject = new Date(startD);
+                        var utcDate = new Date(startDateZurichObject.getUTCFullYear(), startDateZurichObject.getUTCMonth(), startDateZurichObject.getUTCDate(),
+                        startDateZurichObject.getUTCHours(), startDateZurichObject.getUTCMinutes(), startDateZurichObject.getUTCSeconds());
+                        var startDate = utcDate.toISOString();
+
+                        
+                        const endD = convertToISODateTime(day, end);
+                        const endDateZurichObject = new Date(endD);
+                        var utcEndDate = new Date(endDateZurichObject.getUTCFullYear(), endDateZurichObject.getUTCMonth(), endDateZurichObject.getUTCDate(),
+                        endDateZurichObject.getUTCHours(), endDateZurichObject.getUTCMinutes(), endDateZurichObject.getUTCSeconds());
+                        var endDate = utcEndDate.toISOString();
+
+                        
+                        
+                        const orderNumber=0;
+                        editEventData(startDate, endDate, orderNumber, selectedWorkerID, businessID, customerName, customerSurname, orderNote,calendarID, clientTel);
+                    }
+                });
+                    })
+                    .catch((error) => {
+                        console.error('Error fetching event details:', error);
+                    });
+                },
+                editable: true,
+                dayMaxEvents: true,
+                slotLabelFormat: {
+                    hour: 'numeric',
+                    minute: '2-digit',
+                    omitZeroMinute: false,
+                    meridiem: false,
+                    hour12: false
+                },
+                titleFormat: {
+                    year: 'numeric',
+                    month: 'numeric',
+                    day: 'numeric',
+                    weekday: 'short',
+                    omitCommas: true
+                },
+                locale:'de',
+                events: [],
+            });
+			
+			
+            function fetchEventDetails(calendarID) {
+                const url = `/api/calendar-data/${calendarID}`;
+                return fetch(url)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to fetch event details');
+                    }
+                    return response.json();
+                });
+            }
+
+            
+            function  deleteEvent(calendarID) {
+                const url = '/api/delete-schedule'; 
+                const payload = {calendarID:calendarID};
+                fetch(url, {
+                    method: 'POST', 
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(payload)
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to delete event data');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Event data deleted successfully:', data);
+                    location.reload()
+                    loadCalendarData();
+                })
+                .catch(error => {
+                    console.error('Error deleting event data:', error);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Failed to delete event data. Please try again.'
+                    });
+                });
+            }
+            function convertToISODateTime(dateString, timeString) {    
+                const [year, month, day] = dateString.split('-');
+                const [hours, minutes] = timeString.split(':');    
+                const isoDate = new Date(`${year}-${month}-${day}T${hours}:${minutes}:00.000Z`).toISOString();
+                return isoDate;
+            }
+            function saveEventData(startDate, endDate, orderNumber, timeDifferenceInMinutes, selectedWorkerID, businessID,customerName,customerSurname,orderNote, clientTel) {
+                const startDateObject = new Date(startDate);
+                const modifiedStartDate = startDateObject.toISOString();
+
+                const endDateObject = new Date(endDate);
+                const modifiedEndDate = endDateObject.toISOString();
+                const paymentStatus="Success";
+                const duration=timeDifferenceInMinutes;
+                const url = '/api/save-schedule'; 
+                const payload = {
+                    businessID:businessID,
+					customerName:customerName,
+					customerSurname:customerSurname,
+					orderNote:orderNote,
+                    startDate: modifiedStartDate,
+                    endDate: modifiedEndDate,
+                    duration:duration,
+                    paymentStatus:paymentStatus,
+                    orderNumber: orderNumber,
+                    clientTel: clientTel,
+                    selectedWorkerID: selectedWorkerID
+                };
+                fetch(url, {
+                    method: 'POST', 
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(payload)
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to save event data');
+                    }
+                    return response.json();
+                    
+                })
+                .then(data => {
+                    console.log('Event data saved successfully:', data);
+                    location.reload();
+                    loadCalendarData();
+                })
+                .catch(error => {
+                    console.error('Error saving event data:', error);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Failed to save event data. Please try again.'
+                    });
+                });
+            }
+            function editEventData(startDate, endDate, orderNumber, selectedWorkerID, businessID,customerName,customerSurname,orderNote,calendarID, clientTel) {
+
+                const url = '/api/edit-schedule'; 
+                const payload = {
+                    businessID:businessID,
+                    calendarID:calendarID,
+					customerName:customerName,
+					customerSurname:customerSurname,
+					orderNote:orderNote,
+                    startDate: startDate,
+                    endDate: endDate,
+                    orderNumber: orderNumber,
+                    clientTel: clientTel,
+                    selectedWorkerID: selectedWorkerID
+                };
+                fetch(url, {
+                    method: 'POST', 
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(payload)
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to save event data');
+                    }
+                    return response.json();
+                    
+                })
+                .then(data => {
+                    console.log('Event data saved successfully:', data);
+                    location.reload();
+                    loadCalendarData();
+                })
+                .catch(error => {
+                    console.error('Error saving event data:', error);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Failed to save event data. Please try again.'
+                    });
+                });
+            }
+            const businessID = document.getElementById('businessID').value;
+            fetchCalendar(businessID)
+                .then(() => {
+                    calendar.render();
+                })
+            
+            .catch(error => {
+                console.error('Error fetching worker data:', error);
+            });
+            function fetchCalendar(businessID) {
+                const url = `/api/get-calendar/${businessID}`;
+                return fetch(url)
+                    .then(response => response.json())
+                    .then(data => {
+                    const calendarEvents = data.map((event, index) => {
+                        const startUTC = new Date(event.start);
+                        const endUTC = new Date(event.end);
+
+                        startUTC.setUTCHours(startUTC.getUTCHours());
+                        endUTC.setUTCHours(endUTC.getUTCHours());
+                        const startZurich = startUTC.toISOString();
+                        const endZurich = endUTC.toISOString();
+
+                        return {
+                            id: `event-${index + 1}`,
+                            title: event.customerName,
+                            calendarID: event.id,
+                            start: startZurich,
+                            end: endZurich,
+                            editable: false,
+                            backgroundColor: event.workerColor,
+                            borderColor: event.workerColor,
+                        };
+                    });
+                        calendar.addEventSource(calendarEvents);
+                    })
+                    .catch(error => {
+                        console.error('Error fetching calendar data:', error);
+                    });
+            }
+        });
+
+        function fetchCalendarData(businessID, workerID) {
+            const url = `/api/get-calendar-with-worker/${businessID}/${workerID}`;
+            return fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    const calendarEvents = data.map((event, index) => ({
+                        id: `event-${index + 1}`,
+                        title: event.customerName,
+                        calendarID:event.id,
+                        start: event.start,
+                        end: event.end,
+                        editable: false,
+                        backgroundColor:event.workerColor,
+                        borderColor:event.workerColor,	
+                    }));
+                    if (calendar) {
+                        calendar.removeAllEvents();
+                        calendar.addEventSource(calendarEvents);
+                    } else {
+                        console.error('Calendar is not defined.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching calendar data:', error);
+                });
+        }
+        function loadCalendarData() {
+            const businessID = document.getElementById('businessID').value;
+            const workerSelect = document.getElementById('workerSelect');
+            const selectedWorkerID = workerSelect.value;
+			if (selectedWorkerID === "") {
+            // Reload the page
+            location.reload();
+	        }	else {
+			fetchCalendarData(businessID, selectedWorkerID)
+                .then(() => {
+                    if (calendar) {
+                        calendar.render();
+                    } else {
+                        console.error('Calendar is not defined.');
+                    }
+                    
+                })
+                .catch(error => {
+                    console.error('Error loading calendar data:', error);
+                });
+			}
+            
+        }
+		function addNewApp(){
+			function convertToISODateTime(dateString, timeString) {    
+                const [year, month, day] = dateString.split('-');
+                const [hours, minutes] = timeString.split(':');    
+                const isoDate = new Date(`${year}-${month}-${day}T${hours}:${minutes}:00.000Z`).toISOString();
+                return isoDate;
+            }
+			function saveEventData(startDate, endDate, orderNumber, timeDifferenceInMinutes, selectedWorkerID, businessID,customerName,customerSurname,orderNote,clientTel) {
+                const startDateObject = new Date(startDate);
+                const modifiedStartDate = startDateObject.toISOString();
+
+                const endDateObject = new Date(endDate);
+                const modifiedEndDate = endDateObject.toISOString();
+                const paymentStatus="Success";
+                const duration=timeDifferenceInMinutes;
+                console.log(endDate);
+                const url = '/api/save-schedule'; 
+                const payload = {
+                    businessID:businessID,
+					customerName:customerName,
+					customerSurname:customerSurname,
+					orderNote:orderNote,
+                    startDate: modifiedStartDate,
+                    endDate: modifiedEndDate,
+                    duration:duration,
+                    paymentStatus:paymentStatus,
+                    orderNumber: orderNumber,
+                    clientTel: clientTel,
+                    selectedWorkerID: selectedWorkerID
+                };
+                fetch(url, {
+                    method: 'POST', 
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(payload)
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to save event data');
+                    }
+                    return response.json();
+                    
+                })
+                .then(data => {
+                    console.log('Event data saved successfully:', data);
+                    location.reload();
+                    loadCalendarData();
+                })
+                .catch(error => {
+                    console.error('Error saving event data:', error);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Failed to save event data. Please try again.'
+                    });
+                });
+            }
+			Swal.fire({
+			title: '<h5>Termindetails eingeben</h5><hr>',
+            html: `<div class="row mt-2">
+					<div class="col-lg-12">
+                        <label class="fw-bold">Arbeiter auswählen</label>
+						<select class="form-control  " name="workers" id="workerID">										
+						<% workers.forEach((worker) => { %>
+						<option value="<%= worker._id %>"  data-businessid="<%= worker.businessID %>"><%= worker.name %> <%= worker.surname %></option>
+						<% }); %>
+						</select>
+					</div>
+				</div>
+                        <div class="row mt-2">
+                            <div class="col-lg-12">
+							<label class="fw-bold">Termindatum</label>
+                                <input id="event-day" type="date" class="form-control" min="0" max="23">
+                            </div>
+							 <div class="col-lg-6 mt-2 col-12">
+                                <label class="fw-bold">Kundenname</label>
+                                <input id="customer-name" type="text" class="form-control" >
+                            </div>
+							 <div class="col-lg-6 mt-2 col-12">
+                                <label class="fw-bold">Nachname des Kunden</label>
+                                <input id="customer-surname" type="text" class="form-control">
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-lg-6 col-12">
+                                <label class="fw-bold">Startzeit</label>
+                                <input id="event-start" type="time" class="form-control">
+                            </div>
+                            <div class="col-lg-6 col-12">
+                                <label class="fw-bold">Endzeit</label>
+                                <input id="event-end" type="time" class="form-control">
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-lg-12 col-12">
+                                <label class="fw-bold">Kundentelefon</label>
+                                <input id="clientTel" type="number" class="form-control" value="">                               
+                            </div>
+                        </div>
+						<div class="row mt-2">
+							<div class="col-lg-12">
+                                <label class="fw-bold">Terminnotiz</label>
+                                <textarea id="note" class="form-control" style="width:100%"></textarea>
+                            </div>
+                        </div>
+                        `,
+                        showCancelButton: true,
+                        showCloseButton: true,
+                        confirmButtonText: 'Speichern',
+                        cancelButtonText: 'Stornieren',
+                        showLoaderOnConfirm: true,
+                        preConfirm: () => {
+                            const start = document.getElementById('event-start').value;
+                            const end = document.getElementById('event-end').value;
+                            const day = document.getElementById('event-day').value;
+                            const customerName = document.getElementById('customer-name').value;
+                            const customerSurname = document.getElementById('customer-surname').value;
+                            const orderNote = document.getElementById('note').value;							
+                            const businessID = document.getElementById('businessID').value;
+                            const workerSelect = document.getElementById('workerID');
+                            const clientTel = document.getElementById('clientTel').value;
+                            const selectedWorkerID = workerSelect.value;
+                            if (!start || !end || !day || !selectedWorkerID ) {
+                                Swal.showValidationMessage('Please fill all of the fields');
+                            }
+                            return {start, end, day, customerName,customerSurname,orderNote,selectedWorkerID,businessID, clientTel };
+                        },
+                        allowOutsideClick: () => !Swal.isLoading()
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            const start = result.value.start;
+                            const end = result.value.end;
+                            const customerName = result.value.customerName;
+                            const customerSurname = result.value.customerSurname;
+                            const orderNote = result.value.orderNote;
+                            const day = result.value.day;							
+                            const selectedWorkerID = result.value.selectedWorkerID;
+                            const businessID = result.value.businessID;
+                            const clientTel = result.value.clientTel;
+                            //DURATION CALC
+                            var startTimeCalc = parseInt(start.split(":")[0]) * 60 + parseInt(start.split(":")[1]);
+                            var endTimeCalc = parseInt(end.split(":")[0]) * 60 + parseInt(end.split(":")[1]);
+                            var timeDifferenceInMinutes = endTimeCalc - startTimeCalc;
+
+                            const startD = convertToISODateTime(day, start);
+                            const startDateZurichObject = new Date(startD);
+                            var utcDate = new Date(startDateZurichObject.getUTCFullYear(), startDateZurichObject.getUTCMonth(), startDateZurichObject.getUTCDate(),
+                            startDateZurichObject.getUTCHours(), startDateZurichObject.getUTCMinutes(), startDateZurichObject.getUTCSeconds());
+				            var startDate = utcDate.toISOString();
+                            
+                            const endD = convertToISODateTime(day, end);
+                            const endDateZurichObject = new Date(endD);
+                            var utcEndDate = new Date(endDateZurichObject.getUTCFullYear(), endDateZurichObject.getUTCMonth(), endDateZurichObject.getUTCDate(),
+                            endDateZurichObject.getUTCHours(), endDateZurichObject.getUTCMinutes(), endDateZurichObject.getUTCSeconds());
+				            var endDate = utcEndDate.toISOString();
+                            
+                            const orderNumber=0;
+                            saveEventData(startDate, endDate, orderNumber, timeDifferenceInMinutes, selectedWorkerID, businessID, customerName, customerSurname, orderNote, clientTel);
+                        }
+                    }); 
+		}
+
+    </script>
+</body>
+</html>

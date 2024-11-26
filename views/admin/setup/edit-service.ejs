@@ -1,0 +1,137 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+    <title>me Time | Admin Dashboard</title>
+    <link rel="shortcut icon" href="/assets/img/favicon.png">
+    <link rel="stylesheet" href="/admin/assets/css/select2.min.css">
+    <link rel="stylesheet" href="/admin/assets/plugins/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/admin/assets/plugins/bootstrap-tagsinput/css/bootstrap-tagsinput.css">
+    <link rel="stylesheet" href="/admin/assets/plugins/fontawesome/css/fontawesome.min.css">
+    <link rel="stylesheet" href="/admin/assets/plugins/fontawesome/css/all.min.css">
+    <link rel="stylesheet" href="/admin/assets/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="/admin/assets/plugins/feather/feather.css">
+	<link rel="stylesheet" href="/admin/assets/css/ckeditor.css">
+    <link rel="stylesheet" href="/admin/assets/css/style.css">
+</head>
+
+<body>
+    <div class="main-wrapper">
+        <%- include('./sidebar.ejs') %>
+        <%- include('./header.ejs') %>
+        <div class="page-wrapper">
+            <div class="content">
+                <form action="/admin/setup/edit-service/<%= services._id %>" method="post">
+                    <div class="row">
+                        <div class="col-lg-12 col-sm-12 ">
+                            <div class="content-page-header">
+								<h5>Dienst bearbeiten</h5>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+										<label>Dienstname</label>
+                                        <input type="text" class="form-control" required  value="<%= services.serviceName %>" name="serviceName">
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+										<label>Diensttyp</label>
+                                        <select class="select" name="serviceType" required>
+                                            <option value="" disabled>Art auswählen</option>
+                                            <option value="Female" <%= services.serviceType === 'Female' ? 'selected' : '' %>>Weiblich</option>
+                                            <option value="Male" <%= services.serviceType === 'Male' ? 'selected' : '' %>>Männlich</option>
+                                        </select>
+                                    </div>                                    
+                                </div>
+                                <% const hour = services.durationMinutes / 60; %>
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+										<label>Servicedauerstunde</label>
+                                        <select class="select" required name="hour">
+                                        <% for (let i = 0; i <= 10; i++) { %>
+                                            <option value="<%= i %>" <%= i === Math.floor(hour) ? 'selected' : '' %>><%= i %> Hour</option>
+                                        <% } %>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+										<label>Servicedauer Minuten</label>
+                                        <select class="select" required name="minutes">
+                                        <option value="" disabled>Wählen Sie Minuten aus</option>
+                                        <% for (let i = 0; i <= 55; i += 15) { %>
+                                            <option value="<%= i %>" <%= i === services.durationMinutes % 60 ? 'selected' : '' %>><%= i %> Min.</option>
+                                        <% } %>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label>Status</label>
+                                        <select class="select" name="status" required>
+                                            <option value="" disabled>Wählen Sie Status aus</option>
+                                            <option value="Active" <%= services.status === 'Active' ? 'selected' : '' %>>Aktiv</option>
+                                            <option value="Passive" <%= services.status === 'Passive' ? 'selected' : '' %>>Passiv</option>
+                                        </select>
+                                    </div>                                    
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label>Preis</label>
+                                        <input type="text" class="form-control" value="<%= services.price %>" required name="price">
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label>Kategorie</label>
+                                        <select class="select" required name="category">
+                                            <option value="" disabled selected>Kategorie wählen</option>
+                                            <% categories.forEach((category) => { %>
+                                                <option value="<%= category._id %>" <%= services.category == category._id ? 'selected' : '' %>><%= category.categoryName %></option>
+                                            <% }); %>
+                                        </select>
+                                    </div>
+                                </div>
+                                <!--
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <label>Description</label>
+                                        <textarea name="description" id="" cols="30" rows="10" class="form-control" ><%= services.description %></textarea>
+                                    </div>
+                                </div>-->
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <label>Beschreibung</label>
+                                        <input type="text" class="form-control" name="description" value="<%= services.description %>">
+                                    </div>
+                                </div>
+                                <input type="hidden" name="businessID" value="<%= services.businessID%>">
+                                <div class="col-lg-12">
+                                    <div class="btn-path">                                        
+                                        <button type="submit" class="btn btn-submit "> Speichern</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div> 
+    </div>
+    <script src="/admin/assets/js/jquery-3.6.4.min.js"></script>
+    <script src="/admin/assets/js/select2.min.js"></script>
+    <script src="/admin/assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="/admin/assets/plugins/bootstrap-tagsinput/js/bootstrap-tagsinput.js"></script>
+    <script src="/admin/assets/js/feather.min.js"></script>
+    <script src="/admin/assets/js/jquery.dataTables.min.js"></script>
+    <script src="/admin/assets/js/dataTables.bootstrap4.min.js"></script>
+	<script src="/admin/assets/js/ckeditor.js"></script>
+    <script src="/admin/assets/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+    <script src="/admin/assets/plugins/sweetalert/sweetalert2.all.min.js"></script>
+    <script src="/admin/assets/plugins/sweetalert/sweetalerts.min.js"></script>
+    <script src="/admin/assets/js/admin.js"></script>
+</body>
+</html>

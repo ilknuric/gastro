@@ -1,0 +1,101 @@
+.select2-container {
+	z-index: $__unset;
+	.select2-selection--single {
+		border: 1px solid $__searchbarTop;
+		height: 46px;
+		background-color: #FFFFFF;
+		@include rounded(0px);
+		.select2-selection__rendered {
+			padding-right: 30px;
+			padding-left: 15px;
+		}
+	}
+}
+.select2-container--default {
+	.select2-selection--single {
+		.select2-selection__arrow {
+			height: 38px;
+			right: 7px;
+			b {
+				border-color: #ddd transparent $__transparent;
+				border-style: solid;
+				border-width: 6px 6px 0;
+				height: $__zero;
+				left: 50%;
+				margin-left: -10px;
+				margin-top: -2px;
+				position: $__absolute;
+				top: 50%;
+				width: $__zero;
+			}
+		}
+		.select2-selection__rendered {
+			color: $__placeholder;
+			line-height: 46px;
+		}
+	}
+	.select2-results__option--highlighted[aria-selected] {
+		background-color: $__themeColor;
+	}
+	.select2-selection--multiple {
+		border: 1px solid #F8F8F8;
+		min-height: 46px;
+		background-color: #F9F9FB;
+		padding: 4px 8px;
+		color: $__white;
+		@include rounded(10px);
+		.select2-selection__choice {
+			background-color: $__themeColor;
+			border: $__zero;
+			font-size: $__font__size__13;
+			margin-top: 6px;
+			padding: 3px 5px;
+		}
+		.select2-selection__choice__remove {
+			color: $__white;
+			cursor: $__pointer;
+			font-weight: bold;
+			margin-right: $__auto;
+			float: $__right;
+			margin-left: 15px;
+			width: 15px;
+			height: 15px;
+			display: $__flex;
+			align-items: $__center;
+			justify-content: $__center;
+			border-radius: 30px;
+			position: $__relative;
+			top: 1px;
+			padding: 2px;
+		}
+	}
+}
+.select2-container--default.select2-container--open {
+	.select2-selection--single {
+		.select2-selection__arrow {
+			b {
+				border-color: transparent transparent #ddd;
+				border-width: 0 6px 6px;
+				border-color: $__desc;
+				border-width: 2px 0 0 2px;
+				padding: 3px;
+				margin-top: -2px;
+			}
+		}
+	}
+}
+.form-group {
+	.select2-container--default {
+		.select2-selection--single {
+			.select2-selection__rendered {
+				padding-left: 35px;
+			}
+		}
+	}
+}
+.select2-dropdown {
+	border: 1px solid $__filterborder;
+}
+.filter-sorting .review-sort .select2-container--default .select2-selection--single .select2-selection__rendered {
+	margin-left: 0 !important;
+}

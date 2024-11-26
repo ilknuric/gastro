@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+    <title>me Time | Admin Dashboard</title>
+    <link rel="shortcut icon" href="/assets/img/favicon.png">
+    <link rel="stylesheet" href="/admin/assets/css/select2.min.css">
+    <link rel="stylesheet" href="/admin/assets/plugins/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/admin/assets/plugins/bootstrap-tagsinput/css/bootstrap-tagsinput.css">
+    <link rel="stylesheet" href="/admin/assets/plugins/fontawesome/css/fontawesome.min.css">
+    <link rel="stylesheet" href="/admin/assets/plugins/fontawesome/css/all.min.css">
+    <link rel="stylesheet" href="/admin/assets/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="/admin/assets/plugins/feather/feather.css">
+	<link rel="stylesheet" href="/admin/assets/css/ckeditor.css">
+    <link rel="stylesheet" href="/admin/assets/css/style.css">
+</head>
+<body>
+    <div class="main-wrapper">
+        <%- include('./sidebar.ejs') %>
+        <%- include('./header.ejs') %>
+        <div class="page-wrapper">
+            <div class="content">
+                <div class="row">
+                    <div class="col-lg-9 col-sm-12 m-auto">
+                        <div class="content-page-header">
+                            <h5><%= campaigns.campaignName %> bearbeiten</h5>
+                        </div>
+                        <form action="/admin/setup/edit-campaign/<%= campaigns._id %>" method="post">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+										<label>Kampagnenname</label>
+                                        <input type="text" class="form-control" required name="campaignName" value="<%= campaigns.campaignName %>">
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+										<label>Startdatum der Kampagne</label>
+                                        <input type="date" name="campaignStartDate" class="form-control" required value="<%= campaigns.campaignStartDate %>">
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+										<label>Enddatum der Kampagne</label>
+                                        <input type="date" name="campaignEndDate" class="form-control" required value="<%= campaigns.campaignEndDate %>">
+   
+                                    </div>
+                                </div>
+                                <% if (campaigns.campaignType === 'Service') { %>
+                                    <input type="hidden" name="campaignType" class="form-control" value="Service">
+                                    <% } else if (campaigns.campaignType === 'Product') { %>
+                                    <input type="hidden" name="campaignType" class="form-control" value="Product">
+                                    <% } %>
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+										<label>Kampagnenbeschreibung</label>
+                                        <textarea name="campaignDesciption" id="" cols="30" rows="10" class="form-control" ><%= campaigns.campaignDesciption %></textarea>
+                                    </div>
+                                </div>
+                                <br>
+                                <div class="content w-100">
+                                    <div class="content-page-header row">
+                                        <div class="col-lg-3 col-3">
+											<h5>Kampagnendetails</h5>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <div class="social-info">
+                                                <% if (campaigns.campaignType === 'Service') { %>
+                                                <div class="col-lg-12 col-12 ">
+                                                    <div class="form-group  text-end ">
+                                                        <a href="" class="link-sets service-add">
+                                                        <i class="fa fa-plus-circle me-2" aria-hidden="true"></i>Füge neuen Gegenstand hinzu
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                <% } else { %>
+                                                <div class="col-lg-12 col-12 ">
+                                                    <div class="form-group  text-end ">
+                                                        <a href="" class="link-sets product-add">
+                                                        <i class="fa fa-plus-circle me-2" aria-hidden="true"></i>Füge neuen Gegenstand hinzu
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                <% } %>
+                                                <% if (Array.isArray(campaigns.campaignDetails) && campaigns.campaignDetails !== null) { %>
+                                                    <% campaigns.campaignDetails.forEach((campaignDetail) => { %>
+                                                      <div class="row align-items-center times">
+                                                        
+                                                        <% if (campaigns.campaignType === 'Service') { %>
+                                                        <div class="col-lg-7">
+                                                          <div class="form-group">
+															  <label>Dienst für Kampagne auswählen</label>
+                                                            <select class="form-control select" name="serviceID[]" required>
+                                                              <option value="" disabled selected>Wählen Sie „Dienst“.</option>
+                                                              <% services.forEach((service) => { %>
+                                                                <option value="<%= service._id %>+<%= service.price %>" <%= (service._id.toString() === campaignDetail.serviceID.toString()) ? 'selected' : '' %>><%= service.serviceName %></option>
+                                                              <% }); %>                                                              
+                                                            </select>
+                                                          </div>
+                                                        </div>
+                                                        <% } else if (campaigns.campaignType === 'Product') { %>
+                                                        <div class="col-lg-7">
+                                                          <div class="form-group">
+															  <label>Produkt für Kampagne auswählen</label>
+                                                            <select class="form-control select" name="productID[]" required>
+                                                              <option value="" disabled selected>Ausgewähltes Produkt</option>
+                                                              <% products.forEach((product) => { %>
+                                                                <option value="<%= product._id %>+<%= product.price %>" <%= (product._id.toString() === campaignDetail.productID.toString()) ? 'selected' : '' %>><%= product.productName %></option>
+                                                              <% }); %>                                                              
+                                                            </select>
+                                                          </div>
+                                                        </div>
+                                                        <% } %>
+                                                        <div class="col-lg-2">
+                                                          <div class="form-group">
+															  <label>Aktueller Preis</label>
+                                                            <div class="form-group">
+                                                              <input type="text" name="currentPrice[]" class="form-control"  value="<%= parseFloat(campaignDetail.currentPrice).toFixed(2)%>" readonly >
+                                                            </div>
+                                                          </div>
+                                                        </div>
+                                                        <div class="col-lg-2">
+                                                          <div class="form-group">
+															  <label>Kampagnenpreis</label>
+                                                            <div class="form-group">
+                                                              <input type="text" name="campaignPrice[]" class="form-control"  value="<%= campaignDetail.campaignPrice%>">
+                                                            </div>
+                                                          </div>
+                                                        </div>
+                                                        <div class="col-lg-1">
+                                                            <a href="#" class="ms-2 del"><i class="fe fe-trash-2"></i></a>
+                                                        </div>
+                                                      </div>
+                                                    <% }); %>
+                                                  <% } %>
+                                              </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <input type="hidden" name="businessID" value="<%= business._id%>" id="businessID">
+                                <div class="col-lg-12">
+                                    <div class="btn-path">                                                            
+                                        <button type="submit" class="btn btn-submit "> Einreichen</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div> 
+    </div>
+    <script src="/admin/assets/js/jquery-3.6.4.min.js"></script>
+    <script src="/admin/assets/js/select2.min.js"></script>
+    <script src="/admin/assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="/admin/assets/plugins/bootstrap-tagsinput/js/bootstrap-tagsinput.js"></script>
+    <script src="/admin/assets/js/feather.min.js"></script>
+    <script src="/admin/assets/js/jquery.dataTables.min.js"></script>
+    <script src="/admin/assets/js/dataTables.bootstrap4.min.js"></script>
+	<script src="/admin/assets/js/ckeditor.js"></script>
+    <script src="/admin/assets/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+    <script src="/admin/assets/plugins/sweetalert/sweetalert2.all.min.js"></script>
+    <script src="/admin/assets/plugins/sweetalert/sweetalerts.min.js"></script>
+    <script src="/admin/assets/js/admin.js"></script>
+    <script>
+    $(document).ready(function () {
+        $('select[name="serviceID[]"]').select2();
+
+        $(document).on('change', 'select[name="serviceID[]"]', function () {
+            var selectedValue = $(this).val();
+            var selectedPrice = selectedValue ? selectedValue.split('+')[1] : '';
+            $(this).closest('.row').find('input[name="currentPrice[]"]').val(selectedPrice);
+        });
+        $('.service-add').on('click', function (e) {
+            e.preventDefault();
+            const newShiftHtml = `
+            <div class="row align-items-center times">
+                <div class="col-lg-7">
+                    <div class="form-group">
+					<label>Dienst für Kampagne auswählen</label>
+                    <select class="form-control select" name="serviceID[]" required>
+                        <option value="" disabled selected>Wählen Sie „Dienst“.</option>
+                        <% services.forEach((service) => { %>
+                        <option value="<%= service._id %>+<%= service.price %>"><%= service.serviceName %></option>
+                        <% }); %>                                                              
+                    </select>
+                    </div>
+                </div>
+                <div class="col-lg-2">
+                    <div class="form-group">
+					<label>Aktueller Preis</label>
+                    <div class="form-group">
+                        <input type="text" name="currentPrice[]" class="form-control" value="" readonly >
+                    </div>
+                    </div>
+                </div>
+                <div class="col-lg-2">
+                    <div class="form-group">
+					<label>Kampagnenpreis</label>
+                    <div class="form-group">
+                        <input type="text" name="campaignPrice[]" class="form-control" value="">
+                    </div>
+                    </div>
+                </div>
+                <div class="col-lg-1">
+                    <a href="#" class="ms-2 del" style="margin-top:50px;"><i class="fe fe-trash-2"></i></a>
+                </div>
+            </div>`;
+            $('.row:last').after(newShiftHtml);
+                $('.row.times:last').find('select[name="serviceID[]"]').select2();
+        });
+        $(document).on('click', '.del', function (e) {
+            e.preventDefault();
+            $(this).closest('.times').remove();
+        });
+    });
+    </script>
+    <script>
+    $(document).ready(function () {
+        $('select[name="productID[]"]').select2();
+
+        $(document).on('change', 'select[name="productID[]"]', function () {
+            var selectedValue = $(this).val();
+            var selectedPrice = selectedValue ? selectedValue.split('+')[1] : '';
+            $(this).closest('.row').find('input[name="currentPrice[]"]').val(selectedPrice);
+        });
+        $('.product-add').on('click', function (e) {
+            e.preventDefault();
+            const newShiftHtml = `
+            <div class="row align-items-center times">
+                <div class="col-lg-7">
+                    <div class="form-group">
+					<label>Produkt für Kampagne auswählen</label>
+                    <select class="form-control select" name="productID[]" required>
+                        <option value="" disabled selected>Ausgewähltes Produkt</option>
+                        <% products.forEach((product) => { %>
+                        <option value="<%= product._id %>+<%= product.price %>"><%= product.productName %></option>
+                        <% }); %>                                                              
+                    </select>
+                    </div>
+                </div>
+                <div class="col-lg-2">
+                    <div class="form-group">
+					<label>Aktueller Preis</label>
+                    <div class="form-group">
+                        <input type="text" name="currentPrice[]" class="form-control" value="" readonly >
+                    </div>
+                    </div>
+                </div>
+                <div class="col-lg-2">
+                    <div class="form-group">
+					<label>Kampagnenpreis</label>
+                    <div class="form-group">
+                        <input type="text" name="campaignPrice[]" class="form-control" value="">
+                    </div>
+                    </div>
+                </div>
+                <div class="col-lg-1">
+                    <a href="#" class="ms-2 del" style="margin-top:50px;"><i class="fe fe-trash-2"></i></a>
+                </div>
+            </div>`;
+            $('.row:last').after(newShiftHtml);
+                $('.row.times:last').find('select[name="productID[]"]').select2();
+        });
+        $(document).on('click', '.del', function (e) {
+            e.preventDefault();
+            $(this).closest('.times').remove();
+        });
+    });
+    </script>
+</body>
+</html>

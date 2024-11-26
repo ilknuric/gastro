@@ -1,0 +1,86 @@
+.bank-box {
+	background: rgba(193, 0, 55, 0.03);
+	border: 1px solid rgba(193, 0, 55, 0.03);
+	@include rounded(10px);
+	padding: 20px;
+	position: $__relative;
+}
+.bank-header {
+	
+	
+	display: $__flex;
+	justify-content: $__space__between;
+	margin-bottom: 30px;
+}
+.bank-name {
+	h6 {
+		font-weight: $__medium;
+		font-size: $__font__size__18;
+		margin-bottom: 10px;
+	}
+	p {
+		color: $__secondarycolor;
+		font-weight: $__medium;
+		font-size: $__body__font__size;
+		margin-bottom: 10px;
+	}
+}
+.bank-info {
+	p {
+		font-size: $__font__size__12;
+		color: $__secondarycolor;
+		margin-bottom: 6px;
+	}
+	h6 {
+		font-size: $__body__font__size;
+		font-weight: $__medium;
+		color: $__primarycolor;
+		margin-bottom: 10px;
+	}
+}
+.bank-action {
+	
+	
+	display: $__flex;
+	justify-content: $__space__between;
+	a {
+		font-weight: $__medium;
+		font-size: $__body__font__size;
+		color: $__themeColor;
+		i {
+			margin-right: 5px;
+		}
+	}
+}
+.bank-box.active {
+	border: 1px solid $__themeColor;
+	&:before {
+		position: $__absolute;
+		top: -5px;
+		right: -5px;
+		content: "\f058";
+		font-family: "Fontawesome";
+		color: $__themeColor;
+	}
+}
+.seo-list {
+	margin-bottom: 20px;
+	li {
+		display: $__inline__block;
+		margin-right: 10px;
+		a.active {
+			background: $__searchbarTop;
+		}
+		a {
+			display: $__inline__block;
+			background: $__white;
+			border-radius: 6px;
+			@include margin-padding(null, 4px 26px);
+			font-weight: $__medium;
+			font-size: $__font__size__15;
+		}
+	}
+}
+.location-set.soc-active {
+	border: 2px solid $__themeColor;
+}

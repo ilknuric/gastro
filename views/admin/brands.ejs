@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+    <title>Gastro Koçak Handel GmbH | Admin Dashboard</title>
+    <link rel="shortcut icon" href="/assets/img/favicon.png">
+    <link rel="stylesheet" href="assets/css/select2.min.css">
+    <link rel="stylesheet" href="assets/plugins/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/plugins/bootstrap-tagsinput/css/bootstrap-tagsinput.css">
+    <link rel="stylesheet" href="assets/plugins/fontawesome/css/fontawesome.min.css">
+    <link rel="stylesheet" href="assets/plugins/fontawesome/css/all.min.css">
+    <link rel="stylesheet" href="assets/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="assets/plugins/feather/feather.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+    <div class="main-wrapper">
+        <%- include('./sidebar.ejs') %>
+        <%- include('./header.ejs') %>
+        <div class="page-wrapper page-settings">
+            <div class="content">
+                <div class="content-page-header content-page-headersplit mb-0">
+                    <h5>Marken</h5>
+                    <div class="list-btn">
+                        <ul>
+                            <li>
+                                <a class="btn btn-primary" href="/admin/add-brands"><i class="fa fa-plus me-2"></i>Neue Marke hinzufügen</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 ">
+                        <div class="table-resposnive table-div">
+                            <table class="table datatable">
+                                <thead>
+                                    <tr>
+										<th>Markenname</th>
+										<th>Aktion</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% if (brands && brands.length > 0) { %>
+                                        <% brands.forEach((brand) => { %>
+                                            <tr>
+                                                <td><%= brand.brandName %></td>
+                                                <td>
+                                                    <div class="table-actions d-flex">
+                                                        <a class="delete-table me-2" href="/admin/edit-brand/<%= brand._id %>" >
+                                                           <img src="assets/img/icons/edit.svg" alt="gastro">
+                                                        </a>
+                                                        <a class="delete-table" href="/admin/delete-brand/<%= brand._id %>" data-bs-toggle="modal" data-bs-target="#delete-item-<%= brand._id %>">
+                                                            <img src="assets/img/icons/delete.svg" alt="gastro">
+                                                        </a>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <div class="modal fade" id="delete-item-<%= brand._id %>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog modal-dialog-centered ">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="exampleModalLabel">Marken löschen</h5>
+                                                            <button type="button" class="btn-close close-modal" data-bs-dismiss="modal" aria-label="Close">
+                                                                <i class="fe fe-x"></i>
+                                                            </button>
+                                                        </div>
+                                                        <form action="/admin/delete-brand/<%= brand._id %>" method="get">
+                                                            <div class="modal-body py-0">
+                                                                <div class="del-modal">
+                                                                    <p>Möchten Sie wirklich löschen?</p>
+                                                                </div>
+                                                            </div>
+                                                            <div class="modal-footer pt-0">
+                                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Storniern</button>
+                                                                <button type="submit" class="btn btn-primary">Ja</button>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div> 
+                                        <% }); %>
+                                      <% } else { %>
+                                        <tr>
+                                            <td colspan="3">Keine Marken verfügbar.</td>
+                                        </tr>
+                                      <% } %>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> 
+    </div>
+    <script src="assets/js/jquery-3.6.4.min.js"></script>
+    <script src="assets/js/select2.min.js"></script>
+    <script src="assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/plugins/bootstrap-tagsinput/js/bootstrap-tagsinput.js"></script>
+    <script src="assets/js/feather.min.js"></script>
+    <script src="assets/js/jquery.dataTables.min.js"></script>
+    <script src="assets/js/dataTables.bootstrap4.min.js"></script>
+    <script src="assets/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+    <script src="assets/plugins/sweetalert/sweetalert2.all.min.js"></script>
+    <script src="assets/plugins/sweetalert/sweetalerts.min.js"></script>
+    <script src="assets/js/admin.js"></script>
+</body>
+</html>

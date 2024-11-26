@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+    <title>Gastro Koçak Handel GmbH | Admin Dashboard</title>
+    <link rel="shortcut icon" href="/assets/img/favicon.png">
+    <link rel="stylesheet" href="/admin/assets/css/select2.min.css">
+    <link rel="stylesheet" href="/admin/assets/plugins/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/admin/assets/plugins/bootstrap-tagsinput/css/bootstrap-tagsinput.css">
+    <link rel="stylesheet" href="/admin/assets/plugins/fontawesome/css/fontawesome.min.css">
+    <link rel="stylesheet" href="/admin/assets/plugins/fontawesome/css/all.min.css">
+    <link rel="stylesheet" href="/admin/assets/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="/admin/assets/plugins/feather/feather.css">
+    <link rel="stylesheet" href="/admin/assets/css/style.css">
+</head>
+<body>
+    <div class="main-wrapper">
+        <%- include('./sidebar.ejs') %>
+        <%- include('./header.ejs') %>
+        <div class="page-wrapper page-settings">
+            <div class="content">
+                <div class="content-page-header content-page-headersplit">
+                    <h5>Alle Berechtigungen</h5>
+                    <div class="list-btn">
+                        <ul>
+                            <li>
+                                <a class="btn btn-danger" href="/admin/workers"><i class="fa fa-backward me-2"></i>Zurück zur Arbeiterseite</a>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary q" href="/admin/add-holiday/"><i class="fa fa-plus me-2"></i>Neue Berechtigung hinzufügen</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 ">
+                        <div class="table-resposnive table-div">
+                            <table class="table datatable">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Name</th>
+										<th>Beginn des Urlaubs</th>
+										<th>Ende des Urlaubs</th>
+										<th>Aktion</th>
+                                    </tr>
+                                </thead>
+                                <tbody> 
+                                  
+                                    <% if (holidays && holidays.length > 0) { %>
+                                        <% holidays.forEach((holiday,index) => { 
+                                            %>
+                                        <tr>
+                                            <td><%= index+1 %></td>
+                                            <td><%= holiday.workerNames%></td>                                                                            
+                                            <td><%= holiday.HolidayStartDate.toLocaleDateString('de-DE') %></td>
+                                            <td><%= holiday.HolidayEndDate.toLocaleDateString('de-DE') %></td>
+                                            <td>
+                                                <div class="table-actions d-flex">
+                                                    <a class="delete-table me-2" href="/admin/edit-holiday/<%= holiday._id %>" >
+                                                        <img src="/admin/assets/img/icons/edit.svg" alt="gastro">
+                                                    </a>
+                                                    <a class="delete-table" href="/admin/delete-holiday/<%= holiday._id %>" data-bs-toggle="modal" data-bs-target="#delete-item-<%= holiday._id %>">
+                                                        <img src="/admin/assets/img/icons/delete.svg" alt="gastro">
+                                                    </a>
+                                                </div>
+                                            </td>
+                                        </tr>
+
+                                        <div class="modal fade" id="delete-item-<%= holiday._id %>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-centered ">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="exampleModalLabel">Berechtigung löschen</h5>
+                                                        <button type="button" class="btn-close close-modal" data-bs-dismiss="modal" aria-label="Close">
+                                                            <i class="fe fe-x"></i>
+                                                        </button>
+                                                    </div>
+                                                    <form action="/admin/delete-holiday/<%= holiday._id %>" method="get">
+                                                        <div class="modal-body py-0">
+                                                            <div class="del-modal">
+																<p>Möchten Sie wirklich löschen?</p>
+                                                            </div>
+                                                        </div>
+                                                        <div class="modal-footer pt-0">
+                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Stornieren</button>
+                                                            <button type="submit" class="btn btn-primary">Ja</button>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div> 
+                                        <% }); %>
+                                      <% } else { %>
+                                        <tr>
+											<td colspan="3">Keine freien Tage</td>
+                                        </tr>
+                                      <% } %>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> 
+    </div>
+    <script src="/admin/assets/js/jquery-3.6.4.min.js"></script>
+    <script src="/admin/assets/js/select2.min.js"></script>
+    <script src="/admin/assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="/admin/assets/plugins/bootstrap-tagsinput/js/bootstrap-tagsinput.js"></script>
+    <script src="/admin/assets/js/feather.min.js"></script>
+    <script src="/admin/assets/js/jquery.dataTables.min.js"></script>
+    <script src="/admin/assets/js/dataTables.bootstrap4.min.js"></script>
+    <script src="/admin/assets/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+    <script src="/admin/assets/plugins/sweetalert/sweetalert2.all.min.js"></script>
+    <script src="/admin/assets/plugins/sweetalert/sweetalerts.min.js"></script>
+    <script src="/admin/assets/js/admin.js"></script>
+    <% function convertToLocalTime(utcTime) { %>
+        <% const utcDate = new Date(`2000-01-01T${utcTime}:00.000Z`); %>
+        <% const localTime = utcDate.toLocaleTimeString('de-DE', { timeZone: 'Europe/Zurich', hour: '2-digit', minute: '2-digit' }); %>
+        <% return localTime; %>
+    <% } %>
+
+</body>
+
+</html>

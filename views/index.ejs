@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US" lang="en-US">
+<head>
+    <meta charset="utf-8">
+    <title>Gastro Koçak Handel GmbH | Alles für Ihr Restaurant</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<link rel="stylesheet" href="fonts/fonts.css">
+	<link rel="stylesheet" href="fonts/font-icons.css">
+	<link rel="stylesheet" href="css/bootstrap.min.css">
+	<link rel="stylesheet" href="css/swiper-bundle.min.css">
+	<link rel="stylesheet" href="css/animate.css">
+	<link rel="stylesheet"type="text/css" href="css/styles.css"/>
+    <link rel="shortcut icon" href="/favicon.png">
+	<link rel="apple-touch-icon-precomposed" href="favicon.png">
+</head>
+<body class="preload-wrapper">
+    <div class="preload preload-container">
+        <div class="preload-logo">
+            <div class="spinner"></div>
+        </div>
+    </div>
+    <div id="wrapper">
+		<%- include('./partials/header.ejs') %>
+        <div class="tf-slideshow slider-home-2 slider-effect-fade position-relative">
+            <div class="swiper tf-sw-slideshow" data-preview="1" data-tablet="1" data-mobile="1" data-centered="false" data-space="0" data-loop="true" data-auto-play="true" data-delay="2000" data-speed="1000">
+                <div class="swiper-wrapper">
+
+
+                    <% slides.forEach((slide) => { %>
+                    <div class="swiper-slide" lazy="true">
+                        <div class="wrap-slider">
+                            <img class="lazyload" data-src="<%= slide.image_path %>" src="<%= slide.image_path %>" alt="gastro">
+                            <div class="box-content">
+                                <div class="container">
+                                    <p class="fade-item fade-item-1"><%= slide.slideSmall %></p>
+                                    <h1 class="fade-item fade-item-2"><%= slide.slideBig %></h1>
+                                    <a href="/shop" class="fade-item fade-item-3 rounded-full tf-btn btn-fill animate-hover-btn btn-xl radius-3"><span>Siehe Produkte</span><i class="icon icon-arrow-right"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <% }); %>
+                </div>
+            </div>
+            <div class="wrap-pagination sw-absolute-2">
+                <div class="container">
+                    <div class="sw-dots sw-pagination-slider justify-content-center"></div>
+                </div>
+            </div>
+        </div>
+        <!--
+        <div class="tf-marquee marquee-sm bg_primary not-hover">
+            <div class="wrap-marquee">
+                <div class="marquee-item">
+                    <div class="icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="7" height="6" viewBox="0 0 7 6" fill="none"><path d="M3.5 0L6.53109 5.25H0.468911L3.5 0Z" fill="black"></path></svg>
+                    </div>
+                    <p class="text text-uppercase fw-6">LIMITED TIME OFFER: FASHION SALE YOU CAN'T RESIST</p>
+                </div>
+                <div class="marquee-item">
+                    <div class="icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="7" height="6" viewBox="0 0 7 6" fill="none"><path d="M3.5 0L6.53109 5.25H0.468911L3.5 0Z" fill="black"></path></svg>
+                    </div>
+                    <p class="text text-uppercase fw-6">FREE SHIPPING AND RETURN</p>
+                </div>
+                <div class="marquee-item">
+                    <div class="icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="7" height="6" viewBox="0 0 7 6" fill="none"><path d="M3.5 0L6.53109 5.25H0.468911L3.5 0Z" fill="black"></path></svg>
+                    </div>
+                    <p class="text text-uppercase fw-6">NEW SEASON, NEW STYLES: FASHION SALE YOU CAN'T MISS</p>
+                </div>
+                <div class="marquee-item">
+                    <div class="icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="7" height="6" viewBox="0 0 7 6" fill="none"><path d="M3.5 0L6.53109 5.25H0.468911L3.5 0Z" fill="black"></path></svg>
+                    </div>
+                    <p class="text text-uppercase fw-6">LIMITED TIME OFFER: FASHION SALE YOU CAN'T RESIST</p>
+                </div>
+                <div class="marquee-item">
+                    <div class="icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="7" height="6" viewBox="0 0 7 6" fill="none"><path d="M3.5 0L6.53109 5.25H0.468911L3.5 0Z" fill="black"></path></svg>
+                    </div>
+                    <p class="text text-uppercase fw-6">FREE SHIPPING AND RETURN</p>
+                </div>
+                <div class="marquee-item">
+                    <div class="icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="7" height="6" viewBox="0 0 7 6" fill="none"><path d="M3.5 0L6.53109 5.25H0.468911L3.5 0Z" fill="black"></path></svg>
+                    </div>
+                    <p class="text text-uppercase fw-6">NEW SEASON, NEW STYLES: FASHION SALE YOU CAN'T MISS</p>
+                </div>
+                <div class="marquee-item">
+                    <div class="icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="7" height="6" viewBox="0 0 7 6" fill="none"><path d="M3.5 0L6.53109 5.25H0.468911L3.5 0Z" fill="black"></path></svg>
+                    </div>
+                    <p class="text text-uppercase fw-6">LIMITED TIME OFFER: FASHION SALE YOU CAN'T RESIST</p>
+                </div>
+                <div class="marquee-item">
+                    <div class="icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="7" height="6" viewBox="0 0 7 6" fill="none"><path d="M3.5 0L6.53109 5.25H0.468911L3.5 0Z" fill="black"></path></svg>
+                    </div>
+                    <p class="text text-uppercase fw-6">FREE SHIPPING AND RETURN</p>
+                </div>
+                <div class="marquee-item">
+                    <div class="icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="7" height="6" viewBox="0 0 7 6" fill="none"><path d="M3.5 0L6.53109 5.25H0.468911L3.5 0Z" fill="black"></path></svg>
+                    </div>
+                    <p class="text text-uppercase fw-6">NEW SEASON, NEW STYLES: FASHION SALE YOU CAN'T MISS</p>
+                </div>
+                <div class="marquee-item">
+                    <div class="icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="7" height="6" viewBox="0 0 7 6" fill="none"><path d="M3.5 0L6.53109 5.25H0.468911L3.5 0Z" fill="black"></path></svg>
+                    </div>
+                    <p class="text text-uppercase fw-6">LIMITED TIME OFFER: FASHION SALE YOU CAN'T RESIST</p>
+                </div>
+                <div class="marquee-item">
+                    <div class="icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="7" height="6" viewBox="0 0 7 6" fill="none"><path d="M3.5 0L6.53109 5.25H0.468911L3.5 0Z" fill="black"></path></svg>
+                    </div>
+                    <p class="text text-uppercase fw-6">FREE SHIPPING AND RETURN</p>
+                </div>
+                <div class="marquee-item">
+                    <div class="icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="7" height="6" viewBox="0 0 7 6" fill="none"><path d="M3.5 0L6.53109 5.25H0.468911L3.5 0Z" fill="black"></path></svg>
+                    </div>
+                    <p class="text text-uppercase fw-6">NEW SEASON, NEW STYLES: FASHION SALE YOU CAN'T MISS</p>
+                </div>
+            </div>        
+        </div>-->
+        <section class="flat-spacing-11 pb-0">
+            <div class="container">
+                <div class="position-relative">
+                    <div class="flat-title flex-row justify-content-between px-0">
+                        <span class="title wow fadeInUp" data-wow-delay="0s">Nach Kategorie einkaufen</span>
+                    </div>
+                    <div class="sw-pagination-wrapper">
+                        <div class="swiper tf-sw-collection" data-preview="4" data-tablet="3" data-mobile="1" data-space-lg="30" data-space-md="30" data-space="15" data-loop="false" data-auto-play="true">
+                            <div class="swiper-wrapper">
+
+                                <% categories.forEach((category, index) => { %>
+                                <div class="swiper-slide" lazy="true">
+                                    <div class="collection-item-v2 type-small hover-img">
+                                        <a href="/shop/<%- category._id %>" class="collection-inner">
+                                            <div class="collection-image img-style radius-10">
+                                                <img class="lazyload" data-src="<%- category.categoryImage %>" src="<%- category.categoryImage %>" alt="gastro">
+                                            </div>
+                                            <div class="collection-content">
+                                                <div class="top">
+                                                    <h5 class="heading fw-5"><%- category.categoryName %></h5>
+                                                    <p class="subheading" style="visibility: hidden;">6 items</span></p>
+                                                </div>
+                                                <div class="bottom">
+                                                    <button class="tf-btn collection-title hover-icon btn-light rounded-full" type="submit"><span>Jetzt einkaufen</span><i class="icon icon-arrow1-top-left"></i></button>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+                                <% }); %> 
+                            </div>
+                        </div>
+                        <div class="box-sw-navigation">
+                            <div class="sw-dots style-2 medium sw-pagination-collection justify-content-center"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <% campaigns.forEach((campaign, index) => { %>
+        <section class="flat-spacing-8 pb_0">
+            <div class="container">
+                <div class="tf-banner-collection">
+                    <img class="lazyload" data-src="<%- campaign.campaignImage %>" src="<%- campaign.campaignImage %>" alt="gastro" loading="lazy" >
+                    <div class="box-content">
+                        <div class="container wow fadeInUp" data-wow-delay="0s">
+                            <h2 class="heading fw-6 text_white"><%- campaign.campaignName %></h2>
+                            <p class="text_white"><%- campaign.campaignText %></p>
+                            <a href="/campaign/<%- campaign._id %>" class="rounded-full tf-btn btn-primary-main style-3 fw-6 btn-light-icon animate-hover-btn"><span>Kampagnenprodukte kaufen</span></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>     
+        <% }); %> 
+        <section class="flat-spacing-19">
+            <div class="container">
+                <div class="flat-title flex-row justify-content-between px-0">
+                    <span class="title wow fadeInUp" data-wow-delay="0s">Trendprodukte</span>
+                    <div class="box-sw-navigation">
+                        <div class="nav-sw square nav-next-slider nav-next-sell-1"><span class="icon icon-arrow1-left"></span></div>
+                        <div class="nav-sw square nav-prev-slider nav-prev-sell-1"><span class="icon icon-arrow1-right"></span></div>
+                    </div>
+                </div>
+                <div class="hover-sw-nav hover-sw-2">
+                    <div class="swiper tf-sw-product-sell-1 wrap-sw-over" data-preview="4" data-tablet="3" data-mobile="2" data-space-lg="30" data-space-md="15" data-pagination="2" data-pagination-md="3" data-pagination-lg="3">
+                        <div class="swiper-wrapper">
+                            <% products.forEach((product, index) => { %>
+                                <div class="swiper-slide height-auto" lazy="true">
+                                    <div class="card-product overflow-hidden bg_white radius-20 border-line h-100">
+                                        <div class="card-product-wrapper">
+                                            <a href="/product-detail/<%- product._id %>" class="product-img">
+                                                <img class="lazyload img-product" src="<%- product.productImages[0] %>" data-src="<%- product.productImages[0] %>" alt="gastro">
+                                                <img class="lazyload img-hover" data-src="<%- product.productImages[0] %>" src="<%- product.productImages[0] %>" alt="gastro">
+                                            </a>
+                                            <% if (product.discountPercentage) { %>
+                                                <div class="on-sale-wrap text-end">
+                                                    <div class="on-sale-item">-<%= product.discountPercentage %>%</div>
+                                                </div>
+                                            <% } %>
+                                            <div class="list-product-btn absolute-2">
+                                                <a href="#quick_add" data-bs-toggle="modal" class="box-icon bg_white quick-add tf-btn-loading" onclick="showProductModal('<%= product._id %>', '<%= product.productImages[0] %>', '<%= product.productName %>', <%= product.campaignDetail ? product.campaignDetail.campaignPrice : product.price %>, '<%= product.category %>' , '<%= product.packageName %>')">
+                                                    <span class="icon icon-bag"></span>
+                                                    <span class="tooltip">Schnell hinzufügen</span>
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div class="card-product-info has-padding">
+                                            <a href="/product-detail/<%- product._id %>" class="title link"><%- product.productName %> <small class="fs-10">(<%- product.packageName %>)</small></a>
+                                            <% if (product.campaignDetail) { %>
+                                                <div class="d-flex">
+                                                    <div class="price"><%= parseFloat(product.campaignDetail.campaignPrice).toFixed(2) %> CHF</div>
+                                                    <div class="price compare-at-price"><%= parseFloat(product.campaignDetail.currentPrice).toFixed(2) %> CHF</div>
+                                                </div>
+                                            <% } else { %>
+                                                <span class="price"><%= parseFloat(product.price).toFixed(2) %> CHF</span>
+                                            <% } %>
+                                        </div>
+                                    </div>
+                                </div>
+                            <% }); %>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <div class="modal fade modalDemo" id="quick_add">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="header">
+                        <span class="icon-close icon-close-popup" data-bs-dismiss="modal"></span>
+                    </div>
+                    <div class="wrap">
+                        <div class="tf-product-info-item">
+                            <div class="image">
+                                <img id="modal-product-image" src="" alt="gastro">
+                            </div>
+                            <div class="content">
+                                <a id="modal-product-link" href="#"><span id="modal-product-name"></span> <span id="modal-package-name" class="fs-10"></span></a>
+                                <div class="tf-product-info-price">
+                                    <div class="price" id="modal-product-price"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center justify-content-between align-content-center">
+                            <div class="tf-product-info-quantity mb_15">
+                                <div class="quantity-title fw-6">Menge</div>
+                                <div class="wg-quantity">
+                                    <span class="btn-quantity minus-btn">-</span>
+                                    <input type="text" name="number" value="1">
+                                    <span class="btn-quantity plus-btn">+</span>
+                                </div>
+                            </div>
+                            <div class="tf-product-info-buy-button">
+                                <div class="quantity-title fw-6" style="visibility: hidden;">Menge</div>
+                                <a class="tf-btn btn-fill justify-content-center fw-6 fs-16 flex-grow-1 animate-hover-btn" onclick="addToCart()">
+                                    <span>Geschäft</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <section class="flat-spacing-18 flat-testimonial bg_grey-7">
+            <div class="container">
+                <div class="flat-title wow fadeInUp" data-wow-delay="0s">
+                    <span class="title">Kundenfeedback</span>
+                    <p class="sub-title">Sehen Sie, was unsere zufriedenen Kunden über unsere Dienstleistungen sagen.</p>
+                </div>
+                <div class="wrap-carousel">
+                    <div class="swiper tf-sw-testimonial" data-preview="3" data-tablet="2" data-mobile="1" data-space-lg="30" data-space-md="15">
+                        <div class="swiper-wrapper">
+                            <% reviews.forEach((review) => { %>
+                                <div class="swiper-slide height-auto">
+                                    <div class="testimonial-item h-100 bg_white style-column wow fadeInUp" data-wow-delay="0s">
+                                        <div class="rating">
+                                            <% for (let i = 0; i < review.reviewPoint; i++) { %>
+                                                <i class="icon-start text_primary"></i>
+                                            <% } %>
+                                            <% for (let i = review.reviewPoint; i < 5; i++) { %>
+                                                <i class="icon-start text_secondary"></i>
+                                            <% } %>
+                                        </div>
+                                        
+                                        <div class="heading"><%= review.reviewHeading %></div>
+                                        <div class="text">
+                                            <%- review.reviewDetails %>
+                                        </div>
+                                        <div class="author">
+                                            <div class="name"><%= review.reviewOwner %></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            <% }); %>
+                            
+                          
+                        </div>
+                    </div>
+                    <div class="nav-sw nav-next-slider nav-next-testimonial lg"><span class="icon icon-arrow-left"></span></div>
+                    <div class="nav-sw nav-prev-slider nav-prev-testimonial lg"><span class="icon icon-arrow-right"></span></div>
+                    <div class="sw-dots style-2 sw-pagination-testimonial justify-content-center"></div>
+                </div>
+            </div>
+        </section>
+        <section class="flat-spacing-1 flat-iconbox  wow fadeInUp" data-wow-delay="0s">
+            <div class="container">
+                <div class="wrap-carousel wrap-mobile">
+                    <div class="swiper tf-sw-mobile" data-preview="1" data-space="15">
+                        <div class="swiper-wrapper wrap-iconbox">
+                            <div class="swiper-slide">
+                                <div class="tf-icon-box style-row">
+                                    <div class="icon bg_white">
+                                        <i class="icon-shipping"></i>
+                                    </div>
+                                    <div class="content">
+                                        <div class="title fw-4">Schnelle und zuverlässige Lieferung</div>
+                                        <p>Pünktliche Lieferung für Ihre Geschäftsanforderungen</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="swiper-slide">
+                                <div class="tf-icon-box style-row">
+                                    <div class="icon bg_white">
+                                        <i class="icon-payment fs-22"></i>
+                                    </div>
+                                    <div class="content">
+                                        <div class="title fw-4">Sichere Transaktionen</div>
+                                        <p>Garantierte Sicherheit für alle Ihre Zahlungen</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="swiper-slide">
+                                <div class="tf-icon-box style-row">
+                                    <div class="icon bg_white">
+                                        <i class="icon-return fs-20"></i>
+                                    </div>
+                                    <div class="content">
+                                        <div class="title fw-4">Produkte von höchster Qualität</div>
+                                        <p>Nur das Beste für Ihr Unternehmen</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="sw-dots style-2 sw-pagination-mb justify-content-center"></div>
+                </div>
+            </div>
+        </section>
+		<%- include('./partials/footer.ejs') %>
+    </div>
+    <div class="progress-wrap">
+        <svg class="progress-circle svg-content" width="100%" height="100%" viewBox="-1 -1 102 102">
+        <path d="M50,1 a49,49 0 0,1 0,98 a49,49 0 0,1 0,-98" style="transition: stroke-dashoffset 10ms linear 0s; stroke-dasharray: 307.919, 307.919; stroke-dashoffset: 286.138;"></path>
+        </svg>
+    </div>
+    <%- include('./partials/basket.ejs') %>
+    <%- include('./partials/mobilebar.ejs') %>
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/swiper-bundle.min.js"></script>
+    <script type="text/javascript" src="js/carousel.js"></script>
+    <script type="text/javascript" src="js/bootstrap-select.min.js"></script>
+    <script type="text/javascript" src="js/lazysize.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap-select.min.js"></script>
+    <script type="text/javascript" src="js/count-down.js"></script>
+    <script type="text/javascript" src="js/wow.min.js"></script>
+    <script type="text/javascript" src="js/multiple-modal.js"></script>
+    <script type="text/javascript" src="js/main.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,123 @@
+.avatar {
+	position: $__relative;
+	display: $__inline__block;
+	width: 3rem;
+	height: 3rem;
+	>img {
+		width: $__full__width;
+		height: $__full__height;
+		-o-object-fit: $__cover;
+		object-fit: $__cover;
+	}
+	.border {
+		border-width: 3px !important;
+	}
+	.rounded {
+		border-radius: 6px !important;
+	}
+	.avatar-title {
+		font-size: $__font__size__18;
+	}
+}
+.avatar-title {
+	width: $__full__width;
+	height: $__full__height;
+	background-color: $__themeColor;
+	color: $__white;
+	@extend %flex-align-center;
+}
+.avatar-away {
+	&:before {
+		position: $__absolute;
+		right: $__zero;
+		bottom: $__zero;
+		width: $__quarter__width;
+		height: $__quarter__height;
+		border-radius: $__half__rounded;
+		content: '';
+		border: 2px solid $__white;
+		background-color: $__warning;
+	}
+}
+.avatar-offline {
+	&:before {
+		position: $__absolute;
+		right: $__zero;
+		bottom: $__zero;
+		width: $__quarter__width;
+		height: $__quarter__height;
+		border-radius: $__half__rounded;
+		content: '';
+		border: 2px solid $__white;
+		background-color: $__danger;
+	}
+}
+.avatar-online {
+	&:before {
+		position: $__absolute;
+		right: $__zero;
+		bottom: $__zero;
+		width: $__quarter__width;
+		height: $__quarter__height;
+		border-radius: $__half__rounded;
+		content: '';
+		border: 2px solid $__white;
+		background-color: $__success;
+	}
+}
+.avatar-xs {
+	width: 1.65rem;
+	height: 1.65rem;
+	.border {
+		border-width: 2px !important;
+	}
+	.rounded {
+		border-radius: 4px !important;
+	}
+	.avatar-title {
+		font-size: $__font__size__12;
+	}
+}
+.avatar-xs.avatar-away {
+	&:before {
+		border-width: 1px;
+	}
+}
+.avatar-xs.avatar-offline {
+	&:before {
+		border-width: 1px;
+	}
+}
+.avatar-xs.avatar-online {
+	&:before {
+		border-width: 1px;
+	}
+}
+.avatar-sm {
+	width: 2.5rem;
+	height: 2.5rem;
+	.border {
+		border-width: 3px !important;
+	}
+	.rounded {
+		border-radius: 4px !important;
+	}
+	.avatar-title {
+		font-size: $__font__size__15;
+	}
+}
+.avatar-sm.avatar-away {
+	&:before {
+		border-width: 2px;
+	}
+}
+.avatar-sm.avatar-offline {
+	&:before {
+		border-width: 2px;
+	}
+}
+.avatar-sm.avatar-online {
+	&:before {
+		border-width: 2px;
+	}
+}

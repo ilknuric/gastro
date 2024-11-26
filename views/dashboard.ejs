@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US" lang="en-US">
+<head>
+    <meta charset="utf-8">
+    <title>Gastro Koçak Handel GmbH | Alles für Ihr Restaurant</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="fonts/fonts.css">
+    <link rel="stylesheet" href="fonts/font-icons.css">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/swiper-bundle.min.css">
+    <link rel="stylesheet" href="css/animate.css">
+    <link rel="stylesheet"type="text/css" href="css/styles.css"/>
+    <link rel="shortcut icon" href="/favicon.png">
+    <link rel="apple-touch-icon-precomposed" href="images/logo/favicon.png">
+</head>
+<body class="preload-wrapper">
+    <div id="wrapper">
+        <%- include('./partials/header.ejs') %>
+        <div class="tf-page-title">
+            <div class="container-full">
+                <div class="heading text-center">Armaturenbrett</div>
+            </div>
+        </div>
+        <section class="flat-spacing-11">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-3">
+                        <ul class="my-account-nav">
+                            <li><span class="my-account-nav-item active">Armaturenbrett</span></li>
+                            <li><a href="/order-history" class="my-account-nav-item">Bestellungen</a></li>
+                            <li><a href="/user-address" class="my-account-nav-item">Adressdetails</a></li>
+                            <li><a href="/user-account" class="my-account-nav-item">Kontodetails</a></li>
+                            <li><a href="/user-password" class="my-account-nav-item">Passwort ändern</a></li>
+                            <li><a href="/logout" class="my-account-nav-item">Abmelden</a></li> 
+                        </ul>
+                    </div>
+                    <div class="col-lg-9">
+                        <div class="my-account-content account-dashboard">
+                            <div class="mb_60">
+                                <h5 class="fw-5 mb_20">Hallo <%= user.name%> <%= user.surname%></h5>
+                                <p>
+                                    Von Ihrem Konto-Dashboard aus können Sie Ihre <a class="text_primary" href="/order-history">letzten Bestellungen</a> ansehen, Ihre <a class="text_primary" href="/user-address">Versand- und Rechnungsadressen</a> verwalten und <a class="text_primary" href="/user-password">Ihr Passwort</a> sowie <a class="text_primary" href="/user-account">Ihre Kontodaten</a> bearbeiten.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <%- include('./partials/footer.ejs') %>
+    </div>
+    <div class="progress-wrap">
+        <svg class="progress-circle svg-content" width="100%" height="100%" viewBox="-1 -1 102 102">
+        <path d="M50,1 a49,49 0 0,1 0,98 a49,49 0 0,1 0,-98" style="transition: stroke-dashoffset 10ms linear 0s; stroke-dasharray: 307.919, 307.919; stroke-dashoffset: 286.138;"></path>
+        </svg>
+    </div>
+    <%- include('./partials/basket.ejs') %>
+    <%- include('./partials/mobilebar.ejs') %>
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/swiper-bundle.min.js"></script>
+    <script type="text/javascript" src="js/carousel.js"></script>
+    <script type="text/javascript" src="js/bootstrap-select.min.js"></script>
+    <script type="text/javascript" src="js/lazysize.min.js"></script>
+    <script type="text/javascript" src="js/count-down.js"></script>   
+    <script type="text/javascript" src="js/wow.min.js"></script>   
+    <script type="text/javascript" src="js/wow.min.js"></script>
+    <script type="text/javascript" src="js/multiple-modal.js"></script>
+    <script type="text/javascript" src="js/main.js"></script>
+</body>
+</html>

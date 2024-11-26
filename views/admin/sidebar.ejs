@@ -1,0 +1,93 @@
+<div class="sidebar" id="sidebar" style="overflow-y: scroll;">
+    <div class="sidebar-header">
+        <div class="sidebar-logo">
+            <a href="/admin/">
+                <img src="/admin/assets/img/logo.png" class="img-fluid logo" alt="gastro" width="200">
+            </a>
+            <a href="/admin/">
+                <img src="/admin/assets/img/logo.png" class="img-fluid logo-small" alt="gastro">
+            </a>
+        </div>
+    </div>
+    <div class="sidebar-inner " >
+        <div id="sidebar-menu" class="sidebar-menu">
+            <ul>
+                <li class="menu-title m-0">
+                    <h6>Home</h6>
+                </li>
+                <li>
+                    <a href="/admin/home" class="<%= activePage === 'admin/' ? 'active' : '' %>"><i class="fe fe-grid"></i> <span>Dashboard</span></a>
+                </li>
+                <li class="menu-title">
+                    <h6>Geschäft</h6>
+                </li>
+                <li>
+                    <a href="/admin/products" class="<%= activePage === 'admin/products' ? "active" : '' %>"><i class="fe fe-book"></i> <span>Produkte</span></a>
+                </li>
+                <li>
+                    <a href="/admin/categories" class="<%= activePage === 'admin/categories' ? "active" : '' %>"><i class="fe fe-file-text"></i> <span>Kategorien</span></a>
+                </li>
+                <li>
+                    <a href="/admin/brands" class="<%= activePage === 'admin/brands' ? "active" : '' %>"><i class="fe fe-activity"></i> <span>Marken</span></a>
+                </li>
+                <li>
+                    <a href="/admin/package" class="<%= activePage === 'admin/package' ? "active" : '' %>"><i class="fe fe-box"></i> <span>Pakettyp</span></a>
+                </li>
+                <li>
+                    <a href="/admin/promotion" class="<%= activePage === 'admin/promotion' ? "active" : '' %>"><i class="fe fe-dollar-sign"></i> <span>Rabattcodes</span></a>
+                </li>
+                <li>
+                    <a href="/admin/campaigns" class="<%= activePage === 'admin/campaigns' ? "active" : '' %>"><i class="fe fe-arrow-down-circle"></i> <span>Kampagnen</span></a>
+                </li>
+                <!--
+                <li>
+                    <a href="/admin/saloon-images" class="<%= activePage === 'admin/saloon-images' ? 'active' : '' %>"><i class="fe fe-tv"></i> <span>Titelbild</span></a>
+                </li>-->
+                <li class="menu-title">
+                    <h6>Finanzen & Bestellungen</h6>
+                </li>
+                <li>
+                    <a href="/admin/orders" class="<%= activePage === 'admin/orders' ? 'active' : '' %>"><i class="fe fe-shopping-bag"></i> <span>Bestellberichte</span></a>
+                </li>
+                <li>
+                    <a href="/admin/customers" class="<%= activePage === 'admin/customers' ? 'active' : '' %>"><i class="fe fe-briefcase"></i> <span>Kunden</span></a>
+                </li>
+                <li>
+                    <a href="/admin/applications" class="<%= activePage === 'admin/applications' ? 'active' : '' %>"><i class="fe fe-upload"></i> <span>Anwendungen</span></a>
+                </li>
+                    <li class="menu-title">
+                        <h6>Inhalt</h6>
+                    </li>
+				<li>
+                    <a href="/admin/slides" class="<%= activePage === 'admin/slides' ? 'active' : '' %>"><i class="fe fe-airplay"></i> <span>Slides</span></a>
+                </li>
+                <li>
+                    <a href="/admin/about" class="<%= activePage === 'admin/about' ? 'active' : '' %>"><i class="fe fe-file"></i>  <span>Über uns</span></a>
+                </li>
+                <li>
+                    <a href="/admin/reviews" class="<%= activePage === 'admin/reviews' ? 'active' : '' %>"><i class="fe fe-aperture"></i>  <span>Rezensionen</span></a>
+                </li>
+                <!--
+                <li>
+                    <a href="/admin/process" class="<%= activePage === 'admin/process' ? 'active' : '' %>"><i class="fa fa-recycle"></i>  <span>Wie es funktioniert</span></a>
+                </li>-->
+                <li>
+                    <a href="/admin/agb" class="<%= activePage === 'admin/agb' ? 'active' : '' %>"><i class="fe fe-message-square"></i>  <span>AGB</span></a>
+                </li>
+                <li>
+                    <a href="/admin/impressum" class="<%= activePage === 'admin/impressum' ? 'active' : '' %>"><i class="fe fe-file-text"></i> <span>Impressum</span></a>
+                </li>
+                <li class="menu-title">
+                    <h6>Geschäftseinstellungen</h6>
+                </li>
+                <li>
+                    <a href="/admin/settings" class="<%= activePage === 'admin/settings' ? 'active' : '' %>"><i class="fe fe-settings"></i> <span>Einstellungen</span></a>
+                </li>  
+                <li>
+                    <a href="/admin/logout" ><i class="fe fe-log-out"></i> <span>Ausloggen</span></a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+

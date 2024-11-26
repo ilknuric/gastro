@@ -1,0 +1,154 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+    <title>me Time | Admin Dashboard</title>
+    <link rel="shortcut icon" href="/assets/img/favicon.png">
+    <link rel="stylesheet" href="/admin/assets/css/select2.min.css">
+    <link rel="stylesheet" href="/admin/assets/plugins/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/admin/assets/plugins/bootstrap-tagsinput/css/bootstrap-tagsinput.css">
+    <link rel="stylesheet" href="/admin/assets/plugins/fontawesome/css/fontawesome.min.css">
+    <link rel="stylesheet" href="/admin/assets/plugins/fontawesome/css/all.min.css">
+    <link rel="stylesheet" href="/admin/assets/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="/admin/assets/plugins/feather/feather.css">
+	<link rel="stylesheet" href="/admin/assets/css/ckeditor.css">
+    <link rel="stylesheet" href="/admin/assets/css/style.css">
+</head>
+
+<body>
+    <div class="main-wrapper">
+        <%- include('./sidebar.ejs') %>
+        <%- include('./header.ejs') %>
+        <div class="page-wrapper">
+            <div class="content">
+                <form action="/admin/setup/add-new-service" method="post">
+                    <div class="row">
+                        <div class="col-lg-12 col-sm-12 ">
+                            <div class="content-page-header">
+								<h5>Neuen Dienst hinzufügen</h5>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+										<label>Dienstname</label>
+                                        <input type="text" class="form-control" required name="serviceName">
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+										<label>Diensttyp</label>
+                                        <select class="select" name="serviceType" required>
+                                            <option value="" disabled>Art auswählen</option>
+                                            <option value="Female">Weiblich</option>
+                                            <option value="Male">Männlich</option>
+                                        </select>
+                                    </div>                                    
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <label>Servicedauer: Stunde</label>
+                                        <select class="select" required name="hour">
+                                            <option value="0">0 Stunde</option>
+											<option value="1">1 Stunde</option>
+                                             <option value="2">2 Stunden</option>
+                                             <option value="3">3 Stunden</option>
+                                             <option value="4">4 Stunden</option>
+                                             <option value="5">5 Stunden</option>
+                                             <option value="6">6 Stunden</option>
+                                             <option value="7">7 Stunden</option>
+                                             <option value="8">8 Stunden</option>
+                                             <option value="9">9 Stunden</option>
+                                             <option value="10">10 Stunden</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <label>Servicedauer in Minuten</label>
+                                        <select class="select" required name="minutes">
+                                            <option value="" disabled selected>Wählen Sie Minuten aus</option>
+                                            <option value="0">0 Min.</option>
+                                            <!--<option value="5">5 Min.</option>
+                                            <option value="10">10 Min.</option>-->
+                                            <option value="15">15 Min.</option>
+                                            <!--<option value="20">20 Min.</option>
+                                            <option value="25">25 Min.</option>-->
+                                            <option value="30">30 Min.</option>
+                                            <!--<option value="35">35 Min.</option>
+                                            <option value="40">40 Min.</option>-->
+                                            <option value="45">45 Min.</option>
+                                            <!--<option value="50">50 Min.</option>
+                                            <option value="55">55 Min.</option>-->
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label>Status</label>
+                                        <select class="select" name="status" required>
+                                            <option value="" disabled selected>Wählen Sie Status aus</option>
+                                            <option value="Active">Aktiv</option>
+                                            <option value="Passive">Passiv</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label>Preis</label>
+                                        <input type="number" class="form-control"  required name="price">
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label>Kategorie</label>
+                                        <select class="select" required name="category">
+                                            <option value="" disabled selected>Kategorie wählen</option>
+                                            <% categories.forEach((category) => { %>
+                                                <option value="<%= category._id %>"><%= category.categoryName %></option>
+                                            <% }); %>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <label>Beschreibung</label>
+                                        <input type="text" class="form-control" name="description">
+                                    </div>
+                                </div>
+                                <input type="hidden" name="businessID" value="" id="businessID">
+                                <div class="col-lg-12">
+                                    <div class="btn-path">
+                                        <button type="submit" class="btn btn-submit "> Speichern</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div> 
+    </div>
+    <script src="/admin/assets/js/jquery-3.6.4.min.js"></script>
+    <script src="/admin/assets/js/select2.min.js"></script>
+    <script src="/admin/assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="/admin/assets/plugins/bootstrap-tagsinput/js/bootstrap-tagsinput.js"></script>
+    <script src="/admin/assets/js/feather.min.js"></script>
+    <script src="/admin/assets/js/jquery.dataTables.min.js"></script>
+    <script src="/admin/assets/js/dataTables.bootstrap4.min.js"></script>
+	<script src="/admin/assets/js/ckeditor.js"></script>
+    <script src="/admin/assets/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+    <script src="/admin/assets/plugins/sweetalert/sweetalert2.all.min.js"></script>
+    <script src="/admin/assets/plugins/sweetalert/sweetalerts.min.js"></script>
+    <script src="/admin/assets/js/admin.js"></script>
+    <script>
+        var currentURL = window.location.href;
+        var urlParts = currentURL.split('/');
+        var dynamicID = urlParts[urlParts.length - 1];
+    
+        var businessIDInput = document.getElementById('businessID');
+        businessIDInput.value = dynamicID;
+    </script>
+</body>
+</html>

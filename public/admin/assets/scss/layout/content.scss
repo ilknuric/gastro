@@ -1,0 +1,327 @@
+.main-wrapper {
+	width: $__full__width;
+	height: $__full_height_window;
+	min-height: $__full_height_window;
+}
+.page-wrapper {
+	margin-left: 270px;
+	padding-top: 60px;
+	position: $__relative;
+	@include transition(all 0.4s ease);
+	>.content {
+		padding: 30px;
+		width: $__full__width;
+		@include respond-below(custom767) {
+			padding:20px;
+		}
+	}
+	@include respond-below(custom991) {		
+		margin-left: $__zero;
+		padding-left: $__zero;
+		padding-right: $__zero;
+		@include transition(all 0.4s ease);
+	}
+}
+.page-header {
+	margin-bottom: 1.875rem;
+}
+.page-header-card {
+	background-color: $__white;
+	@include margin-padding(0 0 50px, 30px);
+	@include rounded(5px);
+}
+.login-pages {
+	display: flex;
+	display: -webkit-flex;
+	align-items: center;
+	-webkit-align-items: center;
+	position: relative;
+	z-index: 1;
+	height:100vh;
+	@include margin-padding (null, 40px 70px);
+	@include respond-below(custom991) {
+    	@include margin-padding (null, 30px 15px);
+    }
+	@include respond-below(custom767) {
+    	@include margin-padding (null, 12px);
+    }
+}
+.login-logo {
+	@include margin-padding (0 0 18px, null);
+	text-align: $__center;
+	@include respond-below(custom1400) {
+    	@include margin-padding (0 0 40px, null);
+    }
+	@include respond-below(custom992) {
+    	@include margin-padding (0 0 30px, null);
+        text-align: $__center;
+
+    }
+}
+.login-main-wrapper{
+	height:100vh
+}
+.login-input {
+	.form-group {
+		label {
+			color: $__primarycolor;
+			font-size: $__font__size__16;
+		}
+	}
+	.form-control {
+		background: $__white;
+		border: 1px solid $__formcontrol__border;
+        @include placeholder-color($__placeholder);
+		&:focus {
+			border: 1px solid $__themeColor;
+			border-left: 5px solid $__themeColor;
+		}
+	}
+}
+.login-contenthead {
+	h5 {
+		font-size: $__font__size__24;
+		font-weight: $__bold;
+		margin-bottom: 18px;
+		@include respond-below(custom992) {
+			font-size: $__font__size__24;
+		}
+	}
+	h6 {
+		font-size: $__body__font__size;
+		color: $__desc;
+		font-weight: $__regular;
+		margin-bottom: 18px;
+	}
+	p {
+		margin: $__zero;
+		font-weight: $__regular;
+		a {
+			color: $__themeColor;
+			text-decoration: $__underline;
+		}
+	}
+	margin-bottom: 60px;
+}
+.flag-nav {
+	img {
+		min-width: 18px;
+		height: 18px;
+		width: 18px;
+	}
+	@include respond-below(custom992) {
+		display: $__none;
+	}
+}
+.forgetpassword-link {
+	color: $__themeColor;
+	text-decoration: $__underline;
+}
+.tab-sets {
+	border-bottom: 2px solid $__searchbarTop;
+	padding-bottom: 10px;
+	display: $__flex;
+	align-items: $__center;
+	justify-content: $__space__between;
+}
+.tab-contents-sets {
+	ul {
+		display: $__flex;
+		align-items: $__center;
+		@include respond-below(custom992) {
+			flex-wrap: $__wrap;
+		}
+		li {
+			@include respond-below(custom575) {
+				width: $__half__width;
+				padding: $__zero !important;
+				text-align: $__center;
+			}
+			+li {
+				padding-left: 35px;
+			}
+			a {
+				color: $__secondarycolor;
+				font-weight: $__medium;
+				position: $__relative;
+				&:hover {
+					&::after {
+						position: $__absolute;
+						content: "";
+						background: $__themeColor;
+						width: $__full__width;
+						height: 2px;
+						left: $__zero;
+						top: 29px;				
+						@include respond-below(custom992) {
+							height: $__zero;
+						}
+					}
+					color: $__themeColor;
+				}
+				@include respond-below(custom575) {
+					@include margin-padding(null, 10px);
+        			display: $__block;
+				}
+			}
+			a.active {
+				color: $__themeColor;
+				&::after {
+					position: $__absolute;
+					content: "";
+					background: $__themeColor;
+					width: $__full__width;
+					height: 2px;
+					left: $__zero;
+					top: 29px;		
+					@include respond-below(custom992) {
+						height: $__zero;
+					}
+				}
+			}
+		}
+	}
+}
+.table-div {
+	padding-top: 40px;
+}
+.tab-contents-count {
+	@include respond-below(custom992) {
+		display: $__none;
+	}
+	h6 {
+		margin: $__zero;
+		font-size: $__body__font__size;
+		color: $__secondarycolor;
+		font-weight: $__regular;
+	}
+}
+.table-imgname {
+	align-items: $__center;
+	display: $__inline__flex;
+	font-size: $__inherit;
+	font-weight: $__regular;
+	margin: $__zero;
+	padding: $__zero;
+	vertical-align: $__middle;
+	white-space: $__nowrap;
+	padding-right: 30px;
+	img {
+		width: 40px;
+		height: 40px;
+		@include rounded(5px);
+	}
+}
+.badge-pending {
+	background: #FFF9E8;
+	padding: 6px;
+	min-width: 80px;
+	margin: $__zero;
+	font-size: $__font__size__13;
+	color: #FFC107;
+	@include rounded(50px);
+	display: $__inline__block;
+	text-align: $__center;
+}
+.delete-table {
+	&:hover {
+		img {
+			filter: brightness(0) invert(1);
+		}
+	}
+}
+.badge-inactive {
+	background: #F1F8FF;
+	padding: 6px;
+	min-width: 80px;
+	margin: $__zero;
+	font-size: $__font__size__13;
+	color: #007BFF;
+	@include rounded(50px);
+	display: $__inline__block;
+	text-align: $__center;
+}
+.badge-active {
+	background: #F2FFF6;
+	padding: 6px;
+	min-width: 80px;
+	margin: $__zero;
+	font-size: $__font__size__13;
+	color: #1BA345;
+	@include rounded(50px);
+	display: $__inline__block;
+	text-align: $__center;
+	&:hover {
+		background: #F2FFF6;
+		padding: 6px;
+		min-width: 80px;
+		margin: $__zero;
+		color: #1BA345;
+		@include rounded(50px);
+		display: $__inline__block;
+		text-align: $__center;
+	}
+}
+.badge-delete {
+	background: #FFF3F3;
+	padding: 6px;
+	min-width: 80px;
+	margin: $__zero;
+	font-size: $__font__size__13;
+	color: $__remove;
+	@include rounded(50px);
+	display: $__inline__block;
+	text-align: $__center;
+}
+.card-bg {
+	background-color: $__white;
+	@include margin-padding(null, 24px);
+	h5 {
+		@include margin-padding(0 0 25px, null);
+	}
+}
+ .login-pages::before{
+ 	content: "";
+     background-image: url(../img/login-bg-01.png);
+     background-repeat: no-repeat;
+ 	background-position: right top;
+     position: absolute;
+     height: 100%;
+ 	width: 100%;
+ 	left: 0;
+ 	top: 0;
+ 	z-index: -1;
+	 @include respond-below(custom575){
+			display:none
+	 }
+ }
+ .login-pages::after{
+ 	content:"";
+ 	background-image: url(../img/login-bg-02.png);
+     background-repeat: no-repeat;
+ 	background-position: left bottom;
+     position: absolute;
+     height: 100%;
+ 	width: 100%;
+ 	left: 0;
+ 	top: 0;
+ 	z-index: -1;
+	 @include respond-below(custom575){
+		display: none;
+	 }
+ }
+
+.login-wrap{
+	max-width:500px;
+	margin:0 auto;
+	
+}
+.forgotpassword-pages{
+	padding:60px;
+}
+.signup-pages{
+	padding:60px;
+}
+.main-wrapper .wrapper-login{
+	background-color: #F9FAFC;
+}

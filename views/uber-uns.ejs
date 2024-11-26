@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US" lang="en-US">
+<head>
+    <meta charset="utf-8">
+    <title>Gastro Koçak Handel GmbH | Alles für Ihr Restaurant</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="fonts/fonts.css">
+    <link rel="stylesheet" href="fonts/font-icons.css">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/swiper-bundle.min.css">
+    <link rel="stylesheet" href="css/animate.css">
+    <link rel="stylesheet"type="text/css" href="css/styles.css"/>
+    <link rel="shortcut icon" href="/favicon.png">
+    <link rel="apple-touch-icon-precomposed" href="favicon.png">
+</head>
+<body class="preload-wrapper">
+    <div class="preload preload-container">
+        <div class="preload-logo">
+            <div class="spinner"></div>
+        </div>
+    </div>
+    <div id="wrapper">
+        <%- include('./partials/header.ejs') %>
+        <div class="container"><div class="line"></div></div>
+        <section class="flat-spacing-23 flat-image-text-section">
+            <div class="container">
+                <div class="tf-grid-layout md-col-2 tf-img-with-text style-4">
+                    <div class="tf-image-wrap">
+                        <% about.forEach((about, index) => { %>
+                        <img class="lazyload w-100" data-src="<%= about && about.aboutImage ? about.aboutImage : '/assets/img/default.png' %>" src="<%= about && about.aboutImage ? about.aboutImage : '/assets/img/default.png' %>" alt="gastro">
+                        <% }); %> 
+                    </div>
+                    <div class="tf-content-wrap px-0 d-flex justify-content-center w-100">
+                        <div>
+                            <% about.forEach((about, index) => { %>
+                            <div class="heading"><%- about.heading %></div>
+                            <div class="text">
+                                <%- about.maintext %>
+                            </div>
+                            <% }); %> 
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section>
+            <div class="">
+                <div class="bg_grey-2 radius-10 flat-wrap-iconbox">
+                    <div class="flat-title lg">
+                        <span class="title fw-5">Excellence in Every Product</span>
+                        <div>
+                            <p class="sub-title text_black-2">Bei Gastro Koçak Handel bieten wir erstklassige Produkte und zuverlässigen Service für Ihre geschäftlichen Anforderungen.</p> 
+                            <p class="sub-title text_black-2">Unser Expertenteam widmet sich der Bereitstellung von Lösungen, die einen Mehrwert für Ihren Betrieb schaffen.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flat-iconbox-v3 lg">
+                        <div class="wrap-carousel wrap-mobile">
+                            <div class="swiper tf-sw-mobile" data-preview="1" data-space="15">
+                                <div class="swiper-wrapper wrap-iconbox lg">
+                                    <div class="swiper-slide">
+                                        <div class="tf-icon-box text-center">
+                                            <div class="icon">
+                                                <i class="icon-materials"></i>
+                                            </div>
+                                            <div class="content">
+                                                <div class="title">Premium-Qualitätssicherung</div>
+                                                <p class="text_black-2">Unsere Produkte werden strengen Tests unterzogen, um die höchsten Qualitätsstandards zu erfüllen und Konsistenz und Exzellenz bei jeder Bestellung zu gewährleisten.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="swiper-slide">
+                                        <div class="tf-icon-box text-center">
+                                            <div class="icon">
+                                                <i class="icon-design"></i>
+                                            </div>
+                                            <div class="content">
+                                                <div class="title">Zuverlässige Lieferung</div>
+                                                <p class="text_black-2">Wir garantieren zeitnahe und zuverlässige Lieferlösungen, die auf Ihre Geschäftsanforderungen zugeschnitten sind und einen reibungslosen Betrieb gewährleisten.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="swiper-slide">
+                                        <div class="tf-icon-box text-center">
+                                            <div class="icon">
+                                                <i class="icon-sizes"></i>
+                                            </div>
+                                            <div class="content">
+                                                <div class="title">Dedizierter Kundensupport</div>
+                                                <p class="text_black-2">Unser Support-Team ist für Sie da, um bei allen Anfragen behilflich zu sein und sicherzustellen, dass Sie von der Bestellung bis zur Lieferung ein reibungsloses Erlebnis haben.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                               
+                                </div>
+                            </div>
+                            <div class="sw-dots style-2 sw-pagination-mb justify-content-center"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <%- include('./partials/footer.ejs') %>
+    </div>
+    <div class="progress-wrap">
+        <svg class="progress-circle svg-content" width="100%" height="100%" viewBox="-1 -1 102 102">
+        <path d="M50,1 a49,49 0 0,1 0,98 a49,49 0 0,1 0,-98" style="transition: stroke-dashoffset 10ms linear 0s; stroke-dasharray: 307.919, 307.919; stroke-dashoffset: 286.138;"></path>
+        </svg>
+    </div>
+    <%- include('./partials/basket.ejs') %>
+    <%- include('./partials/mobilebar.ejs') %>
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/swiper-bundle.min.js"></script>
+    <script type="text/javascript" src="js/carousel.js"></script>
+    <script type="text/javascript" src="js/bootstrap-select.min.js"></script>
+    <script type="text/javascript" src="js/lazysize.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap-select.min.js"></script>
+    <script type="text/javascript" src="js/count-down.js"></script>
+    <script type="text/javascript" src="js/wow.min.js"></script>
+    <script type="text/javascript" src="js/multiple-modal.js"></script>
+    <script type="text/javascript" src="js/main.js"></script>
+</body>
+</html>

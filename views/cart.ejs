@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US" lang="en-US">
+<head>
+    <meta charset="utf-8">
+    <title>Gastro Koçak Handel GmbH | Alles für Ihr Restaurant</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="fonts/fonts.css">
+    <link rel="stylesheet" href="fonts/font-icons.css">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/swiper-bundle.min.css">
+    <link rel="stylesheet" href="css/animate.css">
+    <link rel="stylesheet"type="text/css" href="css/styles.css"/>
+    <link rel="shortcut icon" href="/favicon.png">
+    <link rel="apple-touch-icon-precomposed" href="favicon.png">
+</head>
+<body class="preload-wrapper">
+    <div class="preload preload-container">
+        <div class="preload-logo">
+            <div class="spinner"></div>
+        </div>
+    </div>
+    <div id="wrapper">
+        <%- include('./partials/header.ejs') %>
+        <div class="tf-page-title">
+            <div class="container-full">
+                <div class="heading text-center">Warenkorb</div>
+            </div>
+        </div>
+        <section class="flat-spacing-11">
+            <div class="container">
+                <div class="tf-page-cart-wrap">
+                    <div class="tf-page-cart-item">
+                        <form>
+                            <table class="tf-table-page-cart">
+                                <thead>
+                                    <tr>
+                                        <th>Produkte</th>
+                                        <th>Preis</th>
+                                        <th>Menge</th>
+                                        <th>Totalpreis</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="cart-body"></tbody>
+                            </table>
+                        </form>
+                    </div>
+                    <div class="tf-page-cart-footer">
+                        <div class="tf-cart-footer-inner">                          
+                            <div class="tf-page-cart-checkout">
+                                <div class="tf-cart-totals-discounts">
+                                    <h3>Zwischensumme</h3>
+                                    <span class="total-value fw-5" id="subtotal"></span>
+                                </div>
+                                <div id="mwstContainer">
+                                </div>
+                                <div class="tf-cart-totals-discounts">
+                                    <h3>Gesamtpreis</h3>
+                                    <span class="total-value fw-5" id="totalprice"></span>
+                                </div>
+                                
+                                <div class="cart-checkout-btn">
+                                    <a href="/checkout" style="color:#fff; width:100%">
+                                    <div class="tf-btn w-100 btn-fill  radius-3 justify-content-center" >
+                                        <span>Kasse</span>
+                                    </div>
+                                </a>
+                                </div>
+                            
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <%- include('./partials/footer.ejs') %>
+    </div>
+    <div class="progress-wrap">
+        <svg class="progress-circle svg-content" width="100%" height="100%" viewBox="-1 -1 102 102">
+        <path d="M50,1 a49,49 0 0,1 0,98 a49,49 0 0,1 0,-98" style="transition: stroke-dashoffset 10ms linear 0s; stroke-dasharray: 307.919, 307.919; stroke-dashoffset: 286.138;"></path>
+        </svg>
+    </div>
+    <%- include('./partials/mobilebar.ejs') %>
+    <%- include('./partials/basket.ejs') %>
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/swiper-bundle.min.js"></script>
+    <script type="text/javascript" src="js/carousel.js"></script>
+    <script type="text/javascript" src="js/bootstrap-select.min.js"></script>
+    <script type="text/javascript" src="js/lazysize.min.js"></script>
+    <script type="text/javascript" src="js/count-down.js"></script>   
+    <script type="text/javascript" src="js/wow.min.js"></script>   
+    <script type="text/javascript" src="js/rangle-slider.js"></script>
+    <script type="text/javascript" src="js/wow.min.js"></script>
+    <script type="text/javascript" src="js/multiple-modal.js"></script>
+    <script type="text/javascript" src="js/main.js"></script>
+    <script>
+        function loadCartTableItems() {
+            displayMwstCalculation();
+            const cartTableBody = document.querySelector('tbody');
+            cartTableBody.innerHTML = ''; 
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            cart.forEach(item => {
+                const itemTotal = (item.price * item.quantity).toFixed(2); 
+                const itemHTML = `
+                    <tr class="tf-cart-item file-delete">
+                        <td class="tf-cart-item_product">
+                            <a href="/product-detail/${item.id}" class="img-box">
+                                <img src="${item.image}" alt="gastro">
+                            </a>
+                            <div class="cart-info">
+                                <a href="/product-detail/${item.id}" class="cart-title link">${item.name}</a>
+                                <span class="remove-cart link remove" onclick="removeFromCart('${item.id}')">Löschen</span>
+                            </div>
+                        </td>
+                        <td class="tf-cart-item_price" cart-data-title="Price">
+                            <div class="cart-price">${item.price.toFixed(2)} CHF</div>
+                        </td>
+                        <td class="tf-cart-item_quantity" cart-data-title="Quantity">
+                            <div class="cart-quantity">
+                                <div class="wg-quantity">
+                                    <span class="btn-quantity minus-btn" onclick="updateQuantity('${item.id}', -1)">
+                                        <svg class="d-inline-block" width="9" height="1" viewBox="0 0 9 1" fill="currentColor"><path d="M9 1H5.14286H3.85714H0V1.50201e-05H3.85714L5.14286 0L9 1.50201e-05V1Z"></path></svg>
+                                    </span>
+                                    <input type="text" name="number" value="${item.quantity}" readonly>
+                                    <span class="btn-quantity plus-btn" onclick="updateQuantity('${item.id}', 1)">
+                                        <svg class="d-inline-block" width="9" height="9" viewBox="0 0 9 9" fill="currentColor"><path d="M9 5.14286H5.14286V9H3.85714V5.14286H0V3.85714H3.85714V0H5.14286V3.85714H9V5.14286Z"></path></svg>
+                                    </span>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="tf-cart-item_total" cart-data-title="Total" >
+                            <div class="cart-total" >${itemTotal} CHF</div>
+                        </td>
+                    </tr>
+                `;
+                cartTableBody.insertAdjacentHTML('beforeend', itemHTML);
+            });
+        }
+        document.addEventListener('DOMContentLoaded', loadCartTableItems);
+
+    </script>
+</body>
+
+</html>

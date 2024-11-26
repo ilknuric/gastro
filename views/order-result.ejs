@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US" lang="en-US">
+<head>
+    <meta charset="utf-8">
+    <title>Gastro Koçak Handel GmbH | Alles für Ihr Restaurant</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="/fonts/fonts.css">   
+    <link rel="stylesheet" href="/fonts/font-icons.css">
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/swiper-bundle.min.css">
+    <link rel="stylesheet" href="/css/animate.css">
+    <link rel="stylesheet" href="/css/animate.css">
+    <link rel="stylesheet"type="text/css" href="/css/styles.css"/>
+    <link rel="shortcut icon" href="/favicon.png">
+    <link rel="apple-touch-icon-precomposed" href="favicon.png">
+</head>
+<body class="preload-wrapper">
+    <div class="preload preload-container">
+        <div class="preload-logo">
+            <div class="spinner"></div>
+        </div>
+    </div>
+    <div id="wrapper">
+        <%- include('./partials/header.ejs') %>
+        <div class="tf-page-title">
+            <div class="container-full">
+                <div class="heading text-center">Bestelldetails</div>
+            </div>
+        </div>
+        <section class="flat-spacing-11">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <h6><strong>Bestellnummer:</strong> <%= orderdetails.orderNumber %></h6> 
+                    </div>
+                    <div class="col-lg-6">
+                        <h6><strong>Name:</strong> <%= orderdetails.name %> <%= orderdetails.surname %></h6> 
+                    </div>
+                    <div class="col-lg-6">
+                        <h6><strong>Telefon:</strong> <%= orderdetails.gsm %></h6>
+                    </div>
+                    <div class="col-lg-6">
+                        <h6><strong>E-mail:</strong> <%= orderdetails.email %></h6>
+                    </div>
+                    <div class="col-lg-6">
+                        <h6><strong>Adresse:</strong> <%= orderdetails.street %> <%= orderdetails.no %>, <%= orderdetails.postcode %> <%= orderdetails.ort %></h6>
+                    </div>
+                    <div class="col-lg-6">
+                        <h6><strong>Bestellhinweis:</strong> <%= orderdetails.note %></h6>
+                    </div>
+                </div>
+                <div class="tf-page-cart-wrap mt-5">
+                    <div class="tf-page-cart-item">
+                        <form>
+                            <table class="tf-table-page-cart">
+                                <thead>
+                                    <tr>
+                                        <th>Produktname</th>
+                                        <th>Preis</th>
+                                        <th>Menge</th>
+                                        <th>Totalpreis</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% orderdetails.orderItems.forEach(item => { %>
+                                        <tr class="tf-cart-item file-delete">
+                                            <td class="tf-cart-item_product">
+                                                <a href="/product-detail/<%= item._id %>" class="img-box">
+                                                    <img src="<%= item.image ? item.image : '/assets/img/default.png' %>" alt="gastro">
+                                                </a>
+                                                <div class="cart-info align-content-center">
+                                                    <a href="/product-detail/<%= item._id %>" class="cart-title link"><%= item.productName %> <small class="fs-10">(<%= item.productName %>)</small></a>
+                                                </div>
+                                            </td>
+                                            <td class="tf-cart-item_price" cart-data-title="Price">
+                                                <div class="cart-price"><%= parseFloat(item.price).toFixed(2) %> CHF</div>
+                                            </td>
+                                            <td class="tf-cart-item_quantity" cart-data-title="Quantity">
+                                                <div class="cart-quantity"><%= item.quantity %></div>
+                                            </td>
+                                            <td class="tf-cart-item_total" cart-data-title="Total">
+                                                <div class="cart-total"><%= (parseFloat(item.price) * parseInt(item.quantity)).toFixed(2) %> CHF</div>
+                                            </td>
+                                        </tr>
+                                        <% }); %>
+                                        
+                                </tbody>
+                            </table>
+                        </form>
+                    </div>
+                    <div class="tf-page-cart-footer">
+                        <div class="tf-cart-footer-inner">
+                            <div class="tf-page-cart-checkout">
+                                <div class="tf-cart-totals-discounts">
+                                    <h3>Zwischensumme</h3>
+                                    <span class="total-value"><%= subtotal.toFixed(2) %> CHF</span>
+                                </div>
+                                <% Object.entries(mwstSummary).forEach(([key, value]) => { %>
+                                    <div class="tf-cart-totals-discounts">
+                                        <h3><%= key %></h3>
+                                        <span class="total-value"><%= value.toFixed(2) %> CHF</span>
+                                    </div>
+                                <% }); %>
+                                <% if(orderdetails.discount){ %>
+                                <div class="tf-cart-totals-discounts">
+                                    <h3>Rabatt</h3>
+                                    <span class="total-value"><%= parseFloat(orderdetails.discount).toFixed(2) %> CHF</span>
+                                </div>
+                                <% } %>
+                                <div class="tf-cart-totals-discounts">
+                                    <h3>Totalpreis</h3>
+                                    <span class="total-value"><%= parseFloat(orderdetails.orderPrice).toFixed(2) %> CHF</span>
+                                </div>                              
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <%- include('./partials/footer.ejs') %>
+    </div>
+    <div class="progress-wrap">
+        <svg class="progress-circle svg-content" width="100%" height="100%" viewBox="-1 -1 102 102">
+        <path d="M50,1 a49,49 0 0,1 0,98 a49,49 0 0,1 0,-98" style="transition: stroke-dashoffset 10ms linear 0s; stroke-dasharray: 307.919, 307.919; stroke-dashoffset: 286.138;"></path>
+        </svg>
+    </div>
+    <%- include('./partials/basket.ejs') %>
+    <%- include('./partials/mobilebar.ejs') %>
+    <script type="text/javascript" src="/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/js/swiper-bundle.min.js"></script>
+    <script type="text/javascript" src="/js/carousel.js"></script>
+    <script type="text/javascript" src="/js/bootstrap-select.min.js"></script>
+    <script type="text/javascript" src="/js/lazysize.min.js"></script>
+    <script type="text/javascript" src="/js/count-down.js"></script>   
+    <script type="text/javascript" src="/js/wow.min.js"></script>   
+    <script type="text/javascript" src="/js/rangle-slider.js"></script>
+    <script type="text/javascript" src="/js/wow.min.js"></script>
+    <script type="text/javascript" src="/js/multiple-modal.js"></script>
+    <script type="text/javascript" src="/js/main.js"></script>
+    <script>
+    localStorage.removeItem('cart');
+    </script>
+</body>
+</html>

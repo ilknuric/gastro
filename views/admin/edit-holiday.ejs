@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+    <title>Gastro Koçak Handel GmbH | Admin Dashboard</title>
+    <link rel="shortcut icon" href="/assets/img/favicon.png">
+    <link rel="stylesheet" href="/admin/assets/css/select2.min.css">
+    <link rel="stylesheet" href="/admin/assets/plugins/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/admin/assets/plugins/bootstrap-tagsinput/css/bootstrap-tagsinput.css">
+    <link rel="stylesheet" href="/admin/assets/plugins/fontawesome/css/fontawesome.min.css">
+    <link rel="stylesheet" href="/admin/assets/plugins/fontawesome/css/all.min.css">
+    <link rel="stylesheet" href="/admin/assets/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="/admin/assets/plugins/feather/feather.css">
+	<link rel="stylesheet" href="/admin/assets/css/ckeditor.css">
+    <link rel="stylesheet" href="/admin/assets/css/style.css">
+</head>
+<body>
+    <div class="main-wrapper">
+        <%- include('./sidebar.ejs') %>
+        <%- include('./header.ejs') %>
+        <div class="page-wrapper">
+            <div class="content">
+                <div class="row">
+                    <div class="col-lg-12s col-sm-12 m-auto">
+                        <div class="content-page-header">
+                            <h5>Arbeitsurlaub bearbeiten</h5>
+                        </div>
+                        <form action="/admin/edit-holiday/<%= holidays._id %>" method="post">
+                            <div class="row">
+                                <input type="hidden" name="businessID" value="<%= business._id%>" id="businessID">
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <div class="location-set mb-0">
+                                            <div class="row align-items-center">
+                                                <div class="col-lg-12 col-12">
+                                                    <div class="form-group mb-0">
+                                                        <label>Arbeiter</label>
+                                                        <select class="select" required name="workerID">
+                                                            <% workers.forEach((worker) => { %>
+                                                                <option value="<%= worker._id %>" <%= worker._id == holidays.workerID ? 'selected' : '' %>><%= worker.name %> <%= worker.surname %></option>
+                                                            <% }); %>
+                                                        </select>                                                        
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div> 
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label>Urlaubsbeginn</label>
+                                      <input type="date" class="form-control" name="HolidayStartDate" required value="<%= holidays.HolidayStartDate.toISOString().split('T')[0] %>" min="<%= (new Date()).toISOString().split('T')[0] %>">
+                                    </div>
+                                </div>  
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label>Berechtigungsablauf</label>
+                                        <input type="date" class="form-control" name="HolidayEndDate" required value="<%= holidays.HolidayEndDate.toISOString().split('T')[0] %>" min="<%= (new Date()).toISOString().split('T')[0] %>">
+                                    </div>
+                                </div>  
+                                <div class="col-lg-12">
+                                    <div class="btn-path">                                    
+                                        <button type="submit" class="btn btn-submit "> Einreichen</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div> 
+    </div>
+    <script src="/admin/assets/js/jquery-3.6.4.min.js"></script>
+    <script src="/admin/assets/js/select2.min.js"></script>
+    <script src="/admin/assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="/admin/assets/plugins/bootstrap-tagsinput/js/bootstrap-tagsinput.js"></script>
+    <script src="/admin/assets/js/feather.min.js"></script>
+    <script src="/admin/assets/js/jquery.dataTables.min.js"></script>
+    <script src="/admin/assets/js/dataTables.bootstrap4.min.js"></script>
+	<script src="/admin/assets/js/ckeditor.js"></script>
+    <script src="/admin/assets/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+    <script src="/admin/assets/plugins/sweetalert/sweetalert2.all.min.js"></script>
+    <script src="/admin/assets/plugins/sweetalert/sweetalerts.min.js"></script>
+    <script src="/admin/assets/js/admin.js"></script>
+</body>
+</html>

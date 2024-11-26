@@ -1,0 +1,152 @@
+.check {
+	display: $__block;
+	margin: $__zero;
+	padding: $__zero;
+	width: $__zero;
+	height: $__zero;
+	visibility: $__hidden;
+	opacity: $__zero;
+	pointer-events: $__none;
+	position: $__absolute;
+	&:checked {
+		+ {
+			.checktoggle {
+				background-color: $__themeColor;
+				&:after {
+					left: 100%;
+					transform: translate(calc(-100% - 5px), -50%);
+				}
+			}
+		}
+	}
+}
+.checktoggle {
+	background-color: $__themeColor;
+	@include rounded(12px);
+	cursor: $__pointer;
+	display: $__block;
+	font-size: $__zero;
+	height: 24px;
+	margin-bottom: $__zero;
+	position: $__relative;
+	width: 48px;
+	&:after {
+		content: ' ';
+		display: $__block;
+		position: $__absolute;
+		top: 50%;
+		left: $__zero;
+		transform: translate(5px, -50%);
+		width: 16px;
+		height: 16px;
+		background-color: $__white;
+		@include rounded(50%);
+		transition: left 300ms ease, transform 300ms ease;
+	}
+}
+.onoffswitch {
+	margin-left: $__auto;
+	position: $__relative;
+	width: 73px;
+	-webkit-user-select: $__none;
+	-moz-user-select: $__none;
+	-ms-user-select: $__none;
+}
+.onoffswitch-checkbox {
+	display: $__none;
+	&:checked {
+		+ {
+			.onoffswitch-label {
+				.onoffswitch-inner {
+					margin-left: $__zero;
+				}
+				.onoffswitch-switch {
+					right: 0px;
+				}
+			}
+		}
+	}
+}
+.onoffswitch-label {
+	display: $__block;
+	overflow: $__hidden;
+	cursor: $__pointer;
+	@include rounded(20px);
+	margin-bottom: $__zero;
+}
+.onoffswitch-inner {
+	display: $__block;
+	margin-left: -100%;
+	@include transition(margin 0.3s ease-in 0s);
+	width: 200%;
+	&:before {
+		box-sizing: $__border__box;
+		color: $__white;
+		display: $__block;
+		float: $__left;
+		font-size: $__font__size__16;
+		height: 30px;
+		line-height: 32px;
+		padding: $__zero;
+		width: 50%;
+		background-color: $__themeColor;
+		color: $__white;
+		content: "ON";
+		padding-left: 14px;
+	}
+	&:after {
+		box-sizing: $__border__box;
+		color: $__white;
+		display: $__block;
+		float: $__left;
+		font-size: $__font__size__16;
+		height: 30px;
+		line-height: 32px;
+		padding: $__zero;
+		width: 50%;
+		content: "OFF";
+		padding-right: 14px;
+		background-color: $__gray;
+		color: $__white;
+		text-align: $__right;
+	}
+}
+.onoffswitch-switch {
+	background: $__white;
+	@include rounded(20px);
+	bottom: $__zero;
+	display: $__block;
+	height: 20px;
+	margin: 5px;
+	position: $__absolute;
+	right: 43px;
+	top: $__zero;
+	@include transition(all 0.3s ease-in 0s);
+	width: 20px;
+}
+.password-strength {
+	display: $__flex;
+	margin-top: 15px;
+	span {
+		width: $__full__width;
+		height: 5px;
+		background: #E3E3E3;
+		margin-right: 10px;
+		@include rounded(5px);
+		&:last-child {
+			margin-right: $__zero;
+		}
+	}
+}
+.weak-pass {
+	.password-strength {
+		span {
+			background: $__danger;
+		}
+	}
+}
+.custom-modal {
+	.modal-body {
+		@include margin-padding(null, 20px 20px 0px 20px);
+	}
+}

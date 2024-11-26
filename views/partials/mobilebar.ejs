@@ -1,0 +1,196 @@
+<div class="tf-toolbar-bottom type-1150">
+    <div class="toolbar-item">
+        <a href="/shop" >
+            <div class="toolbar-icon">
+                <i class="icon-shop"></i>
+            </div>
+            <div class="toolbar-label">Shop</div>
+        </a>
+    </div>
+    <div class="toolbar-item">
+        <a href="#canvasSearch" data-bs-toggle="offcanvas" aria-controls="offcanvasLeft">
+            <div class="toolbar-icon">
+                <i class="icon-search"></i>
+            </div>
+            <div class="toolbar-label">Suchen</div>
+        </a>
+    </div>
+    <div class="toolbar-item">
+        <% if (userID) { %>
+            <a href="/dashboard">
+        <% } else { %>
+            <a href="#login" data-bs-toggle="modal">
+        <% } %>
+            <div class="toolbar-icon">
+                <i class="icon-account"></i>
+            </div>
+            <div class="toolbar-label">Konto</div>
+        </a>
+    </div>
+    <div class="toolbar-item">
+        <a href="#shoppingCart" data-bs-toggle="modal">
+            <div class="toolbar-icon">
+                <i class="icon-bag"></i>
+                <div class="toolbar-count">1</div>
+            </div>
+            <div class="toolbar-label">Warenkorb</div>
+        </a>
+    </div>
+</div>
+<div class="offcanvas offcanvas-start canvas-mb" id="mobileMenu">
+    <span class="icon-close icon-close-popup" data-bs-dismiss="offcanvas" aria-label="Close"></span>
+    <div class="mb-canvas-content">
+        <div class="mb-body">
+            <ul class="nav-ul-mb" id="wrapper-menu-navigation">
+                <li class="nav-mb-item">
+                    <a href="/" class="collapsed mb-menu-link current" >
+                        <span>Home</span>
+                    </a>
+                </li>
+                <li class="nav-mb-item">
+                    <a href="/shop" class="collapsed mb-menu-link " >
+                        <span>Shop</span>
+                    </a>
+                </li>
+                <li class="nav-mb-item">
+                    <a href="/uber-uns" class="collapsed mb-menu-link " >
+                        <span>Über uns</span>
+                    </a>
+                </li>
+                <li class="nav-mb-item">
+                    <a href="/contact" class="collapsed mb-menu-link " >
+                        <span>Kontakt</span>
+                    </a>
+                </li>
+            </ul>
+            <div class="mb-other-content">
+                <ul class="mb-info">
+                    <% business.forEach((business, index) => { %>
+                    <li><b>Adresse:</b> <%= business.businessStreet %> <%= business.businessNr %>,<br> <%= business.businessPostcode %> <%= business.businessOrt %></li>
+                    <li><b>E-mail:</b> <%= business.businessMail %></li>
+                    <li><b>Tel:</b> <%= business.businessTel %></li>
+                    <li><b>Öffnungszeiten:</b> <%= business.businessHour %></li>
+                    <% }); %> 
+                </ul>
+            </div>
+        </div>
+    </div>       
+</div>
+<div class="offcanvas offcanvas-end canvas-search" id="canvasSearch">
+    <div class="canvas-wrapper">
+        <header class="tf-search-head">
+            <div class="title fw-5">
+                Produkte suchen
+                <div class="close">
+                    <span class="icon-close icon-close-popup" data-bs-dismiss="offcanvas" aria-label="Close"></span>
+                </div>
+            </div>
+            <div class="tf-search-sticky">
+                <form class="tf-mini-search-frm" method="post" action="/search">
+                    <fieldset class="text">
+                        <input type="text" placeholder="Suchen" class="" name="search" tabindex="0" value="" aria-required="true" required="">
+                    </fieldset>
+                    <button class="" type="submit"><i class="icon-search"></i></button>
+                </form>
+            </div>
+        </header>
+    </div>
+</div>
+<div class="modal modalCentered fade form-sign-in modal-part-content" id="login">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="header">
+                <div class="demo-title">Anmelden</div>
+                <span class="icon-close icon-close-popup" data-bs-dismiss="modal"></span>
+            </div>
+            <div class="tf-login-form">
+                <form class="" action="/signin" accept-charset="utf-8" method="post">
+                    <div class="tf-field style-1">
+                        <input class="tf-field-input tf-input" placeholder=" " type="email"  name="email" required>
+                        <label class="tf-field-label" for="">Email *</label>
+                    </div>
+                    <div class="tf-field style-1">
+                        <input class="tf-field-input tf-input" placeholder=" " type="password"  name="password" required>
+                        <label class="tf-field-label" for="">Passwort *</label>
+                    </div>
+                    <div>
+                        <a href="#forgotPassword" data-bs-toggle="modal" class="btn-link link">Passwort vergessen?</a>
+                    </div>
+                    <div class="bottom"> 
+                        <div class="w-100">
+                            <button type="submit" class="tf-btn btn-fill animate-hover-btn radius-3 w-100 justify-content-center"><span>Anmelden</span></button>
+                        </div>
+                        <div class="w-100">
+                            <a href="#register" data-bs-toggle="modal" class="btn-link fw-6 w-100 link">
+                                Noch keinen Account?
+                                <i class="icon icon-arrow1-top-left"></i>
+                            </a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal modalCentered fade form-sign-in modal-part-content" id="forgotPassword">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="header">
+                <div class="demo-title">Setzen Sie Ihr Passwort zurück</div>
+                <span class="icon-close icon-close-popup" data-bs-dismiss="modal"></span>
+            </div>
+            <div class="tf-login-form">
+                <form class="" action="/forgot-password" method="POST">
+                    <div>
+                        <p>Wir senden Ihnen eine E-Mail, um Ihr Passwort zurückzusetzen</p>
+                    </div>
+                    <div class="tf-field style-1">
+                        <input class="tf-field-input tf-input" placeholder=" " type="email"  name="email" required>
+                        <label class="tf-field-label" for="">Email *</label>
+                    </div>
+                    <div>
+                        <a href="#login" data-bs-toggle="modal" class="btn-link link">Stornieren</a>
+                    </div>
+                    <div class="bottom"> 
+                        <div class="w-100">
+                            <button type="submit" class="tf-btn btn-fill animate-hover-btn radius-3 w-100 justify-content-center"><span>Passwort zurücksetzen</span></button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal modalCentered fade form-sign-in modal-part-content" id="register">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="header">
+                <div class="demo-title">Registrieren</div>
+                <span class="icon-close icon-close-popup" data-bs-dismiss="modal"></span>
+            </div>
+            <div class="tf-login-form">
+                <form class="" action="/signup" method="post">
+                    <div class="tf-field style-1">
+                        <input class="tf-field-input tf-input" placeholder=" " type="email"  name="email" required>
+                        <label class="tf-field-label" for="">Email *</label>
+                    </div>
+                    <div class="tf-field style-1">
+                        <input class="tf-field-input tf-input" placeholder=" " type="password"  name="password" required>
+                        <label class="tf-field-label" for="">Passwort *</label>
+                    </div>
+                    <div class="bottom"> 
+                        <div class="w-100">
+                            <button type="submit" class="tf-btn btn-fill animate-hover-btn radius-3 w-100 justify-content-center"><span>Registrieren</span></button>
+                        </div>
+                        <div class="w-100">
+                            <a href="#login" data-bs-toggle="modal" class="btn-link fw-6 w-100 link">
+                                Sie haben bereits ein Konto? Melden Sie sich hier an
+                                <i class="icon icon-arrow1-top-left"></i>
+                            </a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

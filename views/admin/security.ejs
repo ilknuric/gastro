@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+	<title>Gastro Koçak Handel GmbH | Admin Dashboard</title>
+	<link rel="shortcut icon" href="/assets/img/favicon.png">
+    <link rel="stylesheet" href="assets/css/select2.min.css">
+	<link rel="stylesheet" href="assets/plugins/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/plugins/bootstrap-tagsinput/css/bootstrap-tagsinput.css">
+	<link rel="stylesheet" href="assets/plugins/fontawesome/css/fontawesome.min.css">
+	<link rel="stylesheet" href="assets/plugins/fontawesome/css/all.min.css">
+	<link rel="stylesheet" href="assets/plugins/intltelinput/css/intlTelInput.css">
+	<link rel="stylesheet" href="assets/plugins/intltelinput/css/demo.css">
+	<link rel="stylesheet" href="assets/plugins/feather/feather.css">
+	<link rel="stylesheet" href="assets/css/style.css">
+		<style>
+	@media only screen and (max-width: 999px) {
+		.page-settings{
+		flex-direction:column;
+		}
+	}
+	
+	</style>
+</head>
+<body>
+	<div class="main-wrapper">
+        <%- include('./sidebar.ejs') %>
+        <%- include('./header.ejs') %>
+		<div class="page-wrapper page-settings">
+			<div class="content-sidelink">
+				<div class="content-sidelinkheading">
+<h6>Einstellungen</h6>
+				</div>
+				<div class="content-sidelinkmenu">
+					<ul>
+						<li><a href="/admin/settings">Geschäftseinstellungen</a></li>
+						<li><a href="/admin/security" class="active">Sicherheit</a></li>
+					</ul>
+				</div>
+			</div>
+			<div class="content w-100">
+                <div class="content-page-header">
+<h5>Sicherheit</h5>
+                </div>
+				<form action="../admin/edit-userentrance/<%= admin._id%>" method="post" >	
+					<div class="change-password">
+						<% if (passError) { %>
+							<div class="alert alert-danger">
+							  <%= passError %>
+							</div>
+						  <% } %>
+						<% if (passSuccess) { %>
+							<div class="alert alert-success">
+							  <%= passSuccess %>
+							</div>
+						  <% } %>
+						<div class="change-passwordhead">
+<h3>Passwort ändern</h3>
+<p>Bitte geben Sie Ihr aktuelles Passwort ein, um Ihr Passwort zu ändern</p>
+						</div>
+						<div class="change-passwordform">
+							<div class="col-lg-12 col-12">
+								<div class="form-group">
+<label>Benutzername</label>
+									<input type="text" class="form-control" placeholder="Dieser Benutzername wird zum Aufrufen des Admin-Dashboards verwendet" name="username" value="<%= admin.username%>">
+								</div>
+							</div>
+							<div class="form-group">
+								<label>Aktuelle Passwort</label>
+								<div class="pass-group">
+									<input type="password" class="form-control pass-input" name="currentPassword">
+									<span class="fas toggle-password fa-eye-slash"></span>
+								</div>
+							</div>
+							<div class="form-group">
+								<label>Neue Passwort</label>
+								<div class="pass-group" id="passwordInput">
+									<input type="password" class="form-control pass-inputs" name="newPasswordOne">
+									<span class="fas toggle-passwords fa-eye-slash"></span>
+								</div>
+								<div  class="password-strength" id="passwordStrength">
+									<span id="poor"></span>
+									<span id="weak"></span>
+									<span id="strong"></span>
+									<span id="heavy"></span>
+								</div>
+								<div id="passwordInfo"></div>	
+							</div>
+							<div class="form-group">
+								<label>Neue Passwort</label>
+								<div class="pass-group">
+									<input type="password" class="form-control pass-inputa" name="newPasswordTwo">
+									<span class="fas toggle-passworda fa-eye-slash"></span>
+								</div>
+							</div>
+						</div>
+						<div class="col-lg-12">
+							<div class="btn-path">
+								<button type="submit" class="btn btn-submit "> Einreichen</button>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div> 
+	</div>
+
+	<!--change email-modal -->
+	<div class="modal fade" id="change-email" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered ">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">Change Email</h5>
+					<button type="button" class="btn-close close-modal" data-bs-dismiss="modal" aria-label="Close">
+						<i class="fe fe-x"></i>
+					</button>
+				</div>
+				<div class="modal-body py-0">
+					<div class="row">
+						<div class="col-12">
+							<div class="form-group">
+								<label>Current Email Address</label>
+								<input type="text" class="form-control" placeholder="Enter Email Address">
+							</div>
+						</div>
+						<div class="col-12">
+							<div class="form-group">
+								<label>New Email Address<span class="mandatory">*</span></label>
+								<input type="text" class="form-control" placeholder="Enter Email Address">
+								<p><i class="fa fa-info-circle me-2 ms-1"></i>New Email Address Only Updated Once You Verified </p>
+							</div>
+						</div>
+						<div class="col-12">
+							<div class="form-group">
+								<label>Current Password</label>
+								<div class="pass-group">
+									<input type="password" class="form-control pass-input" placeholder="*************">
+									<span class="fas toggle-password fa-eye-slash"></span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer pt-0">
+					<button type="button" class="btn btn-primary">Change Email</button>
+					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="modal fade" id="change-no" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered ">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">Change Phone Number</h5>
+					<button type="button" class="btn-close close-modal" data-bs-dismiss="modal" aria-label="Close">
+						<i class="fe fe-x"></i>
+					</button>
+				</div>
+				<div class="modal-body py-0">
+					<div class="row">
+						<div class="col-md-12">
+							<label class="col-form-label">Phone Number</label>										
+						</div>
+						<div class="col-md-2 pe-0">
+							<div class="form-group">
+								<input class="form-control form-control-lg group_formcontrol" id="phone" name="phone" type="text" >
+							</div>
+						</div>
+						<div class="col-md-10 ps-0">
+							<div class="form-group">
+								<input type="text" class="form-control" placeholder="(256) 789-6253">
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-12">
+							<label class="col-form-label">New Phone Number</label>										
+						</div>
+						<div class="col-md-2 pe-0">
+							<div class="form-group mb-0">
+								<input class="form-control form-control-lg group_formcontrol" id="phone1" name="phone" type="text" >
+							</div>
+						</div>
+						<div class="col-md-10 ps-0">
+							<div class="form-group mb-0">
+								<input type="text" class="form-control" placeholder="(256) 789-6253">
+							</div>
+						</div>
+						<div class="col-12">
+							<div class="form-group">
+								<p><i class="fa fa-info-circle me-2 ms-1"></i>New Phone Number Only Updated Once You Verified </p>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-12">
+							<div class="form-group">
+								<label>Current Password</label>
+								<div class="pass-group">
+									<input type="password" class="form-control pass-inputs" placeholder="*************">
+									<span class="fas toggle-passwords fa-eye-slash"></span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer pt-0">
+					<button type="button" class="btn btn-primary">Change Number</button>
+					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script src="assets/js/jquery-3.6.4.min.js"></script>
+    <script src="assets/js/select2.min.js"></script>
+	<script src="assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/plugins/bootstrap-tagsinput/js/bootstrap-tagsinput.js"></script>
+	<script src="assets/js/feather.min.js"></script>
+	<script src="assets/plugins/intltelinput/js/intlTelInput.js"></script>	
+	<script src="assets/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+    <script src="assets/plugins/sweetalert/sweetalert2.all.min.js"></script>
+    <script src="assets/plugins/sweetalert/sweetalerts.min.js"></script>
+    <script src="assets/js/admin.js"></script>
+    <script src="assets/js/validation.js"></script>	
+</body>
+
+</html>

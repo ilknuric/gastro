@@ -1,0 +1,83 @@
+<div class="header"> 
+    <div class="header-left"> 
+        <a href="#" class="logo">
+            <img src="/assets/img/logo.png" alt="gastro" width="30" height="30">
+        </a>
+    </div>
+    <a class="mobile_btn" id="mobile_btn" href="javascript:void(0);">
+        <i class="fas fa-align-left"></i>
+    </a>
+    <div class="header-split">
+        <ul class="nav user-menu">
+            <% if(business.businessStatus=='Active') {%>
+            <li class="nav-item float-start">
+                <a href="/admin/setup/settings/<%= business._id%>"><i class="fa fa-store fs-6"></i>  Geschäftsstatus: <span class="badge-active"> Aktiv</span></a>
+            </li>
+            <% } else {%>
+            <li class="nav-item">
+                <a href="/admin/setup/settings/<%= business._id%>"><i class="fa fa-store fs-6"></i> Geschäftsstatus <small class="" style="font-size:12px">(Ändern Sie Ihren Unternehmensstatus in den Einstellungen.)</small>: <span class="badge-delete">Passiv</span></a>
+            </li>
+            <% } %>
+        </ul>
+        <ul class="nav user-menu">
+            <li class="nav-item">
+                <a href="https://metime-schweiz.ch/admin/home" class="viewsite"><i class="fa fa-backspace me-2 "></i><u>Zurück zum Superadmin</u></a>
+            </li>    
+            <li class="nav-item dropdown">
+                <%
+                if(req.session.auth==2){
+                %>
+                <a href="javascript:void(0)" class="user-link  nav-link" data-bs-toggle="dropdown">
+                    <span class="user-img">
+                        <img class="rounded-circle" src="<%= business.businessImage ? business.businessImage : '/assets/img/default.png' %>" width="40" alt="gastro">
+                        <span class="animate-circle"></span>
+                    </span>
+                    <span class="user-content">
+                        <span class="user-name"><%= business.businessName%></span>
+                        <span class="user-details"><%= business.businessFirstname%> <%= business.businessSurname%></span>
+                    </span>
+                </a>
+                <div class="dropdown-menu menu-drop-user">
+                    <div class="profilemenu ">
+                        <div class="subscription-menu">
+                            <ul>
+                                <li>
+                                    <a href="/admin/setup/settings/<%= business._id%>">Einstellungen</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="subscription-logout">
+                            <a href="/admin/logout">Ausloggen</a>
+                        </div>
+                    </div>
+                </div>
+                <% } else { %>
+                <a href="javascript:void(0)" class="user-link  nav-link" data-bs-toggle="dropdown">
+                    <span class="user-img">
+                        <img class="rounded-circle" src="/assets/img/logo.png" width="70" alt="gastro" style="object-fit: contain;">
+                        <span class="animate-circle"></span>
+                    </span>
+                    <span class="user-content">
+                        <span class="user-name"><%= business.businessName%></span>
+                        <span class="user-details"><%= business.businessFirstname%> <%= business.businessSurname%></span>
+                    </span>
+                </a>
+                <div class="dropdown-menu menu-drop-user">
+                    <div class="profilemenu ">
+                        <div class="subscription-menu">
+                            <ul>
+                                <li>
+                                    <a href="/admin/setup/settings/<%= business._id%>">Einstellungen</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="subscription-logout">
+                            <a href="/admin/logout">Ausloggen</a>
+                        </div>
+                    </div>
+                </div>
+                <% } %>
+            </li>
+        </ul>
+    </div>
+</div>

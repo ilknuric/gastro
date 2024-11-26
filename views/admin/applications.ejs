@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+    <title>me Time | Admin Dashboard</title>
+    <link rel="shortcut icon" href="/assets/img/favicon.png">
+    <link rel="stylesheet" href="assets/css/select2.min.css">
+    <link rel="stylesheet" href="assets/plugins/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/plugins/bootstrap-tagsinput/css/bootstrap-tagsinput.css">
+    <link rel="stylesheet" href="assets/plugins/fontawesome/css/fontawesome.min.css">
+    <link rel="stylesheet" href="assets/plugins/fontawesome/css/all.min.css">
+    <link rel="stylesheet" href="assets/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="assets/plugins/feather/feather.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+    <div class="main-wrapper">
+        <%- include('./sidebar.ejs') %>
+        <%- include('./header.ejs') %>
+        <div class="page-wrapper page-settings">
+            <div class="content">
+                <div class="content-page-header content-page-headersplit mb-0">
+                    <h5>Anwendungen</h5>
+                    <div class="list-btn">
+                        <ul>
+                            <li>
+                                <div class="filter-sorting">
+                                    <ul>
+                                        
+                                    </ul>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 ">
+                        <div class="table-resposnive table-div">
+                            <table class="table datatable">
+                                <thead>
+                                    <tr>
+<th>Bewerbungsdatum</th>
+<th>Firmenname</th>
+<th>Unternehmensstandort</th>
+<th>Bewerbername</th>
+                                        <th>Telefon</th>
+                                        <th>E-mail</th>
+                                        <th>Status</th>
+                                        <th>Aktion</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% if (allapplications && allapplications.length > 0) { %>
+                                        <% allapplications.forEach((application,index) => { 
+                                            %>
+                                    <tr>
+                                        <td><%= new Date(application.createdAt).toLocaleDateString("ch-CH") %></td>
+                                        <td><%= application.businessName%></td>
+                                        <td><%= application.businessLocation%></td>
+                                        <td><%= application.businessFirstname%> <%= application.businessSurname%></td>
+                                        <td><%= application.businessTel%></td>
+                                        <td><%= application.businessMail%></td>                                        
+                                        <% if (application.businessStatus === 'Waiting') { %>
+                                            <td><h6 class="badge-default">Warten</h6></td>
+                                        <% } else if (application.businessStatus === 'Declined') { %>
+                                            <td><h6 class="badge-delete">Abgelehnt</h6></td>
+                                        <% } else { %>
+                                            <td><h6 class="badge-active">Genehmigt</h6></td> 
+                                        <% } %>
+                                        <td>
+                                            <div class="table-actions d-flex">
+                                                <a class="delete-table me-2" href="" data-bs-target="#view-full-<%= application._id %>" data-bs-toggle="modal">
+                                                    <img src="assets/img/icons/eye.svg" alt="gastro">
+                                                </a>
+                                                <% if (application.businessStatus === 'Waiting') { %>
+                                                <a class="delete-table me-2" href="/admin/edit-application/<%= application._id %>" >
+                                                    <img src="assets/img/icons/edit.svg" alt="gastro">
+                                                </a>
+                                                <% } %>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <div class="modal fade" id="view-full-<%= application._id %>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered ">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalLabel">Anwendungsdetails</h5>
+                                                    <button type="button" class="btn-close close-modal" data-bs-dismiss="modal" aria-label="Close">
+                                                        <i class="fe fe-x"></i>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div class="del-modal">
+                                                        <p class="mb-2"><span class="fw-bold">Firmenname: </span><%= application.businessName %></p>
+                                                        <p class="mb-2"><span class="fw-bold">Geschäftsstandort: </span><%= application.businessLocation %></p>
+                                                        <p class="mb-2"><span class="fw-bold">Name des Bewerbers: </span><%= application.businessFirstname %> <%= application.businessSurname %></p>
+                                                        <p class="mb-2"><span class="fw-bold">Telefon: </span><%= application.businessTel %></p>
+                                                        <p class="mb-2"><span class="fw-bold">E-mail: </span><%= application.businessMail %></p>
+                                                        <p class="mb-2"><span class="fw-bold">Status: </span>
+                                                            <% if (application.businessStatus === 'Waiting') { %>
+                                                                <span class="badge-default"><%= application.businessStatus %></span>
+                                                            <% } else if (application.businessStatus === 'Declined') { %>
+                                                                <span class="badge-delete"><%= application.businessStatus %></span>
+                                                            <% } else { %>
+                                                                <span class="badge-active"><%= application.businessStatus %></span>
+                                                            <% } %>    
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div> 
+                                    <% }); %>   
+                                    <% } else { %>
+                                        <tr>
+											<td colspan="3">Keine Bewerbung wartet.</td>
+                                        </tr>
+                                      <% } %>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> 
+    </div> 
+    <script src="/admin/assets/js/jquery-3.6.4.min.js"></script>
+    <script src="/admin/assets/js/select2.min.js"></script>
+    <script src="/admin/assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="/admin/assets/plugins/bootstrap-tagsinput/js/bootstrap-tagsinput.js"></script>
+    <script src="/admin/assets/js/feather.min.js"></script>    
+    <script src="/admin/assets/js/jquery.dataTables.min.js"></script>
+    <script src="/admin/assets/js/dataTables.bootstrap4.min.js"></script>
+    <script src="/admin/assets/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+    <script src="/admin/assets/plugins/sweetalert/sweetalert2.all.min.js"></script>
+    <script src="/admin/assets/plugins/sweetalert/sweetalerts.min.js"></script>
+    <script src="/admin/assets/js/admin.js"></script>
+</body>
+</html>

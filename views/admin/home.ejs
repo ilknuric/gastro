@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+    <title>Gastro Koçak Handel GmbH | Admin Dashboard</title>
+    <link rel="shortcut icon" href="/assets/img/favicon.png">
+    <link rel="stylesheet" href="assets/css/select2.min.css">
+    <link rel="stylesheet" href="assets/plugins/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/plugins/bootstrap-tagsinput/css/bootstrap-tagsinput.css">
+    <link rel="stylesheet" href="assets/plugins/fontawesome/css/fontawesome.min.css">
+    <link rel="stylesheet" href="assets/plugins/fontawesome/css/all.min.css">
+    <link rel="stylesheet" href="assets/plugins/jvectormap/jquery-jvectormap-2.0.3.css">
+    <link rel="stylesheet" href="assets/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="assets/plugins/feather/feather.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+    <div class="main-wrapper">
+        <%- include('./sidebar.ejs') %>
+        <%- include('./header.ejs') %>
+        <div class="page-wrapper">
+            <div class="content">
+                <div class="row">
+                    <div class="col-lg-12 col-sm-12 d-flex widget-path">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="home-user">
+                                    <div class="row">
+                                        <div class="home-head-user home-graph-header col-lg-10">
+											<h2>Top 10 der verkauften Produkte</h2>
+                                        </div>
+                                        <form id="form1" class="col-lg-2 p-1 float-end">
+                                            <input type="button" value="PDF exportieren" id="btnPrintProduct" class="btn btn-primary" />
+                                        </form>
+                                    </div>
+                                    <div class="table-responsive " id="popProduct" style="display: none;">
+                                        <table class=" " style="font-size: 8px !important;">
+                                            <thead>
+                                                <tr style="text-align: left;">
+													<th>Produktname</th>
+													<th>Firmenname</th>
+													<th onclick="sortTable('totalQuantity')">Menge</th>
+													<th>Betrag</th>
+													<th>Verdienen</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody style="font-size: 8px !important;">
+                                                    <% 
+                                                    if (products && products.length > 0) { 
+                                                        products.sort((a, b) => b.totalQuantity - a.totalQuantity);
+                                                        const top10Products = products.slice(0, 10);
+                                                        top10Products.forEach((product, index) => { 
+                                                    %>
+                                                    <tr style="border-bottom: 1px solid #d5d5d5;">
+                                                        <td width="200px"><%= product.name %></td>
+                                                        <td width="200px"><%= product.businessName %></td>
+                                                        <td width="100px"><%= product.totalQuantity %></td>
+                                                        <td width="100px">CHF <%= parseFloat(product.totalPrice).toFixed(2) %></td>
+                                                    </tr>
+                                                    
+                                                <% 
+                                                    }); 
+                                                } else { 
+                                                %>
+                                                    <tr>
+<td colspan="4">Keine Daten verfügbar</td>
+                                                    </tr>
+                                                <% } %>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="table-responsive datatable-nofooter">
+                                        <table class="table">
+                                            <thead>
+                                                <tr>
+													<th>Produktname</th>
+													<th>Firmenname</th>
+													<th>Menge</th>
+													<th>Betrag</th>
+													<th>Verdienen</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <% 
+                                                    if (products && products.length > 0) { 
+                                                        products.sort((a, b) => b.totalQuantity - a.totalQuantity);
+                                                        const top10Products = products.slice(0, 10);
+                                                        top10Products.forEach((product, index) => { 
+                                                    %>
+                                                        <tr>
+                                                            <td><%= product.name %></td>
+                                                            <td><%= product.businessName %></td>
+                                                            <td><%= product.totalQuantity %></td>
+                                                            <td>CHF <%= parseFloat(product.totalPrice).toFixed(2) %></td>
+                                                            
+                                                        </tr>
+                                                    <% }); %>
+                                                <% } else { %>
+                                                    <tr>
+														<td colspan="4">Keine Daten verfügbar</td>
+                                                    </tr>
+                                                <% } %>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> 
+    </div>
+    <div id="overlayer">
+        <span class="loader">
+        <span class="loader-inner"></span>
+        </span>
+    </div>
+    <script src="assets/js/jquery-3.6.4.min.js"></script>
+    <script src="assets/js/select2.min.js"></script>
+    <script src="assets/plugins/apexchart/apexcharts.min.js"></script>
+    <script src="assets/plugins/apexchart/chart-data.js"></script>
+    <script src="assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+     <script src="assets/js/feather.min.js"></script>
+    <script src="assets/js/jquery.dataTables.min.js"></script>
+    <script src="assets/js/dataTables.bootstrap4.min.js"></script>
+    <script src="assets/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+    <script src="assets/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+    <script src="assets/plugins/jvectormap/jquery-jvectormap-2.0.3.min.js"></script>
+    <script src="assets/plugins/jvectormap/jquery-jvectormap-world-mill.js"></script>
+    <script src="assets/plugins/jvectormap/jquery-jvectormap-ru-mill.js"></script>
+    <script src="assets/plugins/jvectormap/jquery-jvectormap-us-aea.js"></script>
+    <script src="assets/plugins/jvectormap/jquery-jvectormap-uk_countries-mill.js"></script>        
+    <script src="assets/plugins/jvectormap/jquery-jvectormap-in-mill.js"></script>
+    <script src="assets/js/jvectormap.js"></script>
+    <script src="assets/plugins/sweetalert/sweetalert2.all.min.js"></script>
+    <script src="assets/plugins/sweetalert/sweetalerts.min.js"></script>
+    <script src="assets/js/admin.js"></script>
+</body>
+</html>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script type="text/javascript">
+//Export 10 Business
+$(document).on("click", "#btnPrintBusiness", function () {
+    var divContents = $("#popBusiness").html();
+    var printWindow = window.open('', '', 'height=400,width=1000');
+    var today = new Date();
+    var dateString = today.getDate() + '.' + (today.getMonth() + 1); 
+    printWindow.document.write('<html><head><title>' + 'Top 10 Businesses' + '_' + dateString + '</title>');
+    printWindow.document.write('<link rel="stylesheet" type="text/css" href="/assets/css/select2.min.css">');
+    printWindow.document.write('<link rel="stylesheet" type="text/css" href="/assets/plugins/bootstrap/css/bootstrap.min.css">');
+    printWindow.document.write('<link rel="stylesheet" type="text/css" href="/assets/plugins/bootstrap-tagsinput/css/bootstrap-tagsinput.css">');
+    printWindow.document.write('<link rel="stylesheet" type="text/css" href="/assets/plugins/fontawesome/css/all.min.css">');
+    printWindow.document.write('<link rel="stylesheet" type="text/css" href="/assets/css/dataTables.bootstrap4.min.css">');
+    printWindow.document.write('<link rel="stylesheet" type="text/css" href="/assets/css/style.css">');
+    printWindow.document.write('</head><body style="font-size:8px">');
+    printWindow.document.write(divContents);
+    printWindow.document.write('</body></html>');
+    printWindow.document.close();
+    printWindow.print();
+});
+
+//Export Services
+$(document).on("click", "#btnPrintService", function () {
+    var divContents = $("#popService").html();
+    var printWindow = window.open('', '', 'height=400,width=1000');
+    var today = new Date();
+    var dateString = today.getDate() + '.' + (today.getMonth() + 1); 
+    printWindow.document.write('<html><head><title>' + 'Top Services' + '_' + dateString + '</title>');
+    printWindow.document.write('<link rel="stylesheet" type="text/css" href="/assets/css/select2.min.css">');
+    printWindow.document.write('<link rel="stylesheet" type="text/css" href="/assets/plugins/bootstrap/css/bootstrap.min.css">');
+    printWindow.document.write('<link rel="stylesheet" type="text/css" href="/assets/plugins/bootstrap-tagsinput/css/bootstrap-tagsinput.css">');
+    printWindow.document.write('<link rel="stylesheet" type="text/css" href="/assets/plugins/fontawesome/css/all.min.css">');
+    printWindow.document.write('<link rel="stylesheet" type="text/css" href="/assets/css/dataTables.bootstrap4.min.css">');
+    printWindow.document.write('<link rel="stylesheet" type="text/css" href="/assets/css/style.css">');
+    printWindow.document.write('</head><body style="font-size:8px">');
+    printWindow.document.write(divContents);
+    printWindow.document.write('</body></html>');
+    printWindow.document.close();
+    printWindow.print();
+});
+
+//Export Products
+$(document).on("click", "#btnPrintProduct", function () {
+    var divContents = $("#popProduct").html();
+    var printWindow = window.open('', '', 'height=400,width=1300');
+    var today = new Date();
+    var dateString = today.getDate() + '.' + (today.getMonth() + 1); 
+    printWindow.document.write('<html><head><title>' + 'Top Products' + '_' + dateString + '</title>');
+    printWindow.document.write('<link rel="stylesheet" type="text/css" href="/assets/css/select2.min.css">');
+    printWindow.document.write('<link rel="stylesheet" type="text/css" href="/assets/plugins/bootstrap/css/bootstrap.min.css">');
+    printWindow.document.write('<link rel="stylesheet" type="text/css" href="/assets/plugins/bootstrap-tagsinput/css/bootstrap-tagsinput.css">');
+    printWindow.document.write('<link rel="stylesheet" type="text/css" href="/assets/plugins/fontawesome/css/all.min.css">');
+    printWindow.document.write('<link rel="stylesheet" type="text/css" href="/assets/css/dataTables.bootstrap4.min.css">');
+    printWindow.document.write('<link rel="stylesheet" type="text/css" href="/assets/css/style.css">');
+    printWindow.document.write('</head><body style="">');
+    printWindow.document.write(divContents);
+    printWindow.document.write('</body></html>');
+    printWindow.document.close();
+    printWindow.print();
+});
+
+</script>
+<body>

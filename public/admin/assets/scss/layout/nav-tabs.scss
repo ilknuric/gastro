@@ -1,0 +1,255 @@
+// .nav-tabs {
+// 	border-bottom: 1px solid #e6e6e6;
+// 	>li {
+// 		>a {
+// 			margin-right: $__zero;
+// 			color: #888;
+// 			border-radius: $__zero;
+// 			&:hover {
+// 				border-color: $__transparent;
+// 				color: #333;
+// 			}
+// 			&:focus {
+// 				border-color: $__transparent;
+// 				color: #333;
+// 			}
+// 		}
+// 	}
+// 	.nav-link {
+// 		border-radius: $__zero;
+// 		&:focus {
+// 			background-color: #eee;
+// 			border-color: $__transparent;
+// 			color: #333;
+// 		}
+// 		&:hover {
+// 			background-color: #eee;
+// 			border-color: $__transparent;
+// 			color: #333;
+// 		}
+// 	}
+// }
+.card-header-tabs {
+	border-bottom: $__zero;
+}
+// .nav-tabs.nav-tabs-solid {
+// 	>li {
+// 		>a {
+// 			color: #333;
+// 			color: #333;
+// 			border-color: $__transparent;
+// 			&:hover {
+// 				background-color: #f5f5f5;
+// 			}
+// 			&:focus {
+// 				background-color: #f5f5f5;
+// 			}
+// 		}
+// 		>a.active {
+// 			background-color: $__themeColor;
+// 			border-color: $__themeColor;
+// 			color: $__white;
+// 			&:hover {
+// 				background-color: $__themeColor;
+// 				border-color: $__themeColor;
+// 				color: $__white;
+// 			}
+// 			&:focus {
+// 				background-color: $__themeColor;
+// 				border-color: $__themeColor;
+// 				color: $__white;
+// 			}
+// 		}
+// 		margin-bottom: $__zero;
+// 	}
+// 	>.active {
+// 		>a {
+// 			background-color: $__themeColor;
+// 			border-color: $__themeColor;
+// 			color: $__white;
+// 			&:hover {
+// 				background-color: $__themeColor;
+// 				border-color: $__themeColor;
+// 				color: $__white;
+// 			}
+// 			&:focus {
+// 				background-color: $__themeColor;
+// 				border-color: $__themeColor;
+// 				color: $__white;
+// 			}
+// 		}
+// 	}
+// 	background-color: #fafafa;
+// 	border: $__zero;
+// 	>.open {
+// 		&:not(.active) {
+// 			>a {
+// 				background-color: #f5f5f5;
+// 				border-color: $__transparent;
+// 			}
+// 		}
+// 	}
+// }
+.tab-content {
+	padding-top: 20px;
+}
+// .nav-tabs.nav-justified {
+// 	>li {
+// 		>a {
+// 			border-radius: $__zero;
+// 			margin-bottom: $__zero;
+// 			&:hover {
+// 				border-bottom-color: #ddd;
+// 			}
+// 			&:focus {
+// 				border-bottom-color: #ddd;
+// 			}
+// 		}
+// 	}
+// }
+// .nav-tabs.nav-justified.nav-tabs-solid {
+// 	>li {
+// 		>a {
+// 			border-color: $__transparent;
+// 		}
+// 	}
+// }
+// .nav-tabs.nav-tabs-solid.nav-tabs-rounded {
+// 	@include rounded(50px);
+// 	>li {
+// 		>a {
+// 			@include rounded(50px);
+// 		}
+// 		>a.active {
+// 			@include rounded(50px);
+// 			&:hover {
+// 				@include rounded(50px);
+// 			}
+// 			&:focus {
+// 				@include rounded(50px);
+// 			}
+// 		}
+// 	}
+// }
+// .nav-tabs-justified {
+// 	>li {
+// 		>a {
+// 			border-radius: $__zero;
+// 			margin-bottom: $__zero;
+// 			&:hover {
+// 				border-bottom-color: #ddd;
+// 			}
+// 			&:focus {
+// 				border-bottom-color: #ddd;
+// 			}
+// 		}
+// 	}
+// }
+// .nav-tabs-justified.nav-tabs-solid {
+// 	>li {
+// 		>a {
+// 			border-color: $__transparent;
+// 		}
+// 	}
+// }
+// .nav-tabs.nav-justified.nav-tabs-top {
+// 	border-bottom: 1px solid #ddd;
+// 	>li {
+// 		>a {
+// 			border-width: 2px 0 0 0;
+// 			&:hover {
+// 				border-width: 2px 0 0 0;
+// 			}
+// 			&:focus {
+// 				border-width: 2px 0 0 0;
+// 			}
+// 		}
+// 	}
+// }
+// .nav-tabs.nav-tabs-top {
+// 	>li {
+// 		margin-bottom: $__zero;
+// 		>a {
+// 			border-width: 2px 0 0 0;
+// 			&:hover {
+// 				border-width: 2px 0 0 0;
+// 				border-top-color: #ddd;
+// 			}
+// 			&:focus {
+// 				border-width: 2px 0 0 0;
+// 				border-top-color: #ddd;
+// 			}
+// 		}
+// 		>a.active {
+// 			border-top-color: $__themeColor;
+// 			&:hover {
+// 				border-top-color: $__themeColor;
+// 			}
+// 			&:focus {
+// 				border-top-color: $__themeColor;
+// 			}
+// 		}
+// 	}
+// 	>li.open {
+// 		>a {
+// 			border-top-color: #ddd;
+// 		}
+// 	}
+// 	>li+li {
+// 		>a {
+// 			margin-left: 1px;
+// 		}
+// 	}
+// }
+// .nav-tabs.nav-tabs-bottom {
+// 	>li {
+// 		margin-bottom: -1px;
+// 		>a.active {
+// 			border-bottom-width: 2px;
+// 			border-color: $__transparent;
+// 			border-bottom-color: $__themeColor;
+// 			background-color: $__transparent;
+// 			transition: none 0s ease 0s;
+// 			-moz-transition: none 0s ease 0s;
+// 			-o-transition: none 0s ease 0s;
+// 			-ms-transition: none 0s ease 0s;
+// 			-webkit-transition: none 0s ease 0s;
+// 			&:hover {
+// 				border-bottom-width: 2px;
+// 				border-color: $__transparent;
+// 				border-bottom-color: $__themeColor;
+// 				background-color: $__transparent;
+// 				transition: none 0s ease 0s;
+// 				-moz-transition: none 0s ease 0s;
+// 				-o-transition: none 0s ease 0s;
+// 				-ms-transition: none 0s ease 0s;
+// 				-webkit-transition: none 0s ease 0s;
+// 			}
+// 			&:focus {
+// 				border-bottom-width: 2px;
+// 				border-color: $__transparent;
+// 				border-bottom-color: $__themeColor;
+// 				background-color: $__transparent;
+// 				transition: none 0s ease 0s;
+// 				-moz-transition: none 0s ease 0s;
+// 				-o-transition: none 0s ease 0s;
+// 				-ms-transition: none 0s ease 0s;
+// 				-webkit-transition: none 0s ease 0s;
+// 			}
+// 		}
+// 	}
+// }
+// .nav-tabs-justified.nav-tabs-top {
+// 	border-bottom: 1px solid #ddd;
+// 	>li {
+// 		>a {
+// 			border-width: 2px 0 0 0;
+// 			&:hover {
+// 				border-width: 2px 0 0 0;
+// 			}
+// 			&:focus {
+// 				border-width: 2px 0 0 0;
+// 			}
+// 		}
+// 	}
+// }

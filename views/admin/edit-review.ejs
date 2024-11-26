@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+    <title>Gastro Koçak Handel GmbH | Admin Dashboard</title>
+    <link rel="shortcut icon" href="/assets/img/favicon.png">
+    <link rel="stylesheet" href="/admin/assets/css/select2.min.css">
+    <link rel="stylesheet" href="/admin/assets/plugins/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/admin/assets/plugins/bootstrap-tagsinput/css/bootstrap-tagsinput.css">
+    <link rel="stylesheet" href="/admin/assets/plugins/fontawesome/css/fontawesome.min.css">
+    <link rel="stylesheet" href="/admin/assets/plugins/fontawesome/css/all.min.css">
+    <link rel="stylesheet" href="/admin/assets/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="/admin/assets/plugins/feather/feather.css">
+	<link rel="stylesheet" href="/admin/assets/css/ckeditor.css">
+    <link rel="stylesheet" href="/admin/assets/css/style.css">
+</head>
+<body>
+    <div class="main-wrapper">
+        <%- include('./sidebar.ejs') %>
+        <%- include('./header.ejs') %>
+        <div class="page-wrapper">
+            <div class="content">
+                <div class="row">
+                    <div class="col-lg-7 col-sm-12 m-auto">
+                        <div class="content-page-header">
+                            <h5>Bewertung bearbeiten</h5>
+                        </div>
+                        <form action="../edit-review/<%= review._id %>" method="post">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <label>Überprüfungspunkt</label>
+                                        <select name="reviewPoint" id="" class="form-control">
+                                            <option value="5" <%= review.reviewPoint == 5 ? 'selected' : '' %>>5</option>
+                                            <option value="4" <%= review.reviewPoint == 4 ? 'selected' : '' %>>4</option>
+                                            <option value="3" <%= review.reviewPoint == 3 ? 'selected' : '' %>>3</option>
+                                            <option value="2" <%= review.reviewPoint == 2 ? 'selected' : '' %>>2</option>
+                                            <option value="1" <%= review.reviewPoint == 1 ? 'selected' : '' %>>1</option>
+                                        </select>
+                                    </div>
+                                </div>                                
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+										<label>Überprüfen Sie die Überschrift</label>
+                                        <input type="text" class="form-control" name="reviewHeading" required value="<%= review.reviewHeading %>" >
+                                    </div>
+                                </div>
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+										<label>Bewertungseigentümer</label>
+                                        <input type="text" class="form-control" name="reviewOwner" required value="<%= review.reviewOwner %>" >
+                                    </div>
+                                </div>
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <label>Rezension</label>
+                                        <textarea id="editor" name="reviewDetails"><%= review.reviewDetails %></textarea>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12">
+                                    <div class="btn-path">                                    
+                                        <a href="/admin/reviews" class="btn btn-cancel me-3">Storniern</a>
+                                        <button type="submit" class="btn btn-submit">Einreichen</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div> 
+    </div>
+    <script src="/admin/assets/js/jquery-3.6.4.min.js"></script>
+    <script src="/admin/assets/js/select2.min.js"></script>
+    <script src="/admin/assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="/admin/assets/plugins/bootstrap-tagsinput/js/bootstrap-tagsinput.js"></script>
+    <script src="/admin/assets/js/feather.min.js"></script>
+    <script src="/admin/assets/js/jquery.dataTables.min.js"></script>
+    <script src="/admin/assets/js/dataTables.bootstrap4.min.js"></script>
+	<script src="/admin/assets/js/ckeditor.js"></script>
+    <script src="/admin/assets/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+    <script src="/admin/assets/plugins/sweetalert/sweetalert2.all.min.js"></script>
+    <script src="/admin/assets/plugins/sweetalert/sweetalerts.min.js"></script>
+    <script src="/admin/assets/js/admin.js"></script>
+ 
+    
+</body>
+</html>

@@ -1,0 +1,289 @@
+<div class="modal fullRight fade modal-shopping-cart" id="shoppingCart">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="header">
+                <div class="title fw-5">Warenkorb</div>
+                <span class="icon-close icon-close-popup" data-bs-dismiss="modal"></span>
+            </div>
+            <div class="wrap">
+                <div class="tf-mini-cart-wrap">
+                    <div class="tf-mini-cart-main">
+                        <div class="tf-mini-cart-sroll">
+                            <div class="tf-mini-cart-items">
+                                <div id="cart-items-container"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tf-mini-cart-bottom">
+                        <div class="tf-mini-cart-bottom-wrap">
+                            <div class="tf-cart-totals-discounts">
+                                <div class="tf-cart-total">Totalpreis</div>
+                                <div class="tf-totals-total-value fw-6"></div>
+                            </div>
+                            <div class="tf-mini-cart-view-checkout">
+                                <a href="/cart" class="tf-btn btn-outline radius-3 link w-100 justify-content-center">Warenkorb ansehen</a>
+                                <a href="/checkout" class="tf-btn btn-fill animate-hover-btn radius-3 w-100 justify-content-center"><span>Kasse</span></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    function findCategoryById(categoryId, callback) {
+        fetch(`/api/category/${categoryId}`)
+            .then(response => response.json())
+            .then(category => callback(category))
+            .catch(error => {
+                console.error('Error fetching category:', error);
+                callback(null);
+            });
+    }
+    function findMwstById(mwstId, callback) {
+        fetch(`/api/mwst/${mwstId}`)
+            .then(response => response.json())
+            .then(mwst => callback(mwst))
+            .catch(error => {
+                console.error('Error fetching mwst:', error);
+                callback(null);
+            });
+    }
+    function updateQuantity(productId, change) {
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+        const productIndex = cart.findIndex(item => item.id === productId);
+        if (productIndex > -1) {
+            cart[productIndex].quantity += change;
+            if (cart[productIndex].quantity <= 0) {
+                cart.splice(productIndex, 1);
+            }
+            localStorage.setItem('cart', JSON.stringify(cart));
+            loadCartItems(); 
+            loadCartTableItems();
+            loadCheckoutItems();
+            displayMwstCalculation();
+        }   
+    }
+    function removeFromCart(productId) {
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+        cart = cart.filter(item => item.id !== productId);
+        localStorage.setItem('cart', JSON.stringify(cart));
+        loadCartItems(); 
+        loadCartTableItems();
+        loadCheckoutItems();
+        displayMwstCalculation();
+    }
+    function calculateMwstTotalsFromCart(callback) {
+        const cart = JSON.parse(localStorage.getItem('cart')) || [];
+        const mwstTotals = {}; 
+        let remainingProducts = cart.length;
+        cart.forEach((product) => {
+            findCategoryById(product.category, (category) => {
+                if (!category || !category.mwstName) {
+                    console.error('Category not found or mwstId missing');
+                    if (--remainingProducts === 0) callback(mwstTotals); 
+                    return;
+                }
+
+                findMwstById(category.mwstID, (mwst) => {
+                    if (!mwst) {
+                        console.error('Mwst not found');
+                        if (--remainingProducts === 0) callback(mwstTotals);
+                        return;
+                    }
+                    const { mwstName, mwstRatio } = mwst;
+                    const productTotal = product.price * product.quantity;
+                    if (!mwstTotals[mwstName]) {
+                        mwstTotals[mwstName] = {
+                            ratio: mwstRatio,
+                            total: 0
+                        };
+                    }
+                    mwstTotals[mwstName].total += productTotal;
+                    if (--remainingProducts === 0) callback(mwstTotals);
+                });
+            });
+        });
+    }
+    function displayMwstCalculation() {
+        calculateMwstTotalsFromCart((mwstTotals) => {
+            let totalPrice = 0;
+            let totalMwstAmount = 0;
+            const mwstContainer = document.getElementById('mwstContainer');
+            mwstContainer.innerHTML = ''; 
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            cart.forEach(product => {
+                totalPrice += product.price * product.quantity;
+            });
+            Object.keys(mwstTotals).forEach((mwstName) => {
+                const { ratio, total } = mwstTotals[mwstName];
+                const mwstAmount = (total * ratio) / 100;
+
+                if (total > 0) { 
+                    const mwstElement = document.createElement('div');
+                    mwstElement.classList.add('tf-cart-totals-discounts');
+
+                    mwstElement.innerHTML = `
+                        <h3>${mwstName} (${ratio}%)</h3>
+                        <span class="total-value fw-5">${mwstAmount.toFixed(2)} CHF</span>
+                    `;
+
+                    mwstContainer.appendChild(mwstElement);
+                }
+                totalMwstAmount += mwstAmount;
+            });
+            const subtotal = totalPrice - totalMwstAmount;
+            document.getElementById('totalprice').innerText = `${totalPrice.toFixed(2)} CHF`;
+            document.getElementById('subtotal').innerText = `${subtotal.toFixed(2)} CHF`;
+        });
+    }
+    displayMwstCalculation();
+
+    let currentProductId = null;
+    let currentProductPrice = null;
+    let currentProductImage = null;
+    let currentProductName = null;
+    let currentProductCategory = null;
+    let packageName = null;
+
+    function showProductModal(id, image, name, price, category, packageName) {
+        document.getElementById('modal-product-image').src = image ? image : '/assets/img/default.png';
+        document.getElementById('modal-product-name').textContent = name;
+        document.getElementById('modal-package-name').textContent = '('+packageName+')';
+        document.getElementById('modal-product-price').textContent = price.toFixed(2) + ' CHF';
+        document.getElementById('modal-product-link').href = `/product-detail/${id}`;
+        
+        const quantityInput = document.querySelector('input[name="number"]');
+        quantityInput.value = 1;
+        
+        currentProductId = id;
+        currentProductPrice = price;
+        currentProductImage = image;
+        currentProductName = name;
+        currentProductCategory = category;
+        packageName = packageName;
+    }
+
+    function addToCart() {
+        const quantityInput = document.querySelector('input[name="number"]');
+        const quantity = parseInt(quantityInput.value) || 1;
+        const product = {
+            id: currentProductId,
+            price: currentProductPrice,
+            quantity: quantity,
+            image: currentProductImage,
+            name: currentProductName,
+            category: currentProductCategory
+        };
+
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+        const existingProductIndex = cart.findIndex(item => item.id === currentProductId);
+        if (existingProductIndex > -1) {
+            cart[existingProductIndex].quantity += quantity;
+        } else {
+            cart.push(product);
+        }
+        localStorage.setItem('cart', JSON.stringify(cart));
+
+        Swal.fire({
+            title: 'Zum Warenkorb hinzugefügt!',
+            icon: 'success',
+            timer: 2000,
+            showConfirmButton: false, 
+            toast: true,
+            position: 'top-end'
+        });
+        loadCartItems();
+    }
+    function loadCartItems() {
+        const cartItemsContainer = document.getElementById('cart-items-container');
+        cartItemsContainer.innerHTML = '';
+
+        const cart = JSON.parse(localStorage.getItem('cart')) || [];
+        let totalPrice = 0;
+        let totalQuantity = 0; 
+
+        cart.forEach(item => {
+            const itemTotal = item.price * item.quantity;
+            totalPrice += itemTotal; 
+            totalQuantity += item.quantity;
+
+            const itemHTML = `
+                <div class="tf-mini-cart-item">
+                    <div class="tf-mini-cart-image">
+                        <a href="/product-detail/${item.id}">
+                            <img src="${item.image}" alt="gastro">
+                        </a>
+                    </div>
+                    <div class="tf-mini-cart-info">
+                        <a class="title link" href="/product-detail/${item.id}">${item.name}</a>
+                        <div class="meta-variant">Menge: ${item.quantity}</div>
+                        <div class="price fw-6">${itemTotal.toFixed(2)} CHF</div>
+                        <div class="tf-mini-cart-btns">
+                            <div class="wg-quantity small">
+                                <span class="btn-quantity minus-btn" onclick="updateQuantity('${item.id}', -1)">-</span>
+                                <input type="text" name="number" value="${item.quantity}" readonly>
+                                <span class="btn-quantity plus-btn" onclick="updateQuantity('${item.id}', 1)">+</span>
+                            </div>
+                            <div class="tf-mini-cart-remove" onclick="removeFromCart('${item.id}')">Löschen</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            cartItemsContainer.insertAdjacentHTML('beforeend', itemHTML);
+        });
+        document.querySelector('.tf-totals-total-value').innerText = `${totalPrice.toFixed(2)} CHF`;
+        document.querySelector('.count-box').innerText = totalQuantity;
+    }
+    
+    document.addEventListener('DOMContentLoaded', loadCartItems);
+    function loadCartTableItems() {
+        const cartTableBody = document.querySelector('.cart-body');
+        cartTableBody.innerHTML = ''; 
+
+        const cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+        cart.forEach(item => {
+            const itemTotal = (item.price * item.quantity).toFixed(2); 
+            const itemHTML = `
+                <tr class="tf-cart-item file-delete">
+                    <td class="tf-cart-item_product">
+                        <a href="/product-detail/${item.id}" class="img-box">
+                            <img src="${item.image}" alt="gastro">
+                        </a>
+                        <div class="cart-info">
+                            <a href="/product-detail/${item.id}" class="cart-title link">${item.name}</a>
+                            <span class="remove-cart link remove" onclick="removeFromCart('${item.id}')">Löschen</span>
+                        </div>
+                    </td>
+                    <td class="tf-cart-item_price" cart-data-title="Price">
+                        <div class="cart-price">${item.price.toFixed(2)} CHF</div>
+                    </td>
+                    <td class="tf-cart-item_quantity" cart-data-title="Quantity">
+                        <div class="cart-quantity">
+                            <div class="wg-quantity">
+                                <span class="btn-quantity minus-btn" onclick="updateQuantity('${item.id}', -1)">
+                                    <svg class="d-inline-block" width="9" height="1" viewBox="0 0 9 1" fill="currentColor"><path d="M9 1H5.14286H3.85714H0V1.50201e-05H3.85714L5.14286 0L9 1.50201e-05V1Z"></path></svg>
+                                </span>
+                                <input type="text" name="number" value="${item.quantity}" readonly>
+                                <span class="btn-quantity plus-btn" onclick="updateQuantity('${item.id}', 1)">
+                                    <svg class="d-inline-block" width="9" height="9" viewBox="0 0 9 9" fill="currentColor"><path d="M9 5.14286H5.14286V9H3.85714V5.14286H0V3.85714H3.85714V0H5.14286V3.85714H9V5.14286Z"></path></svg>
+                                </span>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="tf-cart-item_total" cart-data-title="Total" >
+                        <div class="cart-total" >${itemTotal} CHF</div>
+                    </td>
+                </tr>
+            `;
+            cartTableBody.insertAdjacentHTML('beforeend', itemHTML);
+        });
+    }
+    document.addEventListener('DOMContentLoaded', loadCartTableItems);
+</script>

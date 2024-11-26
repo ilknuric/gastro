@@ -1,0 +1,30 @@
+.login-wrapper {
+	width: $__full__width;
+	height: $__full__height;
+	display: table-cell;
+	vertical-align: $__middle;
+}
+.loginbox {
+	background-color: $__white;
+	@include rounded(10px);
+	box-shadow: 0px 0px 12px 0px rgba(55, 73, 72, 0.02);
+	max-width: 500px;
+	padding: 40px;
+	width: $__full__width;
+}
+.account-logo {
+	img {
+		max-height: 80px;
+		width: $__auto;
+	}
+}
+.login-page::before {
+    content: "";
+    background-image: url(/assets/img/login-bg-01.png);
+    background-repeat: no-repeat;
+    position: absolute;
+    width: 100px;
+    height: 140px;
+	top: 25%;
+}
+

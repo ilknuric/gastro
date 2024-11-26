@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+    <title>me Time | Admin Dashboard</title>
+    <link rel="shortcut icon" href="/assets/img/favicon.png">
+    <link rel="stylesheet" href="/admin/assets/css/select2.min.css">
+    <link rel="stylesheet" href="/admin/assets/plugins/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/admin/assets/plugins/bootstrap-tagsinput/css/bootstrap-tagsinput.css">
+    <link rel="stylesheet" href="/admin/assets/plugins/fontawesome/css/fontawesome.min.css">
+    <link rel="stylesheet" href="/admin/assets/plugins/fontawesome/css/all.min.css">
+    <link rel="stylesheet" href="/admin/assets/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="/admin/assets/plugins/feather/feather.css">
+	<link rel="stylesheet" href="/admin/assets/css/ckeditor.css">
+    <link rel="stylesheet" href="/admin/assets/css/style.css">
+</head>
+<body>
+    <div class="main-wrapper">
+        <%- include('./sidebar.ejs') %>
+        <%- include('./header.ejs') %>
+        <div class="page-wrapper">
+            <div class="content">
+                <div class="row">
+                    <div class="col-lg-12s col-sm-12 m-auto">
+                        <div class="content-page-header">
+                            <h5><%= workers.name %> <%= workers.surname %> bearbeiten</h5>
+                        </div>
+                        <form action="/admin/setup/edit-worker/<%= workers._id %>" method="post">
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label>Name</label>
+                                        <input type="text" class="form-control" value="<%= workers.name %>" name="name">
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+										<label>Nachname</label>
+                                        <input type="text" class="form-control" value="<%= workers.surname %>" name="surname">
+                                    </div>
+                                </div>
+                                <input type="hidden" name="businessID" value="<%= business._id%>" id="businessID">
+                                <!--
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <div class="location-set mb-0">
+                                            <div class="row align-items-center">
+                                                <div class="col-lg-12 col-12">
+                                                    <div class="form-group mb-0">
+                                                        <label>Available Services</label>
+                                                        <select class="select" required name="services[]" multiple="multiple">
+                                                            <% services.forEach((service) => { %>
+                                                                <option value="<%= service._id %>" <%= workers.services.includes(service._id) ? 'selected' : '' %>><%= service.serviceName %></option>
+                                                            <% }); %>
+                                                        </select>                                                        
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>-->
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+										<label>Kalenderfarbe</label>
+                                        <select name="workerColor" id="" class="select select2" required>
+                                            <option value="" selected disabled>Wähle Farbe</option>
+                                          <option value="#518ff1" <%= workers.workerColor === '#518ff1' ? 'selected' : '' %>>Blau</option>
+<option value="#f15151" <%= workers.workerColor === '#f15151' ? 'selected' : '' %>>Rot</option>
+<option value="#59f151" <%= workers.workerColor === '#59f151' ? 'selected' : '' %>>Grün</option>
+<option value="#f1a151" <%= workers.workerColor === '#f1a151' ? 'selected' : '' %>>Orange</option>
+<option value="#f1e951" <%= workers.workerColor === '#f1e951' ? 'selected' : '' %>>Gelb</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label>Verfügbarkeit</label>
+                                        <select class="select select2" name="availability" required>
+                                            <option value="" disabled>Wählen Sie Verfügbarkeit aus</option>
+                                            <option value="Available" <%= workers.availability === 'Available' ? 'selected' : '' %>>Verfügbar</option>
+                                            <option value="Unavailable" <%= workers.availability === 'Unavailable' ? 'selected' : '' %>>Nicht verfügbar</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="content w-100">
+                                    <div class="content-page-header">
+										<h5>Arbeitszeiten</h5>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <div class="social-info">
+                                                <% const daysOfWeek = ['Montag', 'Dienstag','Mittwoch', 'Donnerstag', 'Freitag', 'Samstag', 'Sonntag'];
+                                                if (typeof workers.hours === 'object' && workers.hours !== null) {
+                                                  Object.keys(workers.hours).forEach((dayIndex) => {
+                                                    const shifts = workers.hours[dayIndex];
+                                                    const day = daysOfWeek[dayIndex];%>
+                                                    <% shifts.forEach((shift, index) => { %>
+                                                      <div class="row align-items-center times" data-dayindex="<%= dayIndex %>">
+                                                        <div class="col-lg-2 col-sm-12">
+                                                          <div class="form-group">
+                                                            <% if (index < 1) { %>
+                                                              <p class="fw-semibold"><strong><%= day %></strong></p>
+                                                            <% } %>
+                                                          </div>
+                                                        </div> 
+                                                        <div class="col-lg-3 col-sm-12 col-6">
+                                                          <div class="form-group">
+                                                            <label class="fw-bold">Start</label>
+                                                            <% const adjustedStartTime = convertToLocalTime(shift.start); %>
+                                                            <% function convertToLocalTime(utcTime) { %>
+                                                                <% const utcDate = new Date(`2000-01-01T${utcTime}:00.000Z`); %>
+                                                                <% const localTime = utcDate.toLocaleTimeString('de-DE', { timeZone: 'Europe/Zurich', hour: '2-digit', minute: '2-digit' }); %>
+                                                                <% return localTime; %>
+                                                            <% } %>
+                                                            <input type="time" name="startTime[<%= dayIndex %>][<%= index %>]" class="form-control" value="<%= adjustedStartTime %>" >
+                                                          </div>
+                                                        </div>
+                                                        <div class="col-lg-3 col-sm-12 col-6">
+                                                          <div class="form-group">
+                                                            <label class="fw-bold">Ende</label>
+                                                            <% const adjustedEndTime = convertToLocalTime(shift.end); %>
+                                                            <input type="time" name="endTime[<%= dayIndex %>][<%= index %>]" class="form-control" value="<%= adjustedEndTime %>" >
+                                                          </div>
+                                                        </div>
+                                                        <% if (index === 0) { %>
+                                                        <div class="col-lg-2 col-6">
+                                                            <input type="checkbox" class="offday-check" name="offdayCheckbox[<%= dayIndex %>]" id="offdayCheckbox<%= dayIndex %>" onchange="updateHiddenInput(<%= index %>, <%= dayIndex %>)" <%= (shift.offday === 'on') ? 'checked' : '' %>>
+                                                            <label class="ml-2"> Ruhetag</label>
+                                                            <input type="hidden" name="offday[<%= dayIndex %>][<%= index %>]" id="offdayvalue<%= dayIndex %>" value="<%= shift.offday %>">
+                                                        </div>
+                                                        <% } else { %>
+                                                            <div class="col-lg-2 col-6" style="display: none;">
+                                                            <input type="checkbox" class="offday-check" name="offdayCheckbox[<%= dayIndex %>]" id="offdayCheckbox<%= dayIndex %>" onchange="updateHiddenInput(<%= index %>, <%= dayIndex %>)" <%= (shift.offday === 'on') ? 'checked' : '' %>>
+                                                            <label class="ml-2"> Ruhetag</label>
+                                                            <input type="hidden" name="offday[<%= dayIndex %>][<%= index %>]" id="offdayvalue<%= dayIndex %>" value="off">
+                                                        </div>
+                                                        <% } %>
+                                                        <% if (index > 0) { %>
+                                                        <div class="col-lg-1 col-6">
+                                                            <a href="#" class="ms-2 del"><i class="fe fe-trash-2"></i></a>
+                                                        </div>
+                                                        <% } %>
+                                                        <% if (index < 1) { %>
+                                                        <div class="col-lg-2 col-6">
+                                                            <a href="javascript:void(0);" id="addShiftButton<%= dayIndex %>" class="link-sets add" data-day="<%= dayIndex %>">
+                                                                <i class="fa fa-plus-circle me-2" aria-hidden="true"></i>Schicht hinzufügen
+                                                            </a>
+                                                        </div>
+                                                        <% } %>
+                                                      </div>
+                                                    <% }); %>
+                                                    <hr>
+                                                  <% });
+                                                } %>
+                                              </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12">
+                                    <div class="btn-path">                                    
+                                        <button type="submit" class="btn btn-submit "> Einreichen</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div> 
+    </div>
+    <script src="/admin/assets/js/jquery-3.6.4.min.js"></script>
+    <script src="/admin/assets/js/select2.min.js"></script>
+    <script src="/admin/assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="/admin/assets/plugins/bootstrap-tagsinput/js/bootstrap-tagsinput.js"></script>
+    <script src="/admin/assets/js/feather.min.js"></script>
+    <script src="/admin/assets/js/jquery.dataTables.min.js"></script>
+    <script src="/admin/assets/js/dataTables.bootstrap4.min.js"></script>
+	<script src="/admin/assets/js/ckeditor.js"></script>
+    <script src="/admin/assets/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+    <script src="/admin/assets/plugins/sweetalert/sweetalert2.all.min.js"></script>
+    <script src="/admin/assets/plugins/sweetalert/sweetalerts.min.js"></script>
+    <script src="/admin/assets/js/admin.js"></script>
+    <script>
+    $(document).ready(function () {
+        $('.add').on('click', function (e) {
+            e.preventDefault();
+            const dayIndex = $(this).data('day');
+            const newShiftHtml = `
+                <div class="row align-items-center times" data-dayindex="${dayIndex}">
+                    <div class="col-lg-2 col-sm-12">
+                        <div class="form-group">
+                            <p class="fw-semibold"><strong></strong></p>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-sm-12 col-6">
+                        <div class="form-group">
+                            <label class="fw-bold">Start</label>
+                            <input type="time" name="startTime[${dayIndex}][]" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-sm-12 col-5" >
+                        <div class="form-group">
+                            <label class="fw-bold">Ende</label>
+                            <input type="time" name="endTime[${dayIndex}][]" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="col-lg-1 col-1">
+                        <a href="#" class=" ms-2 del"><i class="fe fe-trash-2"></i></a>
+                    </div>
+                    <div class="col-lg-2"></div>
+                </div>`;
+            $(this).closest('.row').after(newShiftHtml);
+        });
+        $(document).on('click', '.del', function (e) {
+            e.preventDefault();
+            $(this).closest('.times').remove();
+        });
+    });
+
+    function updateHiddenInput(index, dayIndex) {
+    var checkbox = document.getElementById('offdayCheckbox' + dayIndex);
+    var hiddenInput = document.getElementById('offdayvalue' + dayIndex);
+    var addShiftButton = document.getElementById('addShiftButton' + dayIndex);
+
+    if (checkbox && addShiftButton) {
+        if (checkbox.checked) {
+            hiddenInput.value = "on";
+            var shifts = document.querySelectorAll('.times[data-dayindex="' + dayIndex + '"]');
+            for (var i = shifts.length - 1; i > 0; i--) {
+                shifts[i].remove();
+            }
+            var remainingShifts = document.querySelectorAll('.times[data-dayindex="' + dayIndex + '"]');
+            remainingShifts.forEach(function (shift) {
+                var startTimeInput = shift.querySelector('[name^="startTime"]');
+                var endTimeInput = shift.querySelector('[name^="endTime"]');
+                startTimeInput.readOnly = true;
+                endTimeInput.readOnly = true;
+                startTimeInput.value = "";
+                endTimeInput.value = "";
+            });
+            addShiftButton.style.display = 'none';
+        } else {
+            hiddenInput.value = "off";
+            var remainingShifts = document.querySelectorAll('.times[data-dayindex="' + dayIndex + '"]');
+            remainingShifts.forEach(function (shift) {
+                var startTimeInput = shift.querySelector('[name^="startTime"]');
+                var endTimeInput = shift.querySelector('[name^="endTime"]');
+                startTimeInput.readOnly = false;
+                endTimeInput.readOnly = false;
+            });
+            addShiftButton.style.display = 'inline-block';
+        }
+    } else {
+        console.error('Checkbox or Add Shift button not found.');
+    }
+}
+
+
+
+
+
+    </script>
+</body>
+</html>
