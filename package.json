@@ -4,9 +4,9 @@
   "description": "gastro project",
   "main": "index.js",
  "scripts": {
-    "start": "node index.js",
-    "dev": "nodemon index.js"
-},
+      "start": "node index.js",
+      "dev": "nodemon index.js"
+  },
   "author": "İlknur Cengiz",
   "type": "commonjs",
   "license": "ISC",
