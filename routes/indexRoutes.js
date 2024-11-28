@@ -712,12 +712,13 @@ router.get("/shop/:categoryID", async (req, res) => {
     
             const categories = await Category.find();
             const business = await Business.find();
+            const brand = await Brand.find();		
             const userID = req.session.userId;
     
             res.locals.req = req;
             res.locals.activePage = "shop";
     
-            res.render("shop", {currentPage: page,totalPages,products: productsWithDetails,categories,categoryID,userID,business});
+            res.render("shop", {currentPage: page,totalPages,products: productsWithDetails,categories,categoryID,userID,business,brand});
         } catch (err) {
             console.error("Error fetching data:", err);
             return res.redirect("../404");
