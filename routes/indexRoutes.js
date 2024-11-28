@@ -1,7 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const axios = require('axios');
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const ejs = require("ejs");
 const path = require("path");
 const nodemailer = require("nodemailer");
@@ -986,8 +985,6 @@ router.get("/order-result/:orderNumber", async (req, res, next) => {
         next(err);
     }
 });
-
-    
 router.get('/delete-account', async (req, res) => {
         try {
             const userId = req.session.userId;

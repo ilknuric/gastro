@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
-
 const path = require('path');
 const multer = require('multer');
 const ejs = require('ejs');
