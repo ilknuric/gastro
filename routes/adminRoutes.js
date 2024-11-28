@@ -489,7 +489,7 @@ router.post("/admin/add-new-product",requireSuperLogin, uploadProductImages, asy
     try {
       const businessID = req.session.businessID;
       const { productName, description, price, status, category, brandName, package } = req.body;
-      const productImages = req.files.map(file => `http://localhost:3001/assets/images/business/${file.filename}`);
+      const productImages = req.files.map(file => `https://gastro-0ecf38100a36.herokuapp.com/assets/images/business/${file.filename}`);
 
       const newProduct = new Product({
         productName: productName,
@@ -568,7 +568,7 @@ router.post('/admin/edit-product/:productID', requireSuperLogin, upload.array('p
       }
       let productImages = products.productImages || [];
       if (req.files && req.files.length > 0) {
-          const newImages = req.files.map(file => 'http://localhost:3001/assets/images/business/' + file.filename);
+          const newImages = req.files.map(file => 'https://gastro-0ecf38100a36.herokuapp.com/assets/images/business/' + file.filename);
           productImages = [...productImages, ...newImages]; 
       }
       products.productName = productName;
@@ -650,7 +650,7 @@ router.get('/admin/add-categories', requireSuperLogin, async (req, res) => {
 });
 router.post("/admin/add-new-category", requireSuperLogin, uploadproduct.single('categoryImage'), async (req, res) => {
   try {
-      const categoryImage = req.file ? 'http://localhost:3001/assets/images/business/' + req.file.filename : null;
+      const categoryImage = req.file ? 'https://gastro-0ecf38100a36.herokuapp.com/assets/images/business/' + req.file.filename : null;
       const { categoryName, mwstID } = req.body;
       const mwst = await Mwst.findOne({_id:mwstID});
       const newCategory = new Category({
@@ -709,7 +709,7 @@ router.post('/admin/edit-category/:categoryID', requireSuperLogin, upload.single
         const { categoryName, mwstID } = req.body;
         const category = await Category.findById(categoryId);
         const mwst = await Mwst.findOne({_id:mwstID});
-        const categoryImage = req.file ? 'http://localhost:3001/assets/images/business/' + req.file.filename : category.categoryImage;
+        const categoryImage = req.file ? 'https://gastro-0ecf38100a36.herokuapp.com/assets/images/business/' + req.file.filename : category.categoryImage;
       
         if (!category) {
             req.session.error = 'Category not found';
@@ -909,7 +909,7 @@ router.post('/admin/edit-admin-business/:businessID', requireSuperLogin, upload.
       business.commisionRate = commisionRate;
       business.auth = auth;
       if (req.file) {
-          business.businessImage = 'http://localhost:3001/assets/images/business/' + req.file.filename;
+          business.businessImage = 'https://gastro-0ecf38100a36.herokuapp.com/assets/images/business/' + req.file.filename;
       }
 
       await business.save();
@@ -1188,7 +1188,7 @@ router.post('/admin/edit-about/:aboutID', requireSuperLogin, upload.single('abou
       const about = await About.findOne({ _id: aboutID });
       const { heading, maintext } = req.body;
     
-      const aboutImage = req.file ? 'http://localhost:3001/assets/images/business/' + req.file.filename : about.aboutImage;
+      const aboutImage = req.file ? 'https://gastro-0ecf38100a36.herokuapp.com/assets/images/business/' + req.file.filename : about.aboutImage;
 
       about.aboutImage = aboutImage;
       about.heading = heading;
@@ -1535,7 +1535,7 @@ router.get('/admin/add-product-campaign', requireSuperLogin, async (req, res) =>
 router.post("/admin/add-new-campaign", requireSuperLogin, uploadproduct.single('campaignImage'), async (req, res) => {
   try {
     const businessID = req.session.businessID;
-    const campaignImage = req.file ? 'http://localhost:3001/assets/images/business/' + req.file.filename : null;
+    const campaignImage = req.file ? 'https://gastro-0ecf38100a36.herokuapp.com/assets/images/business/' + req.file.filename : null;
     const { campaignStartDate, campaignEndDate, campaignDesciption, campaignName, serviceID, currentPrice, campaignPrice, campaignType,campaignText } = req.body;
     const campaignDetails = [];
     for (let i = 0; i < serviceID.length; i++) {
@@ -1573,7 +1573,7 @@ router.post("/admin/add-new-campaign", requireSuperLogin, uploadproduct.single('
 router.post("/admin/add-new-product-campaign", requireSuperLogin, uploadproduct.single('campaignImage'), async (req, res) => {
   try {
     const businessID = req.session.businessID;
-    const campaignImage = req.file ? 'http://localhost:3001/assets/images/business/' + req.file.filename : null;
+    const campaignImage = req.file ? 'https://gastro-0ecf38100a36.herokuapp.com/assets/images/business/' + req.file.filename : null;
     const { campaignStartDate, campaignEndDate, campaignDesciption, campaignName, productID, currentPrice, campaignPrice, campaignType,campaignText } = req.body;
     const campaignDetails = [];
     for (let i = 0; i < productID.length; i++) {
@@ -1648,7 +1648,7 @@ router.post('/admin/edit-campaign/:campaignID', requireSuperLogin, uploadproduct
       const campaignID = req.params.campaignID;
       const { campaignStartDate, campaignEndDate, campaignRatio, campaignDesciption, campaignName, campaignType,serviceID, productID, currentPrice, campaignPrice,campaignText } = req.body;
       const campaign = await Campaign.findById(campaignID);
-      const campaignImage = req.file ? 'http://localhost:3001/assets/images/business/' + req.file.filename : campaign.campaignImage;
+      const campaignImage = req.file ? 'https://gastro-0ecf38100a36.herokuapp.com/assets/images/business/' + req.file.filename : campaign.campaignImage;
       if (!campaign) {
           req.session.error = 'Campaign not found';
           return res.redirect('/admin/campaigns');
@@ -1975,7 +1975,7 @@ router.post('/admin/delete-images', async (req, res) => {
 });
 router.post('/admin/upload-images', uploadSaloon, async (req, res) => {
   try {
-    const baseImageUrl = 'http://localhost:3001/assets/images/business/';
+    const baseImageUrl = 'https://gastro-0ecf38100a36.herokuapp.com/assets/images/business/';
     const businessID = req.session.businessID;
     const business = await Business.findOne({ _id: businessID });
 
@@ -2050,7 +2050,7 @@ router.get('/admin/add-slide', requireSuperLogin, async (req, res) => {
 });
 router.post("/admin/add-new-slide", requireSuperLogin, uploadproduct.single('slideImage'), async (req, res) => {
   try {
-    const slideImage = req.file ? 'http://localhost:3001/assets/images/business/' + req.file.filename : null;
+    const slideImage = req.file ? 'https://gastro-0ecf38100a36.herokuapp.com/assets/images/business/' + req.file.filename : null;
 	  const { slideBig, slideSmall } = req.body;
     const newSlide = new Slide({
       image_path: slideImage,
@@ -2107,7 +2107,7 @@ router.post('/admin/edit-slide-web/:slideID', requireSuperLogin, upload.single('
       const slide = await SlideWeb.findOne({ _id: slideID });
       const { slideBig, slideSmall } = req.body;
     
-      const slideImageWeb = req.file ? 'http://localhost:3001/assets/images/business/' + req.file.filename : slide.slideImageWeb;
+      const slideImageWeb = req.file ? 'https://gastro-0ecf38100a36.herokuapp.com/assets/images/business/' + req.file.filename : slide.slideImageWeb;
 
       slide.slideImageWeb = slideImageWeb;
       slide.slideBig = slideBig;
@@ -2129,7 +2129,7 @@ router.post('/admin/edit-slide-app/:slideID', requireSuperLogin, upload.single('
       const slide = await Slide.findOne({ _id: slideID });
       const { slideBig, slideSmall } = req.body;
     
-      const slideImage = req.file ? 'http://localhost:3001/assets/images/business/' + req.file.filename : slide.image_path;
+      const slideImage = req.file ? 'https://gastro-0ecf38100a36.herokuapp.com/assets/images/business/' + req.file.filename : slide.image_path;
 
       slide.image_path = slideImage;
       slide.slideBig = slideBig;
