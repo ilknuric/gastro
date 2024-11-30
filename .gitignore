@@ -18,3 +18,5 @@ yarn-error.log*
 # Other system files
 .DS_Store
 Thumbs.db
+
+/public/assets/images/business/
