@@ -53,7 +53,8 @@
                         <h5 class="mb_20">Nehmen Sie Kontakt auf</h5>
                         <p class="mb_24">Bitte senden Sie Ihre Wünsche und Anliegen. Unser Team wird sich so schnell wie möglich mit Ihnen in Verbindung setzen.</p>
                         <div>
-                            <form class="form-contact" id="contactform" action="./contact/contact-process.php" method="post">
+                            <form class="form-contact" action="/contact" method="post">
+                                <input type="hidden" name="userLoc" value="" id="userIP">
                                 <div class="d-flex gap-15 mb_15">
                                     <fieldset class="w-100">
                                         <input type="text" name="name" id="name" required placeholder="Name *"/>
@@ -94,6 +95,27 @@
     <script type="text/javascript" src="/js/jquery-validate.js"></script>   
     <script type="text/javascript" src="/js/multiple-modal.js"></script>
     <script type="text/javascript" src="/js/main.js"></script>
+    <script>
+        function populateUserIP() {
+    return fetch('https://ipapi.co/json/')
+        .then(response => response.json())
+        .then(data => {
+            return data;
+        });
+}
+
+document.addEventListener("DOMContentLoaded", function() {
+    populateUserIP()
+        .then((userIP) => {
+            if (userIP) {
+                document.getElementById("userIP").value = `${userIP.country}`;
+            }
+        })
+        .catch((error) => {
+            console.error('Error retrieving IP address:', error);
+        });
+});
+    </script>
 </body>
 
 </html>

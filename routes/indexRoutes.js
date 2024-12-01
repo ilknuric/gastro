@@ -39,12 +39,12 @@ function requireLogin(req, res, next) {
         }
 }
 const transporter = nodemailer.createTransport({
-        host: "mail.eatorder.ch",
-        port: 465,
+        host: "mail.ilknurcengiz.com",
+        port: 25,
         secure: true,
         auth: {
-		user: 'test@g-itsolutions.ch',
-	        pass: '5$Wu58un',
+		user: 'info@ilknurcengiz.com',
+	        pass: 'Z@vCMkP!*wHg5',
         },
         tls: {
                 rejectUnauthorized: false,
@@ -241,18 +241,18 @@ router.get("/contact", async (req, res) => {
 });
 router.post("/contact", async (req, res) => {
         try {
-            const { email, name, subject, message,userLoc } = req.body;
+            const { email, name, message,userLoc } = req.body;
 
-		if (userLoc!== "CH") {
+		if (userLoc!== "TR") {
 	        res.redirect("/contact?no");
         } else {	
                 const templatePath = path.join(__dirname, "mail/contactEmail.ejs");
                 const templateOwnerPath = path.join(__dirname, "mail/contactOwnerEmail.ejs");
-                const renderedHtml = await ejs.renderFile(templatePath, { name, email, subject, message });
-                const renderedOwnerHtml = await ejs.renderFile(templateOwnerPath, { name, email, subject, message });
+                const renderedHtml = await ejs.renderFile(templatePath, { name, email, message });
+                const renderedOwnerHtml = await ejs.renderFile(templateOwnerPath, { name, email, message });
 
                 const mailOptions = {
-                        from: "metime@metime-schweiz.ch",
+                        from: "info@ilknurcengiz.com",
                         to: email,
                         subject: 'Zeit für die Einreichung des Kontaktformulars',
                         html: renderedHtml,
@@ -260,7 +260,7 @@ router.post("/contact", async (req, res) => {
 
                 const ownerMailOptions = {
                         from: email,
-                        to: "metime@metime-schweiz.ch",
+                        to: "info@ilknurcengiz.com",
                         subject: 'Zeit für mich Neue Nachricht von der Übermittlung des Kontaktformulars',
                         html: renderedOwnerHtml,
                 };
@@ -270,6 +270,7 @@ router.post("/contact", async (req, res) => {
                 res.redirect("/contact?success");
         }    
         } catch (error) {
+            console.error("Error occurred:", error);
                 return res.redirect("../404");
         }
 });  
@@ -396,7 +397,7 @@ router.post("/forgot-password", async (req, res) => {
             const templatePath = path.join(__dirname, "mail/userPasswordReset.ejs");
             const renderedHtml = await ejs.renderFile(templatePath, { email, password: newPassword });
             const customerMailOptions = {
-                from: "metime@metime-schweiz.ch",
+                from: "info@ilknurcengiz.com",
                 to: user.email,
                 subject: 'me Zeit Passwort zurücksetzen',
                 html: renderedHtml,
