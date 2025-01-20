@@ -165,40 +165,39 @@
     <script src="/admin/assets/js/admin.js"></script>
     <script>
         function deleteImage(imageUrl, productId) {
-    Swal.fire({
-        title: "Bu resmi silmek istediğinize emin misiniz?",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
-        confirmButtonText: "Evet, sil!",
-        cancelButtonText: "İptal"
-    }).then((result) => {
-        if (result.isConfirmed) {
-            fetch(`/admin/delete-product-image`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ imageUrl, productId }),
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    Swal.fire("Silindi!", "Resim başarıyla silindi.", "success");
-                    location.reload(); // Sayfayı yeniden yükle
-                } else {
-                    Swal.fire("Hata!", "Resim silinirken bir hata oluştu.", "error");
+            Swal.fire({
+                title: "Sind Sie sicher, dass Sie dieses Bild löschen möchten?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Ja, löschen!",
+                cancelButtonText: "Stornieren"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    fetch(`/admin/delete-product-image`, {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({ imageUrl, productId }),
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            Swal.fire("Gelöscht!", "Das Bild wurde erfolgreich gelöscht.", "success");
+                            location.reload();
+                        } else {
+                            Swal.fire("Fehler!", "Beim Löschen des Bildes ist ein Fehler aufgetreten.", "error");
+                        }
+                    })
+                    .catch(err => {
+                        console.error(err);
+                        Swal.fire("Fehler!", "Etwas ist schief gelaufen.", "error");
+                    });
                 }
-            })
-            .catch(err => {
-                console.error(err);
-                Swal.fire("Hata!", "Bir şeyler yanlış gitti.", "error");
             });
         }
-    });
-}
-
     </script>
 </body>
 </html>

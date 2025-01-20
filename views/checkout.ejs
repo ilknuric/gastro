@@ -82,7 +82,6 @@
                                 <input type="hidden" name="appliedcouponCode" id="lastcouponCode" value="" placeholder="kuponcode">
                                 <input type="hidden" name="discount" id="discount" value="" placeholder="discount">
                                 <input type="hidden" name="orderItems" id="orderItems">
-
                             </div>
                         </div>
                         <div class="tf-page-cart-footer">
@@ -99,12 +98,13 @@
                                         <h6 class="">Zwischensumme</h6>
                                         <h6 class="total fw-5" id="subtotal"></h6>
                                     </div>
-                                    <div id="mwstContainer" style="margin-top: -30px;"></div>
-                                    <div class=" justify-content-between" style="margin-top: -10px; display: none;" id="discount-container">
+                                    <div id="mwstContainer" style="margin-top: -20px;"></div>
+                                    <div class="justify-content-between" style=" display: none;" id="discount-container">
                                         <h6 class="">Rabatt</h6>
                                         <h6 class="total fw-5" id="discount-value"></h6>
                                     </div>
-                                    <div class="d-flex justify-content-between line" style="margin-top: -10px;">
+                                    <hr>
+                                    <div class="d-flex justify-content-between" style="margin-top: -10px;">
                                         <h6 class="">Gesamtpreis</h6>
                                         <h6 class="total fw-5" id="totalprice"></h6>
                                     </div>
@@ -143,193 +143,180 @@
     <script type="text/javascript" src="js/multiple-modal.js"></script>
     <script type="text/javascript" src="js/main.js"></script>
     <script>
-    function loadCheckoutItems() {
         displayMwstCalculation();
-        const checkoutProductList = document.querySelector('.wrap-checkout-product'); 
-        checkoutProductList.innerHTML = ''; 
-        const cart = JSON.parse(localStorage.getItem('cart')) || [];
-        cart.forEach(item => {
-            const itemTotal = (item.price * item.quantity).toFixed(2); 
-            const itemHTML = `
-                <li class="checkout-product-item">
-                    <figure class="img-product">
-                        <img src="${item.image}" alt="gastro">
-                        <span class="quantity">${item.quantity}</span>
-                    </figure>
-                    <div class="content">
-                        <div class="info">
-                            <p class="name">${item.name}</p>
-                        </div>
-                        <span class="price">${itemTotal} CHF</span>
-                    </div>
-                </li>
-            `;
-            checkoutProductList.insertAdjacentHTML('beforeend', itemHTML);
-        });
-    }
-    document.addEventListener('DOMContentLoaded', loadCheckoutItems);
-
-
-
-    function findCouponCode(couponCode, callback) {
-        $.ajax({
-            url: `/api/promotion/${couponCode}`,
-            type: 'GET',
-            dataType: 'json',
-            success: function(coupon) {
-                callback(coupon);
-            },
-            error: function(jqXHR, textStatus, errorThrown) {
-                console.error('Error fetching coupon:', errorThrown);
-                callback(null); 
-            }
-        });
-    }
-
-    $(document).on("click", ".promo-check", function (e) {
-        e.preventDefault();
-        const couponCode = document.getElementById("couponCode").value.trim();
-        const userID = document.getElementById("userID").value.trim();
-        const cart = JSON.parse(localStorage.getItem('cart')) || [];
-
-        if (!couponCode || cart.length === 0) {
-            Swal.fire({
-                title: 'Hata',
-                text: "Lütfen bir kupon kodu girin ve sepetinizi kontrol edin.",
-                icon: 'error',
-                confirmButtonText: 'Tamam'
-            });
-            return;
-        }
-        let basketTotalPrice = 0;
-        for (const item of cart) {
-            const price = parseFloat(item.price) * parseFloat(item.quantity);
-            basketTotalPrice += price;
-        }
-
-        findCouponCode(couponCode, function(couponDetails) {
-            if (!couponDetails) {
-                Swal.fire({
-                    title: 'Hata',
-                    text: "Bu kupon bulunamadı veya kullanılamaz durumda.",
-                    icon: 'error',
-                    confirmButtonText: 'Tamam'
-                });
-                return;
-            }
-            const couponType = couponDetails.couponType;
-            const couponValue = parseFloat(couponDetails.couponValue);
-            const minValue = parseFloat(couponDetails.minValue);
-            if (basketTotalPrice < minValue) {
-                Swal.fire({
-                    title: 'Hata',
-                    text: `Bu kupon için minimum sepet tutarı CHF ${minValue.toFixed(2)}.`,
-                    icon: 'error',
-                    confirmButtonText: 'Tamam'
-                });
-                return;
-            }
-
+        function findCouponCode(couponCode, callback) {
             $.ajax({
-                url: `/api/order/check-coupon`,
-                type: 'POST',
-                data: JSON.stringify({ couponCode, userID }),
-                contentType: "application/json",
-                success: function(orderCheck) {
-                    if (orderCheck.used) {
-                        Swal.fire({
-                            title: 'Hata',
-                            text: "Bu kupon daha önce kullanılmış.",
-                            icon: 'error',
-                            confirmButtonText: 'Tamam'
-                        });
-                    } else {
-                        let discount = 0;
-                        if (couponType === "%") {
-                            discount = (basketTotalPrice * couponValue) / 100;
-                        } else if (couponType === "CHF") {
-                            discount = couponValue;
-                        }
-
-                        const newTotal = basketTotalPrice - discount;
-                        if (discount > 0) {
-                            document.getElementById("discount-value").innerText = `${discount.toFixed(2)} CHF`;
-                            document.getElementById("discount-container").style.display = "flex";
-                        } else {
-                            document.getElementById("discount-container").style.display = "none";
-                        }
-
-                        document.getElementById("totalprice").innerText = `${newTotal.toFixed(2)} CHF`;
-                        document.getElementById("lastcouponCode").value = couponCode;
-                        document.getElementById("tots").value = newTotal;
-                        document.getElementById("discount").value = discount;
-
-                        Swal.fire({
-                            title: 'Başarılı',
-                            text: "Kupon başarıyla uygulandı!",
-                            icon: 'success',
-                            confirmButtonText: 'Tamam'
-                        });
-                    }
+                url: `/api/promotion/${couponCode}`,
+                type: 'GET',
+                dataType: 'json',
+                success: function(coupon) {
+                    callback(coupon);
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
-                    console.error('Error checking coupon usage:', errorThrown);
+                    console.error('Error fetching coupon:', errorThrown);
+                    callback(null); 
+                }
+            });
+        }
+        function loadCheckoutItems() {
+            const checkoutProductList = document.querySelector('.wrap-checkout-product'); 
+            checkoutProductList.innerHTML = ''; 
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            cart.forEach(item => {
+                const itemTotal = (item.price * item.quantity).toFixed(2); 
+                const itemHTML = `
+                    <li class="checkout-product-item">
+                        <figure class="img-product">
+                            <img src="${item.image}" alt="gastro">
+                            <span class="quantity">${item.quantity}</span>
+                        </figure>
+                        <div class="content">
+                            <div class="info">
+                                <p class="name">${item.name}</p>
+                            </div>
+                            <span class="price">${itemTotal} CHF</span>
+                        </div>
+                    </li>
+                `;
+                checkoutProductList.insertAdjacentHTML('beforeend', itemHTML);
+            });
+            updateSubtotalAndTaxes(0);
+        }
+        function updateSubtotalAndTaxes(discount) {
+    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+    const subtotal = cart.reduce((total, item) => total + parseFloat(item.price) * parseFloat(item.quantity), 0);
+    const discountedTotal = subtotal - (discount || 0);
+    const totalPrice = discountedTotal.toFixed(2);
+
+    // Eski fiyatı ve indirimli fiyatı ayrı ayrı göster
+    const totalPriceElement = document.getElementById('totalprice');
+    if (discount > 0) {
+        totalPriceElement.innerHTML = `
+            <span class="original-price" style="text-decoration: line-through;">${subtotal.toFixed(2)} CHF</span> 
+            <span class="discounted-price" >${totalPrice} CHF</span>
+        `;
+    } else {
+        totalPriceElement.innerHTML = `<span class="discounted-price">${totalPrice} CHF</span>`;
+    }
+
+    // Gizli input değerini güncelle
+    document.getElementById('tots').value = totalPrice;
+}
+
+        document.addEventListener('DOMContentLoaded', loadCheckoutItems);
+        $(document).on("click", ".promo-check", function (e) {
+            e.preventDefault();
+            const couponCode = document.getElementById("couponCode").value.trim();
+            const userID = document.getElementById("userID").value.trim();
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+            if (!couponCode || cart.length === 0) {
+                Swal.fire({
+                    title: 'Hata',
+                    text: "Lütfen bir kupon kodu girin ve sepetinizi kontrol edin.",
+                    icon: 'error',
+                    confirmButtonText: 'Tamam'
+                });
+                return;
+            }
+
+            let basketTotalPrice = 0;
+            for (const item of cart) {
+                const price = parseFloat(item.price) * parseFloat(item.quantity);
+                basketTotalPrice += price;
+            }
+
+            findCouponCode(couponCode, function (couponDetails) {
+                if (!couponDetails) {
                     Swal.fire({
                         title: 'Hata',
-                        text: "Kupon kullanım durumu kontrol edilirken bir hata oluştu.",
+                        text: "Bu kupon bulunamadı veya kullanılamaz durumda.",
                         icon: 'error',
                         confirmButtonText: 'Tamam'
                     });
-                }
-            });
-        });
-    });
-
-
-
-
-    function prepareOrderItems(callback) {
-        const cart = JSON.parse(localStorage.getItem('cart')) || [];
-        const orderItems = [];
-        let remainingProducts = cart.length;
-
-        cart.forEach((item) => {
-            findCategoryById(item.category, (category) => {
-                if (!category || !category.mwstID) {
-                    console.error('Category or mwstId missing for item:', item);
-                    if (--remainingProducts === 0) callback(orderItems); 
                     return;
                 }
 
-                findMwstById(category.mwstID, (mwst) => {
-                    if (!mwst) {
-                        console.error('Mwst not found for category:', category);
-                        if (--remainingProducts === 0) callback(orderItems); 
-                        return;
-                    }
-                    orderItems.push({
-                        _id: item.id,
-                        productName: item.name,
-                        description: item.description || '',
-                        price: item.price.toString(),
-                        category: item.category,
-                        quantity: item.quantity.toString(),
-                        mwstName: mwst.mwstName || '',
-                        mwstValue: ((item.price * item.quantity) * (mwst.mwstRatio / 100)).toFixed(2),
-                        mwstRatio: mwst.mwstRatio.toString(),
-                        __v: "0"
+                const couponType = couponDetails.couponType;
+                const couponValue = parseFloat(couponDetails.couponValue);
+                const minValue = parseFloat(couponDetails.minValue);
+                if (basketTotalPrice < minValue) {
+                    Swal.fire({
+                        title: 'Hata',
+                        text: `Bu kupon için minimum sepet tutarı CHF ${minValue.toFixed(2)}.`,
+                        icon: 'error',
+                        confirmButtonText: 'Tamam'
                     });
-                    if (--remainingProducts === 0) callback(orderItems);
+                    return;
+                }
+
+                let discount = 0;
+                if (couponType === "%") {
+                    discount = (basketTotalPrice * couponValue) / 100;
+                } else if (couponType === "CHF") {
+                    discount = couponValue;
+                }
+
+                if (discount > 0) {
+                    document.getElementById("discount-value").innerText = `${discount.toFixed(2)} CHF`;
+                    document.getElementById("discount-container").style.display = "flex";
+                    updateSubtotalAndTaxes(discount);
+                } else {
+                    document.getElementById("discount-container").style.display = "none";
+                }
+
+                document.getElementById("lastcouponCode").value = couponCode;
+                document.getElementById("discount").value = discount;
+
+                Swal.fire({
+                    title: 'Başarılı',
+                    text: "Kupon başarıyla uygulandı!",
+                    icon: 'success',
+                    confirmButtonText: 'Tamam'
                 });
             });
         });
-    }
-    prepareOrderItems((orderItems) => {
-        document.getElementById('orderItems').value = JSON.stringify(orderItems);
-        const totalPrice = orderItems.reduce((total, item) => total + parseFloat(item.price) * parseFloat(item.quantity), 0).toFixed(2);
-        document.getElementById('tots').value = totalPrice;
-        document.querySelector('.totalPrice').innerText = `${totalPrice} CHF`;
-    });
+        function prepareOrderItems(callback) {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const orderItems = [];
+            let remainingProducts = cart.length;
+    
+            cart.forEach((item) => {
+                findCategoryById(item.category, (category) => {
+                    if (!category || !category.mwstID) {
+                        console.error('Category or mwstId missing for item:', item);
+                        if (--remainingProducts === 0) callback(orderItems); 
+                        return;
+                    } 
+                    findMwstById(category.mwstID, (mwst) => {
+                        if (!mwst) {
+                            console.error('Mwst not found for category:', category);
+                            if (--remainingProducts === 0) callback(orderItems); 
+                            return;
+                        }
+                        orderItems.push({
+                            _id: item.id,
+                            productName: item.name,
+                            description: item.description || '',
+                            price: item.price.toString(),
+                            category: item.category,
+                            quantity: item.quantity.toString(),
+                            mwstName: mwst.mwstName || '',
+                            mwstValue: ((item.price * item.quantity) * (mwst.mwstRatio / 100)).toFixed(2),
+                            mwstRatio: mwst.mwstRatio.toString(),
+                            __v: "0"
+                        });
+                        if (--remainingProducts === 0) callback(orderItems);
+                    });
+                });
+            });
+        }
+        prepareOrderItems((orderItems) => {
+            document.getElementById('orderItems').value = JSON.stringify(orderItems);
+            const totalPrice = orderItems.reduce((total, item) => total + parseFloat(item.price) * parseFloat(item.quantity), 0).toFixed(2);
+            document.getElementById('tots').value = totalPrice;
+            document.querySelector('.totalPrice').innerText = `${totalPrice} CHF`;
+        });
     </script>
 </body>
 </html>

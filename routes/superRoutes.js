@@ -1143,7 +1143,7 @@ router.get('/admin/setup/saloon-images/:businessID', requireSuperLogin, async (r
     const business = await Business.findOne({_id:businessID});
 
     if (!business) {
-      return res.status(200).send('No data available.');
+      return res.status(200).send('Keine Daten in der Tabelle verfügbar');
     }
     res.locals.req = req;
     res.locals.activePage = 'admin/setup/saloon-images';

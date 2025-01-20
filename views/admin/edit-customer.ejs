@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
-    <title>me Time | Admin Dashboard</title>
+    <title>Gastro Koçak Handel | Admin Dashboard</title>
     <link rel="shortcut icon" href="/assets/img/favicon.png">
     <link rel="stylesheet" href="/admin/assets/css/select2.min.css">
     <link rel="stylesheet" href="/admin/assets/plugins/bootstrap/css/bootstrap.min.css">
@@ -76,16 +76,6 @@
                                         <input type="text" class="form-control" value="<%= users.ort %>" name="ort">
                                     </div>
                                 </div>
-                                <div class="col-lg-12">
-                                    <div class="form-group">
-                                        <label>Bewerbungsstatus<small class="fw-bold text-bg-danger p-1">Ändern Sie den Status des neuen Geschäftsantrags in <u>Genehmigen</u> oder <u>Ablehnen</u>. Der Unternehmer erhält die Ergebnisse per E-Mail</small></label>
-                                        <select class="select select2" name="customerStatus" required>
-                                            <option value="" disabled>Select Status</option>
-                                            <option value="Approved" <%= users.customerStatus === 'Approved' ? 'selected' : '' %>>Approve</option>
-                                            <option value="Declined" <%= users.customerStatus === 'Declined' ? 'selected' : '' %>>Decline</option>
-                                        </select>
-                                    </div>
-                                </div>   
                                 <div class="col-lg-12">
                                     <div class="btn-path">                                    
                                         <a href="/admin/customers" class="btn btn-cancel me-3">Storniern</a>

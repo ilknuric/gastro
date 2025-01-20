@@ -39,11 +39,11 @@ function requireLogin(req, res, next) {
         }
 }
 const transporter = nodemailer.createTransport({
-        host: "mail.ilknurcengiz.com",
-        port: 25,
+        host: 'mail.ilknurcengiz.com',
+        port: 465,
         secure: true,
         auth: {
-		user: 'info@ilknurcengiz.com',
+            user: 'info@ilknurcengiz.com',
 	        pass: 'Z@vCMkP!*wHg5',
         },
         tls: {
@@ -225,7 +225,7 @@ router.get("/contact", async (req, res) => {
         try {
                 const userID=req.session.userId;
                 const business = await Business.find();
-		const recaptchaSiteKey = process.env.RECAPTCHA_SITE_KEY;
+		const recaptchaSiteKey = '6LdIC9gjAAAAACuHZooId0vwas6-8K8Dosl78I4I';
                 res.locals.req = req;
                 res.locals.activePage = "contact";
                 res.render("contact",{recaptchaSiteKey,userID,business});
@@ -243,32 +243,32 @@ router.post("/contact", async (req, res) => {
         try {
             const { email, name, message,userLoc } = req.body;
 
-		if (userLoc!== "TR") {
-	        res.redirect("/contact?no");
-        } else {	
-                const templatePath = path.join(__dirname, "mail/contactEmail.ejs");
-                const templateOwnerPath = path.join(__dirname, "mail/contactOwnerEmail.ejs");
-                const renderedHtml = await ejs.renderFile(templatePath, { name, email, message });
-                const renderedOwnerHtml = await ejs.renderFile(templateOwnerPath, { name, email, message });
+            if (userLoc !== "TR" && userLoc !== "CH") {
+                res.redirect("/contact?no");
+            } else {	
+                    const templatePath = path.join(__dirname, "mail/contactEmail.ejs");
+                    const templateOwnerPath = path.join(__dirname, "mail/contactOwnerEmail.ejs");
+                    const renderedHtml = await ejs.renderFile(templatePath, { name, email, message });
+                    const renderedOwnerHtml = await ejs.renderFile(templateOwnerPath, { name, email, message });
 
-                const mailOptions = {
-                        from: "info@ilknurcengiz.com",
-                        to: email,
-                        subject: 'Zeit für die Einreichung des Kontaktformulars',
-                        html: renderedHtml,
-                };
+                    const mailOptions = {
+                            from: "info@ilknurcengiz.com",
+                            to: email,
+                            subject: 'Zeit für die Einreichung des Kontaktformulars',
+                            html: renderedHtml,
+                    };
 
-                const ownerMailOptions = {
-                        from: email,
-                        to: "info@ilknurcengiz.com",
-                        subject: 'Zeit für mich Neue Nachricht von der Übermittlung des Kontaktformulars',
-                        html: renderedOwnerHtml,
-                };
+                    const ownerMailOptions = {
+                            from: email,
+                            to: "info@ilknurcengiz.com",
+                            subject: 'Zeit für mich Neue Nachricht von der Übermittlung des Kontaktformulars',
+                            html: renderedOwnerHtml,
+                    };
 
-                await transporter.sendMail(mailOptions);
-                await transporter.sendMail(ownerMailOptions);
-                res.redirect("/contact?success");
-        }    
+                    await transporter.sendMail(mailOptions);
+                    await transporter.sendMail(ownerMailOptions);
+                    res.redirect("/contact?success");
+            }    
         } catch (error) {
             console.error("Error occurred:", error);
                 return res.redirect("../404");
@@ -398,7 +398,7 @@ router.post("/forgot-password", async (req, res) => {
             const renderedHtml = await ejs.renderFile(templatePath, { email, password: newPassword });
             const customerMailOptions = {
                 from: "info@ilknurcengiz.com",
-                to: user.email,
+                to: email,
                 subject: 'me Zeit Passwort zurücksetzen',
                 html: renderedHtml,
             };
@@ -406,7 +406,6 @@ router.post("/forgot-password", async (req, res) => {
             await transporter.sendMail(customerMailOptions);
             delete req.session.loginError;
             delete req.session.loginSuccess;
-    
             req.session.loginSuccess = "Neues Passwort an Ihre E-Mail gesendet";
             res.redirect("/login#recover");
         } catch (error) {
@@ -776,6 +775,78 @@ router.post("/search", async (req, res) => {
             res.status(500).send("Internal Server Error");
         }
 }); 
+router.post("/search/filter", async (req, res) => {
+    try {
+        const { category, brandName, min_price, max_price, page = 1 } = req.body;
+        const pageSize = 9; 
+        const userID = req.session.userId;
+        const categoryID = '';
+        let filter = { status: "Active" };
+        if (category && category.length > 0) {
+            filter.category = { $in: category };
+        }
+        if (brandName && brandName.length > 0) {
+            filter.brandName = { $in: brandName }; 
+        }
+        if (min_price || max_price) {
+            filter.price = {};
+            if (min_price) filter.price.$gte = parseFloat(min_price);
+            if (max_price) filter.price.$lte = parseFloat(max_price);
+        }
+        const productCount = await Product.countDocuments(filter);
+        const totalPages = Math.ceil(productCount / pageSize);
+        const products = await Product.find(filter)
+            .skip((page - 1) * pageSize)
+            .limit(pageSize);
+        const campaigns = await Campaign.find();
+        const brand = await Brand.find();
+        const packageIDs = products.map((product) => product.package);
+        const packages = await Package.find({ _id: { $in: packageIDs } });
+        const packageMap = packages.reduce((acc, pkg) => {
+            acc[pkg._id.toString()] = pkg.packageName;
+            return acc;
+        }, {});
+        const productsWithDetails = products.map((product) => {
+            const campaignDetail = campaigns
+                .flatMap((campaign) => campaign.campaignDetails)
+                .find((detail) => detail.productID === product._id.toString());
+
+            const discountPercentage = campaignDetail
+                ? Math.round(
+                      ((campaignDetail.currentPrice - campaignDetail.campaignPrice) /
+                          campaignDetail.currentPrice) *
+                          100
+                  )
+                : null;
+
+            return {
+                ...product.toObject(),
+                campaignDetail: campaignDetail || null,
+                discountPercentage: discountPercentage,
+                packageName: packageMap[product.package] || "Unknown",
+            };
+        });
+        const categories = await Category.find();
+        const business = await Business.find();
+        res.locals.req = req;
+        res.locals.activePage = "shop";
+        res.render("shop", {
+            currentPage: page,
+            totalPages,
+            products: productsWithDetails,
+            categories, 
+            business,
+            userID,
+            categoryID,
+            brand,
+        });
+    } catch (err) {
+        console.error("Error during detailed filter search:", err);
+        res.status(500).send("Internal Server Error");
+    }
+});
+
+
 router.get("/campaign/:campaignID", async (req, res) => {
         try {
             const categoryID = '';
@@ -902,9 +973,28 @@ router.post("/place-order", async (req, res) => {
                     orderItems = JSON.parse(orderItems);
                 }
                 const newOrder = new Order({name,surname,userID,email,gsm,street,no,postcode,ort,note,orderNumber,orderItems,orderPrice,couponCode:appliedcouponCode,discount});
-                console.log(appliedcouponCode)
                 await User.updateOne({ _id: userID },{$set: {name,surname,gsm,street,no,postcode,ort}});
                 await newOrder.save();
+
+                const templatePath = path.join(__dirname, '../routes/mail/orderConfirmation.ejs');
+                const renderedHtml = await ejs.renderFile(templatePath,{name, surname, 	orderPrice,orderNumber,email,gsm,street,postcode,ort,note,nr:no,orderItems,discount});
+                const templatePathOwner = path.join(__dirname, '../routes/mail/orderConfirmationOwner.ejs');
+                const renderedHtmlOwner = await ejs.renderFile(templatePathOwner,{name, surname,orderPrice,orderNumber,email,gsm,street,postcode,ort,note,nr:no,orderItems,discount});
+                const customerMailOptions = {
+                    from: "info@ilknurcengiz.com",
+                    to: email,
+                    subject: 'Bestellbestätigung Gastro Kocak Handel GmbH',
+                    html: renderedHtml,
+                };
+                await transporter.sendMail(customerMailOptions);
+                
+                const ownerMailOptions = {
+                    from: "info@ilknurcengiz.com",
+                    to: "info@ilknurcengiz.com",
+                    subject: 'Bestellbestätigung Gastro Kocak Handel GmbH',
+                    html: renderedHtmlOwner,
+                };
+                await transporter.sendMail(ownerMailOptions);
                 res.redirect('/order-result/' + orderNumber);
         } catch (err) {
                 console.error(err);
@@ -915,14 +1005,10 @@ router.get("/order-result/:orderNumber", async (req, res, next) => {
     try {
         const orderNumber = req.params.orderNumber;
         const userID = req.session.userId;
-
-        // Sipariş detaylarını al
         const orderdetails = await Order.findOne({ orderNumber: orderNumber });
         if (!orderdetails) {
             return next();
         }
-
-        // Sipariş ürün detaylarını genişlet
         const orderItemsWithDetails = await Promise.all(
             orderdetails.orderItems.map(async (item) => {
                 const product = await Product.findById(item._id);
@@ -942,11 +1028,9 @@ router.get("/order-result/:orderNumber", async (req, res, next) => {
                         description: product.description,
                     };
                 }
-                return item; // Eğer ürün bulunamazsa, orijinal item'i döndür
+                return item;
             })
         );
-
-        // MwSt. hesaplama
         const mwstSummary = {};
         let totalMwst = 0;
 
@@ -961,28 +1045,14 @@ router.get("/order-result/:orderNumber", async (req, res, next) => {
                 totalMwst += parseFloat(mwstValue);
             }
         });
-
-        // Subtotal hesaplama
         const subtotal = parseFloat(orderdetails.orderPrice) - totalMwst;
-
-        // Güncellenmiş orderdetails
         const updatedOrderDetails = {
             ...orderdetails.toObject(),
             orderItems: orderItemsWithDetails,
         };
-
         const business = await Business.find();
-
-        // Verileri gönder
         res.locals.req = req;
-        res.render("order-result", {
-            orderdetails: updatedOrderDetails,
-            mwstSummary,
-            subtotal,
-            totalMwst,
-            business,
-            userID,
-        });
+        res.render("order-result", {orderdetails: updatedOrderDetails,mwstSummary,subtotal,totalMwst,business,userID,});
     } catch (err) {
         logger.error("Error Log:", err);
         next(err);

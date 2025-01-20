@@ -31,10 +31,8 @@
         </div>
     </div>
 </div>
-
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
 <script>
     function findCategoryById(categoryId, callback) {
         fetch(`/api/category/${categoryId}`)
@@ -89,7 +87,6 @@
                     if (--remainingProducts === 0) callback(mwstTotals); 
                     return;
                 }
-
                 findMwstById(category.mwstID, (mwst) => {
                     if (!mwst) {
                         console.error('Mwst not found');
@@ -129,10 +126,8 @@
                     mwstElement.classList.add('tf-cart-totals-discounts');
 
                     mwstElement.innerHTML = `
-                        <h3>${mwstName} (${ratio}%)</h3>
-                        <span class="total-value fw-5">${mwstAmount.toFixed(2)} CHF</span>
-                    `;
-
+                        <h6>${mwstName} (${ratio}%)</h6>
+                        <h6 class=" fw-5">${mwstAmount.toFixed(2)} CHF</h6>`;
                     mwstContainer.appendChild(mwstElement);
                 }
                 totalMwstAmount += mwstAmount;
@@ -212,7 +207,6 @@
             const itemTotal = item.price * item.quantity;
             totalPrice += itemTotal; 
             totalQuantity += item.quantity;
-
             const itemHTML = `
                 <div class="tf-mini-cart-item">
                     <div class="tf-mini-cart-image">
@@ -239,15 +233,15 @@
         });
         document.querySelector('.tf-totals-total-value').innerText = `${totalPrice.toFixed(2)} CHF`;
         document.querySelector('.count-box').innerText = totalQuantity;
+        const countBox = document.querySelector('.toolbar-count.count-box');
+        countBox.textContent = totalQuantity;
     }
     
     document.addEventListener('DOMContentLoaded', loadCartItems);
     function loadCartTableItems() {
         const cartTableBody = document.querySelector('.cart-body');
         cartTableBody.innerHTML = ''; 
-
         const cart = JSON.parse(localStorage.getItem('cart')) || [];
-
         cart.forEach(item => {
             const itemTotal = (item.price * item.quantity).toFixed(2); 
             const itemHTML = `

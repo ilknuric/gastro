@@ -33,7 +33,7 @@ const Package = require('../models/packageModel');
 
 const transporter = nodemailer.createTransport({
   host: 'mail.ilknurcengiz.com',
-  port: 25,
+  port: 465,
   secure: true,
   auth: {
 	  user: 'info@ilknurcengiz.com',
@@ -111,13 +111,6 @@ const checkLoggedInMiddleware = (req, res, next) => {
   }
   next();
 };
-function adjustTime(time, hours) {
-  const [hh, mm] = time.split(':');
-  const adjustedHours = parseInt(hh, 10) + hours;
-  const adjustedHH = Math.max(0, adjustedHours);
-  
-  return `${adjustedHH.toString().padStart(2, '0')}:${mm}`;
-}
 //LOGIN
 router.get('/admin/', requireLogin, async (req, res) => {
   try {
@@ -402,7 +395,7 @@ router.post("/forgotPassword", async (req, res) => {
         const customerMailOptions = {
           from: 'info@ilknurcengiz.com',
           to: business.businessMail,
-          subject: `Zurücksetzen des me Time-Administratorkennworts`,
+          subject: `Zurücksetzen des Gastro Kocak Handel-Administratorkennworts`,
           html: renderedHtml,
         };
   
@@ -489,7 +482,7 @@ router.post("/admin/add-new-product",requireSuperLogin, uploadProductImages, asy
     try {
       const businessID = req.session.businessID;
       const { productName, description, price, status, category, brandName, package } = req.body;
-      const productImages = req.files.map(file => `https://gastro-0ecf38100a36.herokuapp.com/assets/images/business/${file.filename}`);
+      const productImages = req.files.map(file => `http://localhost:3001/assets/images/business/${file.filename}`);
 
       const newProduct = new Product({
         productName: productName,
@@ -568,7 +561,7 @@ router.post('/admin/edit-product/:productID', requireSuperLogin, upload.array('p
       }
       let productImages = products.productImages || [];
       if (req.files && req.files.length > 0) {
-          const newImages = req.files.map(file => 'https://gastro-0ecf38100a36.herokuapp.com/assets/images/business/' + file.filename);
+          const newImages = req.files.map(file => 'http://localhost:3001/assets/images/business/' + file.filename);
           productImages = [...productImages, ...newImages]; 
       }
       products.productName = productName;
@@ -650,7 +643,7 @@ router.get('/admin/add-categories', requireSuperLogin, async (req, res) => {
 });
 router.post("/admin/add-new-category", requireSuperLogin, uploadproduct.single('categoryImage'), async (req, res) => {
   try {
-      const categoryImage = req.file ? 'https://gastro-0ecf38100a36.herokuapp.com/assets/images/business/' + req.file.filename : null;
+      const categoryImage = req.file ? 'http://localhost:3001/assets/images/business/' + req.file.filename : null;
       const { categoryName, mwstID } = req.body;
       const mwst = await Mwst.findOne({_id:mwstID});
       const newCategory = new Category({
@@ -709,7 +702,7 @@ router.post('/admin/edit-category/:categoryID', requireSuperLogin, upload.single
         const { categoryName, mwstID } = req.body;
         const category = await Category.findById(categoryId);
         const mwst = await Mwst.findOne({_id:mwstID});
-        const categoryImage = req.file ? 'https://gastro-0ecf38100a36.herokuapp.com/assets/images/business/' + req.file.filename : category.categoryImage;
+        const categoryImage = req.file ? 'http://localhost:3001/assets/images/business/' + req.file.filename : category.categoryImage;
       
         if (!category) {
             req.session.error = 'Category not found';
@@ -909,7 +902,7 @@ router.post('/admin/edit-admin-business/:businessID', requireSuperLogin, upload.
       business.commisionRate = commisionRate;
       business.auth = auth;
       if (req.file) {
-          business.businessImage = 'https://gastro-0ecf38100a36.herokuapp.com/assets/images/business/' + req.file.filename;
+          business.businessImage = 'http://localhost:3001/assets/images/business/' + req.file.filename;
       }
 
       await business.save();
@@ -1188,7 +1181,7 @@ router.post('/admin/edit-about/:aboutID', requireSuperLogin, upload.single('abou
       const about = await About.findOne({ _id: aboutID });
       const { heading, maintext } = req.body;
     
-      const aboutImage = req.file ? 'https://gastro-0ecf38100a36.herokuapp.com/assets/images/business/' + req.file.filename : about.aboutImage;
+      const aboutImage = req.file ? 'http://localhost:3001/assets/images/business/' + req.file.filename : about.aboutImage;
 
       about.aboutImage = aboutImage;
       about.heading = heading;
@@ -1215,7 +1208,7 @@ router.get('/admin/process', requireSuperLogin,  async (req, res) => {
     const businessStatus = 'Waiting';
     const applications = await Application.find({ businessStatus: businessStatus });
     if (!process) {
-      return res.status(200).send('No data available.');
+      return res.status(200).send('Keine Daten in der Tabelle verfügbar');
     }
     res.locals.req = req;
     res.locals.activePage = 'admin/process';
@@ -1535,7 +1528,7 @@ router.get('/admin/add-product-campaign', requireSuperLogin, async (req, res) =>
 router.post("/admin/add-new-campaign", requireSuperLogin, uploadproduct.single('campaignImage'), async (req, res) => {
   try {
     const businessID = req.session.businessID;
-    const campaignImage = req.file ? 'https://gastro-0ecf38100a36.herokuapp.com/assets/images/business/' + req.file.filename : null;
+    const campaignImage = req.file ? 'http://localhost:3001/assets/images/business/' + req.file.filename : null;
     const { campaignStartDate, campaignEndDate, campaignDesciption, campaignName, serviceID, currentPrice, campaignPrice, campaignType,campaignText } = req.body;
     const campaignDetails = [];
     for (let i = 0; i < serviceID.length; i++) {
@@ -1573,7 +1566,7 @@ router.post("/admin/add-new-campaign", requireSuperLogin, uploadproduct.single('
 router.post("/admin/add-new-product-campaign", requireSuperLogin, uploadproduct.single('campaignImage'), async (req, res) => {
   try {
     const businessID = req.session.businessID;
-    const campaignImage = req.file ? 'https://gastro-0ecf38100a36.herokuapp.com/assets/images/business/' + req.file.filename : null;
+    const campaignImage = req.file ? 'http://localhost:3001/assets/images/business/' + req.file.filename : null;
     const { campaignStartDate, campaignEndDate, campaignDesciption, campaignName, productID, currentPrice, campaignPrice, campaignType,campaignText } = req.body;
     const campaignDetails = [];
     for (let i = 0; i < productID.length; i++) {
@@ -1648,7 +1641,7 @@ router.post('/admin/edit-campaign/:campaignID', requireSuperLogin, uploadproduct
       const campaignID = req.params.campaignID;
       const { campaignStartDate, campaignEndDate, campaignRatio, campaignDesciption, campaignName, campaignType,serviceID, productID, currentPrice, campaignPrice,campaignText } = req.body;
       const campaign = await Campaign.findById(campaignID);
-      const campaignImage = req.file ? 'https://gastro-0ecf38100a36.herokuapp.com/assets/images/business/' + req.file.filename : campaign.campaignImage;
+      const campaignImage = req.file ? 'http://localhost:3001/assets/images/business/' + req.file.filename : campaign.campaignImage;
       if (!campaign) {
           req.session.error = 'Campaign not found';
           return res.redirect('/admin/campaigns');
@@ -1944,7 +1937,7 @@ router.get('/admin/saloon-images', requireSuperLogin, async (req, res) => {
     const business = await Business.findOne({_id:businessID});
 
     if (!business) {
-      return res.status(200).send('No data available.');
+      return res.status(200).send('Keine Daten in der Tabelle verfügbar');
     }
     res.locals.req = req;
     res.locals.activePage = 'admin/saloon-images';
@@ -1975,7 +1968,7 @@ router.post('/admin/delete-images', async (req, res) => {
 });
 router.post('/admin/upload-images', uploadSaloon, async (req, res) => {
   try {
-    const baseImageUrl = 'https://gastro-0ecf38100a36.herokuapp.com/assets/images/business/';
+    const baseImageUrl = 'http://localhost:3001/assets/images/business/';
     const businessID = req.session.businessID;
     const business = await Business.findOne({ _id: businessID });
 
@@ -2050,7 +2043,7 @@ router.get('/admin/add-slide', requireSuperLogin, async (req, res) => {
 });
 router.post("/admin/add-new-slide", requireSuperLogin, uploadproduct.single('slideImage'), async (req, res) => {
   try {
-    const slideImage = req.file ? 'https://gastro-0ecf38100a36.herokuapp.com/assets/images/business/' + req.file.filename : null;
+    const slideImage = req.file ? 'http://localhost:3001/assets/images/business/' + req.file.filename : null;
 	  const { slideBig, slideSmall } = req.body;
     const newSlide = new Slide({
       image_path: slideImage,
@@ -2107,7 +2100,7 @@ router.post('/admin/edit-slide-web/:slideID', requireSuperLogin, upload.single('
       const slide = await SlideWeb.findOne({ _id: slideID });
       const { slideBig, slideSmall } = req.body;
     
-      const slideImageWeb = req.file ? 'https://gastro-0ecf38100a36.herokuapp.com/assets/images/business/' + req.file.filename : slide.slideImageWeb;
+      const slideImageWeb = req.file ? 'http://localhost:3001/assets/images/business/' + req.file.filename : slide.slideImageWeb;
 
       slide.slideImageWeb = slideImageWeb;
       slide.slideBig = slideBig;
@@ -2129,7 +2122,7 @@ router.post('/admin/edit-slide-app/:slideID', requireSuperLogin, upload.single('
       const slide = await Slide.findOne({ _id: slideID });
       const { slideBig, slideSmall } = req.body;
     
-      const slideImage = req.file ? 'https://gastro-0ecf38100a36.herokuapp.com/assets/images/business/' + req.file.filename : slide.image_path;
+      const slideImage = req.file ? 'http://localhost:3001/assets/images/business/' + req.file.filename : slide.image_path;
 
       slide.image_path = slideImage;
       slide.slideBig = slideBig;
@@ -2292,11 +2285,17 @@ router.get('/admin/add-customer', requireSuperLogin, async (req, res) => {
 router.post('/admin/add-new-customer', requireSuperLogin, async (req, res) => {
   try {
       const { name, surname, gsm, email, no, ort, postcode,street,customerStatus } = req.body;
+      const existingUser = await User.findOne({ email });
+      if (existingUser) {
+        req.session.error = 'Bu e-posta zaten kayıtlı!';
+        return res.redirect('/admin/add-customer?alreadyexist');
+      }
       const currentDate = new Date();
       const month = (currentDate.getMonth() + 1).toString().padStart(2, '0');
       const day = currentDate.getDate().toString().padStart(2, '0');
-      const username = name + surname + month + day;
+      const username = name + month + day;
       const password = await bcrypt.hash(username, 10);
+ 
 
       const newCustomer = new User({
         name: name,
@@ -2316,7 +2315,7 @@ router.post('/admin/add-new-customer', requireSuperLogin, async (req, res) => {
       const customerMailOptions = {
         from: 'info@ilknurcengiz.com',
         to: email,
-        subject: 'Glückwunsch! Ihr Unternehmen ist von me Time genehmigt.',
+        subject: 'Glückwunsch! Ihr Unternehmen ist von Gastro Kocak Handel genehmigt.',
         html: renderedHtml,
       };
     
@@ -2358,7 +2357,7 @@ router.get('/admin/edit-customer/:customerID', requireSuperLogin,  async (req, r
 router.post('/admin/edit-customer/:customerID', requireSuperLogin, async (req, res) => {
   try {
       const customerID = req.params.customerID;
-      const { name, surname, email, gsm, street, no, ort, postcode, customerStatus  } = req.body;
+      const { name, surname, email, gsm, street, no, ort, postcode  } = req.body;
       const users = await User.findById(customerID);
     
       if (!users) {
@@ -2373,7 +2372,6 @@ router.post('/admin/edit-customer/:customerID', requireSuperLogin, async (req, r
       users.no = no;
       users.ort = ort;
       users.postcode = postcode;
-      users.customerStatus = customerStatus;
       
       await users.save();
       res.locals.activePage = 'admin/customers';

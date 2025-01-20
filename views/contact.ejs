@@ -13,6 +13,11 @@
     <link rel="stylesheet"type="text/css" href="/css/styles.css"/>
     <link rel="shortcut icon" href="/favicon.png">
     <link rel="apple-touch-icon-precomposed" href="favicon.png">
+    <style>
+        h2{
+            line-height: 1;
+        }
+    </style>
 </head>
 <body class="preload-wrapper">
     <div class="preload preload-container">
@@ -53,7 +58,7 @@
                         <h5 class="mb_20">Nehmen Sie Kontakt auf</h5>
                         <p class="mb_24">Bitte senden Sie Ihre Wünsche und Anliegen. Unser Team wird sich so schnell wie möglich mit Ihnen in Verbindung setzen.</p>
                         <div>
-                            <form class="form-contact" action="/contact" method="post">
+                            <form class="form-contact" action="/contact" method="post" onsubmit="return check_captcha_filled()"> 
                                 <input type="hidden" name="userLoc" value="" id="userIP">
                                 <div class="d-flex gap-15 mb_15">
                                     <fieldset class="w-100">
@@ -65,6 +70,11 @@
                                 </div>
                                 <div class="mb_15">
                                     <textarea placeholder="Nachricht" name="message" id="message" required cols="30" rows="10"></textarea>
+                                </div>
+                                <div class="col-md-12 col-sm-12">
+                                    <div class="col-md-12 col-sm-12">  
+                                      <div class="g-recaptcha mb-3 justify-center" data-sitekey="<%= recaptchaSiteKey %>"  data-callback="captcha_filled" data-expired-callback="captcha_expired"></div>
+                                    </div>
                                 </div>
                                 <div class="send-wrap">
                                     <button type="submit" class="tf-btn w-100 radius-3 btn-fill animate-hover-btn justify-content-center">Senden</button>
@@ -95,26 +105,68 @@
     <script type="text/javascript" src="/js/jquery-validate.js"></script>   
     <script type="text/javascript" src="/js/multiple-modal.js"></script>
     <script type="text/javascript" src="/js/main.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>	
     <script>
-        function populateUserIP() {
-    return fetch('https://ipapi.co/json/')
-        .then(response => response.json())
-        .then(data => {
-            return data;
-        });
-}
-
-document.addEventListener("DOMContentLoaded", function() {
-    populateUserIP()
-        .then((userIP) => {
-            if (userIP) {
-                document.getElementById("userIP").value = `${userIP.country}`;
+        jQuery(document).ready(function() {
+        if (~window.location.href.indexOf("success")) {
+            Swal.fire({
+				showCloseButton: true,
+				timer: 5000,
+				icon: 'success',
+				title: 'Wir haben Ihre Nachricht erhalten, vielen Dank, dass Sie uns erreicht haben!',
+				showConfirmButton: false,
+            }).then(() => {
+                window.location = "/contact";
+            });
+        }
+        })
+        jQuery(document).ready(function() {
+            if (~window.location.href.indexOf("no")) {
+                Swal.fire({
+					showCloseButton: true,
+					timer: 6000,
+					icon: 'error',
+					title: 'Fehler beim Posten des Formulars, bitte versuchen Sie es erneut.',
+					showConfirmButton: false,
+                }).then(() => {
+                    window.location = "/contact";
+                });
             }
         })
-        .catch((error) => {
-            console.error('Error retrieving IP address:', error);
+        var allow_submit = false
+		function captcha_filled () {
+			allow_submit = true
+		}
+		function check_captcha_filled (e) {
+			console.log('verify-captcha')
+			if (!allow_submit) {
+				Swal.fire('Bitte bestätigen Sie, dass Sie ein Mensch sind, indem Sie das Captcha ausfüllen');
+				return false
+			}
+			captcha_expired()
+			return true
+		}
+        function populateUserIP() {
+            return fetch('https://ipapi.co/json/')
+                .then(response => response.json())
+                .then(data => {
+                    return data;
+                });
+        }
+        document.addEventListener("DOMContentLoaded", function() {
+            populateUserIP()
+                .then((userIP) => {
+                    if (userIP) {
+                        document.getElementById("userIP").value = `${userIP.country}`;
+                    }
+                })
+                .catch((error) => {
+                    console.error('Error retrieving IP address:', error);
+                });
         });
-});
     </script>
 </body>
 

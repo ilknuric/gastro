@@ -41,7 +41,6 @@
                                         <th>Tel</th>
                                         <th>E-mail</th>
                                         <th>Adresse</th>
-                                        <th>Status</th>
                                         <th>Aktion</th>
                                     </tr>
                                 </thead>
@@ -54,11 +53,6 @@
                                             <td><%= user.gsm%></td> 
                                             <td><%= user.email%></td> 
                                             <td><%= user.street%> <%= user.no%>, <%= user.postcode%> <%= user.ort%></td> 
-                                            <% if (user.customerStatus=='Approved') { %>
-                                            <td><h6 class="badge-active">Aktiv</h6></td>
-                                            <% } else { %>
-                                            <td><h6 class="badge-delete">Waiting Approval</h6></td>
-                                            <% } %>
                                             <td>
                                                 <div class="table-actions d-flex">
                                                     <a class="delete-table me-2" href="/admin/edit-customer/<%= user._id %>" >
@@ -74,7 +68,7 @@
                                             <div class="modal-dialog modal-dialog-centered ">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
-                                                        <h5 class="modal-title" id="exampleModalLabel">Produkt löschen</h5>
+                                                        <h5 class="modal-title" id="exampleModalLabel">Kunde löschen</h5>
                                                         <button type="button" class="btn-close close-modal" data-bs-dismiss="modal" aria-label="Close">
                                                             <i class="fe fe-x"></i>
                                                         </button>

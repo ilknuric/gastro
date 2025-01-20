@@ -2506,7 +2506,7 @@ header.header-bg {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: var(--primary);
+  background-color: #e78019;
   border-radius: 50%;
   font-size: 10px;
   font-weight: 500;
@@ -10939,7 +10939,7 @@ blockquote .text {
   margin-bottom: 35px;
 }
 .widget-price .box-title-price {
-  margin-top: 30px;
+  margin-top: 10px;
   display: flex;
   align-items: center;
   gap: 10px;
@@ -12787,7 +12787,7 @@ blockquote .text {
 }
 .tf-page-cart-checkout .tf-cart-totals-discounts h3 {
   font-size: 20px;
-  line-height: 24px;
+  line-height: 30px;
 }
 .tf-page-cart-checkout .tf-cart-totals-discounts .total-value {
   font-size: 20px;

@@ -29,7 +29,7 @@
         </div>
         <section class="flat-spacing-10">
             <div class="container">
-                <div class="tf-grid-layout lg-col-2 tf-login-wrap">
+                <div class="tf-grid-layout lg-col-1 tf-login-wrap">
                     <div class="tf-login-form">
                         <div id="recover">
                             <h5 class="mb_24">Setzen Sie Ihr Passwort zurück</h5>
@@ -39,6 +39,11 @@
                                     <% if (loginError) { %>
                                         <div class="alert alert-danger">
                                           <%= loginError %>
+                                        </div>
+                                      <% } %>
+                                      <% if (loginSuccess) { %>
+                                        <div class="alert alert-success">
+                                          <%= loginSuccess %>
                                         </div>
                                       <% } %>
                                     <div class="tf-field style-1 mb_15">
@@ -81,10 +86,11 @@
                             </div>
                         </div>
                     </div>
+                    <!--
                     <div class="tf-login-content">
                         <h5 class="mb_36">Noch keinen Account?</h5>                        
                         <a href="/register" class="tf-btn btn-line">Registrieren<i class="icon icon-arrow1-top-left"></i></a>
-                    </div>
+                    </div>-->
                 </div>
             </div>
         </section>
